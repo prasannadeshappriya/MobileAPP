@@ -23,6 +23,7 @@ public class LogInActivity extends AppCompatActivity {
     private EditText etUserName;
     private EditText etPassword;
     private Button btnSignIn;
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,8 @@ public class LogInActivity extends AppCompatActivity {
         btnSignIn = (Button) findViewById(R.id.btnSignIn);
         etPassword = (EditText) findViewById(R.id.etPassword);
         etUserName = (EditText) findViewById(R.id.etUserName);
+
+        pd = new ProgressDialog(this, R.style.AppTheme_Dark_Dialog);
     }
 
     public void getToken(){
@@ -72,7 +75,7 @@ public class LogInActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        final ProgressDialog pd = new ProgressDialog(this, R.style.AppTheme_Dark_Dialog);
+        //final ProgressDialog pd = new ProgressDialog(this, R.style.AppTheme_Dark_Dialog);
         pd.setIndeterminate(true);
         pd.setMessage("Authenticating..");
         pd.show();
@@ -82,7 +85,7 @@ public class LogInActivity extends AppCompatActivity {
             public void onFinish() {
                 process_token_response(request);
                 Log.i(Constants.LOG_TAG, "LogInActivity Class - OnFinish method triggered");
-                pd.dismiss();
+                //pd.dismiss();
             }
 
             @Override
@@ -145,10 +148,10 @@ public class LogInActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        final ProgressDialog pd = new ProgressDialog(this, R.style.AppTheme);
+        //final ProgressDialog pd = new ProgressDialog(this, R.style.AppTheme);
         pd.setIndeterminate(true);
-        pd.setMessage("Authenticating..");
-        pd.show();
+        pd.setMessage("Getting details..");
+        //pd.show();
 
         CountDownTimer timer = new CountDownTimer(2000, 1000) {
             @Override
@@ -197,7 +200,7 @@ public class LogInActivity extends AppCompatActivity {
                     }
                 }
                 count++;
-                if(count>=5){con = true;}
+                if(count>=7){con = true;}
             }
             if(con){break;}
         }

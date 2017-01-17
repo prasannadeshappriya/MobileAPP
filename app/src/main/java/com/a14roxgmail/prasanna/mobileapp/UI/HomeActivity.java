@@ -1,9 +1,7 @@
 package com.a14roxgmail.prasanna.mobileapp.UI;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,11 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import com.a14roxgmail.prasanna.mobileapp.Fragment.CourseFragment;
 import com.a14roxgmail.prasanna.mobileapp.R;
-
 import java.util.HashMap;
 
 public class HomeActivity extends AppCompatActivity
@@ -53,6 +50,7 @@ public class HomeActivity extends AppCompatActivity
         tvFullName = (TextView) header.findViewById(R.id.tvFullName);
         tvIndexNo.setText(map.get("username").toUpperCase().toString());
         tvFullName.setText(map.get("fullname").toString());
+
     }
 
     @Override
@@ -94,7 +92,11 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            CourseFragment courseFragment = new CourseFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frmMain,courseFragment);
+            transaction.commit();
+
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
