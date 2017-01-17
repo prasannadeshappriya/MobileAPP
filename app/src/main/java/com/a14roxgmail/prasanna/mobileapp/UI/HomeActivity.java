@@ -2,6 +2,7 @@ package com.a14roxgmail.prasanna.mobileapp.UI;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,9 +14,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.CourseFragment;
 import com.a14roxgmail.prasanna.mobileapp.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -25,11 +34,13 @@ public class HomeActivity extends AppCompatActivity
     Toolbar toolbar;
     TextView tvIndexNo;
     TextView tvFullName;
+    ArrayList<JSONObject> course_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -42,8 +53,19 @@ public class HomeActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        course_list = new ArrayList<>();
+
         Bundle b = getIntent().getExtras();
         HashMap<String,String> map = (HashMap<String,String>) b.getSerializable("Values");
+        String response = b.getString("CourseResponse");
+        try {
+            JSONArray jsonArray = new JSONArray(response);
+            for (int i=0; i<jsonArray.length(); i++) {
+                course_list.add(jsonArray.getJSONObject(i));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         View header = navigationView.getHeaderView(0);
         tvIndexNo = (TextView) header.findViewById(R.id.tvIndexNo);
@@ -51,6 +73,12 @@ public class HomeActivity extends AppCompatActivity
         tvIndexNo.setText(map.get("username").toUpperCase().toString());
         tvFullName.setText(map.get("fullname").toString());
 
+        CourseFragment courseFragment = new CourseFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frmMain,courseFragment);
+        courseFragment.setServerCourseList(course_list);
+        toolbar.setTitle("My Courses");
+        transaction.commit();
     }
 
     @Override
@@ -91,22 +119,20 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_MyCourses) {
             CourseFragment courseFragment = new CourseFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.frmMain,courseFragment);
+            courseFragment.setServerCourseList(course_list);
+            toolbar.setTitle("My Courses");
             transaction.commit();
 
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_feedback) {
+            toolbar.setTitle("Feedback");
+        } else if (id == R.id.nav_GPA) {
+            toolbar.setTitle("GPA");
+        } else if (id == R.id.nav_signout) {
+            //Signout Process
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

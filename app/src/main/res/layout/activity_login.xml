@@ -31,14 +31,15 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textPassword"
                 android:hint="Password"
                 android:id="@+id/etPassword"/>
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="48dip"
-            android:text="SignIn"
+            android:layout_width="250px"
+            android:layout_height="match_parent"
+            android:text="Sign In"
             android:layout_marginTop="20dip"
             android:width="150dip"
             android:layout_gravity="center_horizontal"

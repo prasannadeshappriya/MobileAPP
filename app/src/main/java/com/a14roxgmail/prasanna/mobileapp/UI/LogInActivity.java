@@ -13,17 +13,20 @@ import android.widget.Toast;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Token;
 import com.a14roxgmail.prasanna.mobileapp.R;
-import com.a14roxgmail.prasanna.mobileapp.VolleyRequest.ServerRequest;
+import com.a14roxgmail.prasanna.mobileapp.Utilities.ServerRequest;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class LogInActivity extends AppCompatActivity {
+public class LogInActivity extends AppCompatActivity implements Serializable {
     private EditText etUserName;
     private EditText etPassword;
     private Button btnSignIn;
-    ProgressDialog pd;
+    private HashMap<String,String> details;
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,19 +124,14 @@ public class LogInActivity extends AppCompatActivity {
             Toast.makeText(this, "Server timeout", Toast.LENGTH_LONG).show();
         } else {
             Log.i(Constants.LOG_TAG, "Server Response :- " + response.toString());
-            HashMap<String,String> details = XMLPaser(response.toString());
+            details = XMLPaser(response.toString());
             //Hashmap_ids
             //          sitename
             //          username
             //          firstname
             //          lastname
             //          fullname
-            Log.i(Constants.LOG_TAG, details.get("fullname"));
-            HomeActivity home = new HomeActivity();
-            Intent i = new Intent(this,HomeActivity.class);
-            i.putExtra("Values",details);
-            this.finish();
-            startActivity(i);
+            getCourseInfo();
         }
     }
 
@@ -158,7 +156,7 @@ public class LogInActivity extends AppCompatActivity {
             public void onFinish() {
                 process_user_info_response(request);
                 Log.i(Constants.LOG_TAG, "LogInActivity Class - OnFinish method triggered");
-                pd.dismiss();
+                //pd.dismiss();
             }
 
             @Override
@@ -205,5 +203,52 @@ public class LogInActivity extends AppCompatActivity {
             if(con){break;}
         }
         return map;
+    }
+
+    public void getCourseInfo(){
+        final ServerRequest request = new ServerRequest(4, this);
+        request.set_server_url(Constants.SERVER_REST_URL);
+        request.setParams(Token.getToken(), "wstoken");
+        request.setParams("moodle_enrol_get_users_courses", "wsfunction");
+        request.setParams(details.get("userid"),"userid");
+        request.setParams("json","moodlewsrestformat");
+        try {
+            String req = request.sendPostRequest();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //final ProgressDialog pd = new ProgressDialog(this, R.style.AppTheme_Dark_Dialog);
+        pd.setIndeterminate(true);
+        pd.setMessage("Getting Course Info..");
+        pd.show();
+
+        CountDownTimer timer = new CountDownTimer(2000, 1000) {
+            @Override
+            public void onFinish() {
+                process_Course_info_response(request);
+                Log.i(Constants.LOG_TAG, "LogInActivity Class - process_Course_info_response OnFinish method triggered");
+                pd.dismiss();
+            }
+
+            @Override
+            public void onTick(long millisLeft) {}
+        };
+        timer.start();
+    }
+
+
+    private void process_Course_info_response(ServerRequest request) {
+        String response = request.getResponse();
+        if (response.equals("")) {
+            Toast.makeText(this, "Server timeout", Toast.LENGTH_LONG).show();
+        } else {
+            Log.i(Constants.LOG_TAG, "Server Response :- " + response);
+            Intent i = new Intent(this,HomeActivity.class);
+            i.putExtra("Values",details);
+            i.putExtra("CourseResponse",response);
+            this.finish();
+            startActivity(i);
+        }
     }
 }

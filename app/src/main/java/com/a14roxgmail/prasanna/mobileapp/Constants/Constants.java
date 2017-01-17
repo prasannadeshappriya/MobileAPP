@@ -10,6 +10,7 @@ public class Constants {
     //Token based user authentication
     public static final String SERVER_GET_TOKEN = SERVER + "login/token.php";
     public static final String SERVER_GET_USER_INFO = SERVER + "webservice/rest/server.php";
+    public static final String SERVER_REST_URL = SERVER + "webservice/rest/server.php";
 
     //Testing Log Details
     public static final String LOG_TAG = "TAG";

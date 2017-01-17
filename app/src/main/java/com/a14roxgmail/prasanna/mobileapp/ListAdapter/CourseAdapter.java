@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.Model.Semester;
 import com.a14roxgmail.prasanna.mobileapp.R;
+import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,8 +58,9 @@ public class CourseAdapter extends BaseAdapter {
 
         ArrayAdapter adapter = new ArrayAdapter(context,android.R.layout.simple_list_item_1,name_list);
         lstSubCourse.setAdapter(adapter);
+        Utility.setListViewHeightBasedOnItems(lstSubCourse);
 
-        tvSemName.setText(String.valueOf(arr.get(i).getId()));
+        tvSemName.setText("Semester " + String.valueOf(arr.get(i).getId()));
         return v;
     }
 }

@@ -1,4 +1,4 @@
-package com.a14roxgmail.prasanna.mobileapp.VolleyRequest;
+package com.a14roxgmail.prasanna.mobileapp.Utilities;
 
 import android.app.Activity;
 import android.util.Log;
