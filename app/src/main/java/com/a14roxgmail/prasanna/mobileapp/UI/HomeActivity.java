@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.CourseFragment;
+import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaFragment;
+import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaSemFragment;
 import com.a14roxgmail.prasanna.mobileapp.R;
 
 import org.json.JSONArray;
@@ -53,6 +55,14 @@ public class HomeActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        GpaFragment gpaFragment = new GpaFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frmMain,gpaFragment);
+        toolbar.setTitle("GPA SEM");
+        transaction.commit();
+
+
+/*
         course_list = new ArrayList<>();
 
         Bundle b = getIntent().getExtras();
@@ -79,6 +89,7 @@ public class HomeActivity extends AppCompatActivity
         courseFragment.setServerCourseList(course_list);
         toolbar.setTitle("My Courses");
         transaction.commit();
+*/
     }
 
     @Override

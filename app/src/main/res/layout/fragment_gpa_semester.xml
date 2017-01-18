@@ -6,11 +6,13 @@
     android:layout_marginBottom="10dip"
     android:layout_marginLeft="10dip"
     android:layout_marginRight="10dip"
+    android:background="@drawable/frame_border"
     android:layout_height="match_parent">
+
 
     <ListView
         android:layout_marginTop="10dip"
-        android:id="@+id/lstGpaViewList"
+        android:id="@+id/lstSemesterGpa"
         android:layout_width="match_parent"
         android:dividerHeight="@dimen/activity_vertical_margin"
         android:divider="#00000000"
@@ -18,5 +20,14 @@
         android:layout_weight="1">
     </ListView>
 
+    <Button
+        android:text="Save"
+        android:layout_below="@+id/btnSave"
+        android:layout_gravity="right"
+        android:layout_marginBottom="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginTop="5dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

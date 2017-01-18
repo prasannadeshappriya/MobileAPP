@@ -36,6 +36,10 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         //Initialize
         init();
 
+        Intent i = new Intent(this,HomeActivity.class);
+        startActivity(i);
+        this.finish();
+
         btnSignIn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override

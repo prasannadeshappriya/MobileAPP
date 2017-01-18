@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_width="match_parent"
+    android:background="@drawable/frame_border"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="Semester Name"
+        android:id="@+id/adapterVWSemName"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/vwBar1"
+        android:layout_below="@+id/adapterVWSemName"
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/vwBar1"
+        android:layout_marginLeft="50dip"
+        android:text="GPA"
+        android:id="@+id/adapterVWGpaType"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="50dip"
+        android:text="GPA"
+        android:id="@+id/adapterVWGpa"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vwBar1"
+        android:layout_toRightOf="@+id/adapterVWGpaType" />
+
+
+</RelativeLayout>
