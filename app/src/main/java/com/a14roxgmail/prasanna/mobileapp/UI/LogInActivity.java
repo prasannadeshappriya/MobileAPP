@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Token;
+import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
+import com.a14roxgmail.prasanna.mobileapp.Database.Database;
+import com.a14roxgmail.prasanna.mobileapp.Model.User;
 import com.a14roxgmail.prasanna.mobileapp.R;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.ServerRequest;
 
@@ -27,6 +30,7 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
     private Button btnSignIn;
     private HashMap<String,String> details;
     private ProgressDialog pd;
+    private userDAO user_DAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +39,6 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
 
         //Initialize
         init();
-
-        Intent i = new Intent(this,HomeActivity.class);
-        startActivity(i);
-        this.finish();
 
         btnSignIn.setOnClickListener(
                 new View.OnClickListener() {
@@ -51,9 +51,18 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
 
     }
 
+
+
     public void SignIn(){
         if(Validate()){
-            getToken();
+            if(user_DAO.isUserExist(etUserName.getText().toString())){
+                //Log.i(Constants.LOG_TAG,"User " + etUserName.getText().toString() + " is exist on the database");
+                Log.i(Constants.LOG_TAG,"asdasadadsa");
+            }else {
+                //Log.i(Constants.LOG_TAG,"User " + etUserName.getText().toString() + " is not exist on the database");
+                Log.i(Constants.LOG_TAG,"asdasadadsa");
+                getToken();
+            }
         }
     }
 
@@ -66,8 +75,8 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         btnSignIn = (Button) findViewById(R.id.btnSignIn);
         etPassword = (EditText) findViewById(R.id.etPassword);
         etUserName = (EditText) findViewById(R.id.etUserName);
-
         pd = new ProgressDialog(this, R.style.AppTheme_Dark_Dialog);
+        user_DAO = new userDAO(getApplicationContext());
     }
 
     public void getToken(){
@@ -128,14 +137,26 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
             Toast.makeText(this, "Server timeout", Toast.LENGTH_LONG).show();
         } else {
             Log.i(Constants.LOG_TAG, "Server Response :- " + response.toString());
+
             details = XMLPaser(response.toString());
-            //Hashmap_ids
+            //Hashmap_keys
             //          sitename
             //          username
             //          firstname
             //          lastname
             //          fullname
-            getCourseInfo();
+
+            user_DAO.addUser(
+                    new User(
+                            details.get("firstname"),
+                            details.get("lastname"),
+                            details.get("fullname"),
+                            etUserName.getText().toString(),
+                            Token.getToken()
+                    )
+            );
+
+            //getCourseInfo();
         }
     }
 

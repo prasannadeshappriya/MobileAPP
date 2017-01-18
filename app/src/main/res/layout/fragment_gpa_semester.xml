@@ -22,7 +22,7 @@
 
     <Button
         android:text="Save"
-        android:layout_below="@+id/btnSave"
+        android:id="@+id/btnSave"
         android:layout_gravity="right"
         android:layout_marginBottom="5dip"
         android:layout_marginRight="5dip"

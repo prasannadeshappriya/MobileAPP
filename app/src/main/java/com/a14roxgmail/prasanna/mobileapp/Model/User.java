@@ -8,6 +8,8 @@ public class User {
     private String firstName;
     private String lastName;
     private String fullName;
+    private String userIndex;
+    private String token;
 
     public User(String ID, String firstName, String lastName, String fullName) {
         this.ID = ID;
@@ -15,6 +17,34 @@ public class User {
         this.lastName = lastName;
         this.fullName = fullName;
     }
+
+    public User(String firstName, String lastName, String fullName, String userIndex, String token) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.fullName = fullName;
+        this.token = token;
+        this.userIndex = userIndex;
+    }
+
+    public User(String ID, String firstName, String lastName, String fullName, String userIndex, String token) {
+        this.ID = ID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.fullName = fullName;
+        this.token = token;
+        this.userIndex = userIndex;
+    }
+
+    public void setUserIndex(String userIndex){
+        this.userIndex = userIndex;
+    }
+
+    public void setToken(String token){
+        this.token = token;
+    }
+
+    public String getToken(){return token;}
+    public String getUserIndex(){return userIndex;}
 
     public String getFirstName() {
         return firstName;
