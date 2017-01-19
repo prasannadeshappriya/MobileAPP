@@ -81,7 +81,7 @@ public class GradeDAO extends DAO {
             if(c.moveToFirst()) {
                 return new GPA(
                         Constants.GPA_FLAG,
-                        c.getString(c.getColumnIndex("semester")),
+                        "-",
                         c.getString(c.getColumnIndex("gpa")),
                         c.getString(c.getColumnIndex("user_index"))
                 );
