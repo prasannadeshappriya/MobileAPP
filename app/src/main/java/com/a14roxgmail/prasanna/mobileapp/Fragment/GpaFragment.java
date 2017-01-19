@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
+import com.a14roxgmail.prasanna.mobileapp.DAO.GradeDAO;
 import com.a14roxgmail.prasanna.mobileapp.ListAdapter.GpaViewAdapter;
 import com.a14roxgmail.prasanna.mobileapp.Model.GPA;
 import com.a14roxgmail.prasanna.mobileapp.R;
@@ -25,6 +27,13 @@ public class GpaFragment extends Fragment {
     private GpaViewAdapter adapter;
     private List<GPA> lstGpa;
     private ListView listView;
+    private GradeDAO grade_dao;
+    private CourseDAO course_dao;
+    private String user_index;
+
+    public void setUser_index(String user_index){
+        this.user_index = user_index;
+    }
 
     @Nullable
     @Override
@@ -58,11 +67,18 @@ public class GpaFragment extends Fragment {
     }
 
     public void refreshListView(){
-        lstGpa.add(new GPA(1,"sgpa","1","3.14"));
-        lstGpa.add(new GPA(2,"sgpa","2","2.32"));
-        lstGpa.add(new GPA(3,"sgpa","3","2.74"));
-        lstGpa.add(new GPA(4,"sgpa","4","1.78"));
-        lstGpa.add(new GPA(5,"gpa","5","3.78"));
+        if(!grade_dao.isGPAExist(user_index)){
+            lstGpa.add(new GPA("sgpa","1","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA("sgpa","2","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA("sgpa","3","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA("sgpa","4","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA("sgpa","5","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA("sgpa","6","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA("sgpa","7","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA("sgpa","8","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA("gpa","-","Not Calculated Yet",user_index));
+        }
+
 
         adapter = new GpaViewAdapter(getContext(),lstGpa);
         listView.setAdapter(adapter);
@@ -71,5 +87,7 @@ public class GpaFragment extends Fragment {
     private void init(View view) {
         lstGpa = new ArrayList<>();
         listView = (ListView)view.findViewById(R.id.lstGpaViewList);
+        grade_dao = new GradeDAO(getContext());
+        course_dao = new CourseDAO(getContext());
     }
 }

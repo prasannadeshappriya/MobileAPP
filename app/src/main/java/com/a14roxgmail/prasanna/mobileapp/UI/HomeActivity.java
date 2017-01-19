@@ -40,6 +40,7 @@ public class HomeActivity extends AppCompatActivity
     TextView tvFullName;
     CourseDAO course_dao;
     ArrayList<Course> course_list;
+    String userIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +59,6 @@ public class HomeActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        GpaFragment gpaFragment = new GpaFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frmMain,gpaFragment);
-        toolbar.setTitle("GPA SEM");
-        transaction.commit();
-
         course_dao = new CourseDAO(this);
         Bundle b = getIntent().getExtras();
         HashMap<String,String> map = (HashMap<String,String>) b.getSerializable("Values");
@@ -73,10 +68,9 @@ public class HomeActivity extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
         tvIndexNo = (TextView) header.findViewById(R.id.tvIndexNo);
         tvFullName = (TextView) header.findViewById(R.id.tvFullName);
-        tvIndexNo.setText(map.get("username").toUpperCase().toString());
+        userIndex = map.get("username").toUpperCase().toString();
+        tvIndexNo.setText(userIndex);
         tvFullName.setText(map.get("fullname").toString());
-
-        /*
 
         CourseFragment courseFragment = new CourseFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -84,7 +78,7 @@ public class HomeActivity extends AppCompatActivity
         courseFragment.setServerCourseList(course_list);
         toolbar.setTitle("My Courses");
         transaction.commit();
-        */
+
 
     }
 
@@ -137,7 +131,12 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_feedback) {
             toolbar.setTitle("Feedback");
         } else if (id == R.id.nav_GPA) {
+            GpaFragment gpaFragment = new GpaFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frmMain,gpaFragment);
+            gpaFragment.setUser_index(userIndex);
             toolbar.setTitle("GPA");
+            transaction.commit();
         } else if (id == R.id.nav_signout) {
             //Signout Process
         }

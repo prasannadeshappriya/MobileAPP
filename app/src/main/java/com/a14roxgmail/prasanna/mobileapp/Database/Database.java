@@ -45,6 +45,23 @@ public class Database extends SQLiteOpenHelper {
                 "FOREIGN KEY(user_index) REFERENCES user(user_index));";
         Log.i(Constants.LOG_TAG, "Create course table query :- " + command);
         sqLiteDatabase.execSQL(command);
+
+        command = "CREATE TABLE IF NOT EXISTS gpa (" +
+                "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "user_index VARCHAR(10), " +
+                "gpa VARCHAR(10), " +
+                "FOREIGN KEY(user_index) REFERENCES user(user_index));";
+        Log.i(Constants.LOG_TAG, "Create gpa table query :- " + command);
+        sqLiteDatabase.execSQL(command);
+
+        command = "CREATE TABLE IF NOT EXISTS sgpa (" +
+                "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "user_index VARCHAR(10), " +
+                "semester VARCHAR(10), " +
+                "sgpa VARCHAR(10), " +
+                "FOREIGN KEY(user_index) REFERENCES user(user_index));";
+        Log.i(Constants.LOG_TAG, "Create sgpa table query :- " + command);
+        sqLiteDatabase.execSQL(command);
     }
 
 

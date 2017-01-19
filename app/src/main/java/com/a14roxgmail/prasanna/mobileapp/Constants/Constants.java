@@ -21,4 +21,6 @@ public class Constants {
 
     //Constant Values
     public static final String USER_LOGIN_FLAG = "1";
+    public static final String SGPA_FLAG = "sgpa";
+    public static final String GPA_FLAG = "gpa";
 }
