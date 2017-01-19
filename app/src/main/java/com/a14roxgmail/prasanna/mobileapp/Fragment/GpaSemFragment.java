@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.GpaPoints;
+import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.ListAdapter.CourseGpaCalcAdapter;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.Model.GPA;
@@ -30,7 +33,25 @@ public class GpaSemFragment extends Fragment{
     CourseGpaCalcAdapter adapter;
     List<Course> courses_name;
     ListView lstCourse;
+    String semester;
+    CourseDAO course_dao;
     GPA gpa;
+    String userIndex;
+
+    public void setArgs(String semester, String userIndex, GPA gpa){
+        setSemester(semester);
+        setGpa(gpa);
+        setUserIndex(userIndex);
+    }
+
+    private void setSemester(String semester){
+        this.semester = semester;
+    }
+
+    private void setUserIndex(String userIndex){
+        this.userIndex = userIndex;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,18 +62,25 @@ public class GpaSemFragment extends Fragment{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        save_and_refresh(view);
+                        Log.i(Constants.LOG_TAG,semester);
+                        //save_and_refresh(view);
                     }
                 }
         );
 
-        courses_name.add(new Course("1","140062D","In14-S5-CS3332 - Industrial Instrumentation & Control","CS2023","3.0","1" ));
-        courses_name.add(new Course("2","140062D", "In14-S5-CS3322 - Computer-integrated Control System Applications","CS4854","2.0","1"));
-        courses_name.add(new Course("3","140062D", "In14-S5-CS3282 - Industrial Computer Engineering Project","CS6298","4.0","1"));
-        courses_name.add(new Course("4","140062D", "In14-S1-MN1012 - Engineering in Context","CS6598","6.0","1"));
-        courses_name.add(new Course("5","140062D", "In14-S1-EL1012 - Language Skills Enhancement I","CS65498","3.20","1"));
-        courses_name.add(new Course("6","140062D", "In14-S1-EL1012 - Language Skills Enhancement I Language Skills Enhancement ILanguage Skills Enhancement I","CS65928","3.40","1"));
-
+        ArrayList<Course> course = course_dao.getAllCourseBySemester(semester,userIndex);
+        for(int i=0; i<course.size(); i++){
+            courses_name.add(
+                    new Course(
+                            String.valueOf(i+1),
+                            course.get(i).getUserIndex(),
+                            course.get(i).getCourseName(),
+                            course.get(i).getCourseCode(),
+                            course.get(i).getCredits(),
+                            course.get(i).getSemester()
+                    )
+            );
+        }
         adapter = new CourseGpaCalcAdapter(getContext(),courses_name);
         lstCourse.setAdapter(adapter);
 
@@ -74,12 +102,13 @@ public class GpaSemFragment extends Fragment{
 
     }
 
-    public void setGpa(GPA gpa){this.gpa = gpa;}
+    private void setGpa(GPA gpa){this.gpa = gpa;}
 
     private void init(View view) {
         courses_name = new ArrayList<>();
         lstCourse = (ListView) view.findViewById(R.id.lstSemesterGpa);
         btnSave = (Button) view.findViewById(R.id.btnSave);
+        course_dao = new CourseDAO(getContext());
     }
 
     @Override
@@ -94,6 +123,7 @@ public class GpaSemFragment extends Fragment{
                     GpaFragment gpaFragment = new GpaFragment();
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.frmMain,gpaFragment);
+                    gpaFragment.setUser_index(userIndex);
                     transaction.commit();
                     return true;
                 }

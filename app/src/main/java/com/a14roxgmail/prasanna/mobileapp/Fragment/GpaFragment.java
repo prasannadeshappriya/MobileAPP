@@ -47,7 +47,7 @@ public class GpaFragment extends Fragment {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                         GPA gpa = (GPA)adapterView.getItemAtPosition(i);
-                        openEditWindow(view,gpa);
+                        openEditWindow(view,gpa,i);
                         return false;
                     }
                 }
@@ -56,29 +56,54 @@ public class GpaFragment extends Fragment {
         return view;
     }
 
-    private void openEditWindow(View view, GPA gpa){
+    private void openEditWindow(View view, GPA gpa, int i){
         if(gpa.getType().equals("sgpa")){
             GpaSemFragment gpaSemFragment = new GpaSemFragment();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.replace(R.id.frmMain,gpaSemFragment);
-            gpaSemFragment.setGpa(gpa);
+            gpaSemFragment.setArgs(String.valueOf(i+1),user_index,gpa);
             transaction.commit();
         }
     }
 
     public void refreshListView(){
-        if(!grade_dao.isGPAExist(user_index)){
-            lstGpa.add(new GPA(1, "sgpa","1","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA(2, "sgpa","2","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA(3, "sgpa","3","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA(4, "sgpa","4","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA(5, "sgpa","5","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA(6, "sgpa","6","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA(7, "sgpa","7","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA(8, "sgpa","8","Not Calculated Yet",user_index));
+        if(grade_dao.isGPAExist(user_index)){
+            int max = Integer.parseInt(course_dao.getMaxSemester(user_index));
+            for(int i=0; i<max; i++) {
+                if (grade_dao.isSGPAExist(user_index, String.valueOf(i+1))) {
+                    ArrayList<GPA> arrGpa = grade_dao.getSGPA(user_index);
+                    lstGpa.add(new GPA(
+                            (i+1),
+                            arrGpa.get(i).getType(),
+                            arrGpa.get(i).getSemester(),
+                            arrGpa.get(i).getGpa(),
+                            arrGpa.get(i).getUserIndex()
+                    ));
+                }else{
+                    lstGpa.add(new GPA(
+                            (i+1),
+                            "sgpa",
+                            String.valueOf(i+1),
+                            "Not Calculated Yet",
+                            user_index
+                    ));
+                }
+            }
+            GPA overall = grade_dao.getGPA(user_index);
+            lstGpa.add(new GPA(
+                    max,
+                    overall.getType(),
+                    "-",
+                    overall.getGpa(),
+                    overall.getUserIndex()
+            ));
+        }else{
+            int a = Integer.parseInt(course_dao.getMaxSemester(user_index));
+            for(int i=0;i<a;i++){
+                lstGpa.add(new GPA((i+1), "sgpa",String.valueOf(i+1),"Not Calculated Yet",user_index));
+            }
             lstGpa.add(new GPA(9, "gpa","-","Not Calculated Yet",user_index));
         }
-
 
         adapter = new GpaViewAdapter(getContext(),lstGpa);
         listView.setAdapter(adapter);

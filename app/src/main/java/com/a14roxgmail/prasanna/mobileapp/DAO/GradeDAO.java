@@ -100,8 +100,9 @@ public class GradeDAO extends DAO {
             return false;
         }
     }
-    public boolean isSGPAExist(String userIndex){
-        command = "SELECT * FROM " + tableSGpa + " WHERE user_index=\"" + userIndex + "\";";
+
+    public boolean isSGPAExist(String userIndex, String semester){
+        command = "SELECT * FROM " + tableSGpa + " WHERE user_index=\"" + userIndex + "\" + AND semester = \"" + semester + "\";";
         Log.i(Constants.LOG_TAG,"Check for sgpa exist query :- " + command);
         Cursor c = sqldb.rawQuery(command,null);
         if(c.getCount()>0){

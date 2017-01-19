@@ -42,6 +42,40 @@ public class CourseDAO extends DAO{
         return course;
     }
 
+    public ArrayList<Course> getAllCourseBySemester(String semester, String userIndex){
+        command = "SELECT * FROM "+tableName+" WHERE user_index = \"" + userIndex + "\" AND semester = \"" + semester + "\";";
+        Log.i(Constants.LOG_TAG,"Course select all for userIndex and semester query :- " + command);
+        Cursor c = sqldb.rawQuery(command,null);
+        Log.i(Constants.LOG_TAG, "Table name :- " + tableName + "   Search cursor count :- " + String.valueOf(c.getCount()));
+        ArrayList<Course> arrCourse = new ArrayList<>();
+        Course course = null;
+        if(c.moveToFirst()) {
+            do {
+                course = new Course(
+                        c.getString(c.getColumnIndex("user_index")),
+                        c.getString(c.getColumnIndex("course_name")),
+                        c.getString(c.getColumnIndex("course_code")),
+                        c.getString(c.getColumnIndex("credits")),
+                        c.getString(c.getColumnIndex("semester")));
+                arrCourse.add(course);
+            } while (c.moveToNext());
+        }
+        return arrCourse;
+    }
+
+    public String getMaxSemester(String userIndex){
+        command = "SELECT semester FROM " + tableName + " WHERE user_index = \"" + userIndex + "\" ORDER BY semester desc;";
+        Log.i(Constants.LOG_TAG,"Select max semester number, query :- " + command);
+        Cursor c = sqldb.rawQuery(command,null);
+        if(c.getCount()>0) {
+            Log.i(Constants.LOG_TAG, "Table name :- " + tableName + "   Search cursor count :- " + String.valueOf(c.getCount()));
+            c.moveToFirst();
+            return c.getString(c.getColumnIndex("semester"));
+        }else {
+            return "0";
+        }
+    }
+
     public ArrayList<Course> getAllCoursesByUserId(String userIndex){
         command = "SELECT * FROM "+tableName+" WHERE user_index = \"" + userIndex + "\";";
         Log.i(Constants.LOG_TAG,"Course select all for userIndex query :- " + command);
