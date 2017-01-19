@@ -57,13 +57,13 @@ public class HomeActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-/*
+
         GpaFragment gpaFragment = new GpaFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frmMain,gpaFragment);
         toolbar.setTitle("GPA SEM");
         transaction.commit();
-*/
+
         course_dao = new CourseDAO(this);
         Bundle b = getIntent().getExtras();
         HashMap<String,String> map = (HashMap<String,String>) b.getSerializable("Values");
@@ -76,12 +76,15 @@ public class HomeActivity extends AppCompatActivity
         tvIndexNo.setText(map.get("username").toUpperCase().toString());
         tvFullName.setText(map.get("fullname").toString());
 
+        /*
+
         CourseFragment courseFragment = new CourseFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frmMain,courseFragment);
         courseFragment.setServerCourseList(course_list);
         toolbar.setTitle("My Courses");
         transaction.commit();
+        */
 
     }
 

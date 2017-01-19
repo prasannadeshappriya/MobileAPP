@@ -44,10 +44,10 @@ public class CourseGpaCalcAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        /*
         View v = View.inflate(context, R.layout.adapter_gpa_semester,null);
 
         TextView tvCourseName = (TextView)v.findViewById(R.id.adapterCourseName) ;
+        TextView tvCourseCredit = (TextView)v.findViewById(R.id.adapterCourseCredits) ;
         Spinner spiGrades = (Spinner)v.findViewById(R.id.spiGrades);
 
         arrGrades = new ArrayList<>();
@@ -59,11 +59,11 @@ public class CourseGpaCalcAdapter extends BaseAdapter {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,arrGrades);
         spiGrades.setAdapter(adapter);
 
-        String course_name = lstCourse.get(i).getFullname();
+        String course_name = lstCourse.get(i).getCourseName();
         tvCourseName.setText(course_name);
 
+        String course_credit = lstCourse.get(i).getCredits();
+        tvCourseCredit.setText("(Credits - " + course_credit + ")");
         return v;
-        */
-        return view;
     }
 }
