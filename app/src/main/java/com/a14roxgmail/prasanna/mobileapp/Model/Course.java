@@ -10,7 +10,7 @@ public class Course {
     private String courseCode;
     private String credits;
     private String semester;
-    private String grades;
+    private String grade;
 
     public Course(String userIndex){
         this.userIndex = userIndex;
@@ -23,6 +23,7 @@ public class Course {
         this.credits = credits;
         this.semester = semester;
     }
+
     public Course(String id, String userIndex, String courseName, String courseCode, String credits, String semester) {
         this.id = id;
         this.userIndex = userIndex;
@@ -39,11 +40,14 @@ public class Course {
         this.courseCode = courseCode;
         this.credits = credits;
         this.semester = semester;
-        this.grades = grade;
+        this.grade = grade;
     }
 
-    public String getGrades(){return grades;}
-    public void setGrades(String grades){this.grades = grades;}
+    public String getGrade(){return grade;}
+
+    public void setGrade(String grade){
+        this.grade = grade;
+    }
 
     public String getCourseCode() {
         return courseCode;

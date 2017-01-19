@@ -9,6 +9,7 @@ public class GPA {
     private String semester;
     private String gpa;
     private String userIndex;
+    private String total_credits;
 
     public GPA(int id, String type, String semester, String gpa, String userIndex) {
         this.id = id;
@@ -18,12 +19,26 @@ public class GPA {
         this.userIndex = userIndex;
     }
 
+    public GPA(String type, String semester, String gpa, String userIndex, String total_credits) {
+        this.type = type;
+        this.semester = semester;
+        this.gpa = gpa;
+        this.userIndex = userIndex;
+        this.total_credits = total_credits;
+    }
+
     public GPA(String type, String semester, String gpa, String userIndex) {
         this.type = type;
         this.semester = semester;
         this.gpa = gpa;
         this.userIndex = userIndex;
     }
+
+    public void setTotal_credits(String total_credits){
+        this.total_credits = total_credits;
+    }
+
+    public String getTotal_credits(){return total_credits;}
 
     public void setUserIndex(String userIndex){
         this.userIndex = userIndex;

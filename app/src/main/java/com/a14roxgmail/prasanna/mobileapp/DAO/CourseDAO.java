@@ -110,6 +110,12 @@ public class CourseDAO extends DAO{
         sqldb.insert(tableName,null,cv);
     }
 
+    public void updateGrade(String userIndex, String course_name,String grade){
+        command = "UPDATE " + tableName + " SET grade = \"" + grade + "\" WHERE course_name = \"" + course_name + "\" AND user_index = \"" + userIndex + "\";";
+        Log.i(Constants.LOG_TAG, "Update grade for user :- " + userIndex + ", course :- " + course_name + ", query :- " + command);
+        sqldb.execSQL(command);
+    }
+
     public void addCourseList(ArrayList<Course> arrCourse){
         Log.i(Constants.LOG_TAG,"CourseDAO addCourseList method triggered");
         for(int i=0;i<arrCourse.size(); i++){

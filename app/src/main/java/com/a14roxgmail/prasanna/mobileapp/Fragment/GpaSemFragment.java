@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.GpaPoints;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
+import com.a14roxgmail.prasanna.mobileapp.DAO.GradeDAO;
 import com.a14roxgmail.prasanna.mobileapp.ListAdapter.CourseGpaCalcAdapter;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.Model.GPA;
@@ -37,6 +38,7 @@ public class GpaSemFragment extends Fragment{
     String semester;
     CourseDAO course_dao;
     GPA gpa;
+    GradeDAO gradeDAO;
     String userIndex;
 
     public void setArgs(String semester, String userIndex, GPA gpa){
@@ -80,8 +82,7 @@ public class GpaSemFragment extends Fragment{
                             course.get(i).getCourseName(),
                             course.get(i).getCourseCode(),
                             course.get(i).getCredits(),
-                            course.get(i).getSemester(),
-                            "2"
+                            course.get(i).getSemester()
                     )
             );
         }
@@ -93,20 +94,89 @@ public class GpaSemFragment extends Fragment{
     }
 
     public void save_and_refresh(View view){
-        double Total;
+        double total = 0.0;
+        double total_cedits = 0.0;
         int count = lstCourse.getAdapter().getCount();
 
         for(int i=0; i<count; i++){
-            //View v = lstCourse.getAdapter().getView(i,view,null);
             View v = getViewByPosition(i,lstCourse);
             Spinner spiGrade = (Spinner)v.findViewById(R.id.spiGrades);
             TextView tv = (TextView) v.findViewById(R.id.adapterCourseCredits);
-            String point = GpaPoints.getPoint(spiGrade.getSelectedItem().toString());
-            Log.i(Constants.LOG_TAG,point + "  " + tv.getText().toString() + "   " + spiGrade.getSelectedItem().toString());
+            TextView tvName = (TextView) v.findViewById(R.id.adapterCourseName);
+            double point = Double.parseDouble(GpaPoints.getPoint(spiGrade.getSelectedItem().toString()));
 
+            double credit = Double.parseDouble(
+                    tv.getText().toString().substring(
+                            11,
+                            tv.getText().toString().length()-1)
+            );
+
+            Log.i(Constants.LOG_TAG,point + "  '" + credit + "'   " + spiGrade.getSelectedItem().toString());
+            total = total + (credit*point);
+            if(!spiGrade.getSelectedItem().toString().equals("Non - GPA")){
+                total_cedits = total_cedits + credit;
+            }
+            course_dao.updateGrade(userIndex,tvName.getText().toString(),spiGrade.getSelectedItem().toString());
         }
 
+        double sgpa = (total /total_cedits);
+        Log.i(Constants.LOG_TAG, "semester gpa :- " + sgpa);
 
+        gradeDAO.addGpa(
+                new GPA(
+                        Constants.SGPA_FLAG,
+                        semester,
+                        String.valueOf(sgpa),
+                        userIndex,
+                        String.valueOf(total_cedits)
+                )
+
+        );
+
+        if(getOption()) {
+            calculate_overall_gpa_option_a();
+        }else{
+            calculate_overall_gpa_option_b();
+        }
+    }
+
+    private void calculate_overall_gpa_option_a() {
+        ArrayList<GPA> sgpa_list = gradeDAO.getSGPA(userIndex);
+        double totalSgpa = 0.0;
+        double totalCredit = 0.0;
+        for(int i=0; i<sgpa_list.size(); i++){
+            GPA gpa = sgpa_list.get(i);
+            totalSgpa+= Double.parseDouble(gpa.getGpa());
+            Log.i(Constants.LOG_TAG, gpa.getTotal_credits().toString());
+            totalCredit+= Double.parseDouble(gpa.getTotal_credits().toString());
+        }
+        double gpa = (totalSgpa/sgpa_list.size());
+        Log.i(Constants.LOG_TAG,"Calculater log using method 1 :- " + gpa);
+
+        gradeDAO.addGpa(
+                new GPA(
+                        Constants.GPA_FLAG,
+                        semester,
+                        String.valueOf(gpa),
+                        userIndex,
+                        String.valueOf(totalCredit)
+                )
+        );
+
+        GpaFragment gpaFragment = new GpaFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.frmMain,gpaFragment);
+        gpaFragment.setUser_index(userIndex);
+        transaction.commit();
+
+    }
+
+    private void calculate_overall_gpa_option_b() {
+        //
+    }
+
+    private boolean getOption(){
+        return true;
     }
 
     public View getViewByPosition(int position, ListView listView) {
@@ -128,6 +198,7 @@ public class GpaSemFragment extends Fragment{
         lstCourse = (ListView) view.findViewById(R.id.lstSemesterGpa);
         btnSave = (Button) view.findViewById(R.id.btnSave);
         course_dao = new CourseDAO(getContext());
+        gradeDAO = new GradeDAO(getContext());
     }
 
     @Override

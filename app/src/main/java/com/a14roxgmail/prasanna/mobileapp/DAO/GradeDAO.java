@@ -23,7 +23,7 @@ public class GradeDAO extends DAO {
         this.context = context;
     }
 
-    public void addOveralGpa(GPA gpa){
+    public void addGpa(GPA gpa){
         Log.i(Constants.LOG_TAG,"GPA " + gpa.getType() + " insert method triggered");
         ContentValues cv = new ContentValues();
 
@@ -31,10 +31,24 @@ public class GradeDAO extends DAO {
         if(gpa.getType().equals("sgpa")) {
             cv.put("semester", gpa.getSemester());
             cv.put("sgpa", gpa.getGpa());
+            cv.put("total_credit", gpa.getTotal_credits());
             sqldb.insert(tableSGpa,null,cv);
         }else{
             cv.put("gpa", gpa.getGpa());
             sqldb.insert(tableGpa,null,cv);
+        }
+    }
+
+    public String getTotalCredit(String semester, String userIndex){
+        command = "SELECT total_credit FROM " + tableSGpa + " WHERE user_index = \"" + userIndex + "\" AND semester = \"" + semester + "\";";
+        Log.i(Constants.LOG_TAG,"Select total credits for semester " + semester + ", query :- " + command);
+        Cursor c = sqldb.rawQuery(command,null);
+        if(c.getCount()>0) {
+            Log.i(Constants.LOG_TAG, "Table name :- " + tableSGpa + "   Search cursor count :- " + String.valueOf(c.getCount()));
+            c.moveToFirst();
+            return c.getString(c.getColumnIndex("total_credit"));
+        }else {
+            return "0.0";
         }
     }
 
@@ -50,7 +64,8 @@ public class GradeDAO extends DAO {
                         Constants.SGPA_FLAG,
                         c.getString(c.getColumnIndex("semester")),
                         c.getString(c.getColumnIndex("sgpa")),
-                        c.getColumnName(c.getColumnIndex("user_index"))
+                        c.getString(c.getColumnIndex("user_index")),
+                        c.getString(c.getColumnIndex("total_credit"))
                 );
                 arrGPA.add(gpa);
             } while (c.moveToNext());
@@ -63,15 +78,17 @@ public class GradeDAO extends DAO {
         Log.i(Constants.LOG_TAG,"get gpa for user " + userIndex + " query " + command);
         Cursor c = sqldb.rawQuery(command,null);
         if(c.getCount()>0){
-            c.close();
-            return new GPA(
-                    Constants.GPA_FLAG,
-                    c.getString(c.getColumnIndex("semester")),
-                    c.getString(c.getColumnIndex("gpa")),
-                    c.getColumnName(c.getColumnIndex("user_index"))
-            );
+            if(c.moveToFirst()) {
+                return new GPA(
+                        Constants.GPA_FLAG,
+                        c.getString(c.getColumnIndex("semester")),
+                        c.getString(c.getColumnIndex("gpa")),
+                        c.getString(c.getColumnIndex("user_index"))
+                );
+            }else{
+                return null;
+            }
         }else{
-            c.close();
             return null;
         }
     }
@@ -102,7 +119,7 @@ public class GradeDAO extends DAO {
     }
 
     public boolean isSGPAExist(String userIndex, String semester){
-        command = "SELECT * FROM " + tableSGpa + " WHERE user_index=\"" + userIndex + "\" + AND semester = \"" + semester + "\";";
+        command = "SELECT * FROM " + tableSGpa + " WHERE user_index=\"" + userIndex + "\" AND semester = \"" + semester + "\";";
         Log.i(Constants.LOG_TAG,"Check for sgpa exist query :- " + command);
         Cursor c = sqldb.rawQuery(command,null);
         if(c.getCount()>0){

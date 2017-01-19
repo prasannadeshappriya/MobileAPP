@@ -41,6 +41,7 @@ public class Database extends SQLiteOpenHelper {
                 "course_name VARCHAR(255), " +
                 "course_code VARCHAR(50), " +
                 "credits VARCHAR(10), " +
+                "grade VARCHAR(10), " +
                 "semester VARCHAR(10), " +
                 "FOREIGN KEY(user_index) REFERENCES user(user_index));";
         Log.i(Constants.LOG_TAG, "Create course table query :- " + command);
@@ -57,6 +58,7 @@ public class Database extends SQLiteOpenHelper {
         command = "CREATE TABLE IF NOT EXISTS sgpa (" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "user_index VARCHAR(10), " +
+                "total_credit VARCHAR(20), " +
                 "semester VARCHAR(10), " +
                 "sgpa VARCHAR(10), " +
                 "FOREIGN KEY(user_index) REFERENCES user(user_index));";
