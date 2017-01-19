@@ -2,7 +2,6 @@ package com.a14roxgmail.prasanna.mobileapp.DAO;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Database.Database;
 

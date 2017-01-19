@@ -44,6 +44,7 @@ public class CourseGpaCalcAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        /*
         View v = View.inflate(context, R.layout.adapter_gpa_semester,null);
 
         TextView tvCourseName = (TextView)v.findViewById(R.id.adapterCourseName) ;
@@ -62,5 +63,7 @@ public class CourseGpaCalcAdapter extends BaseAdapter {
         tvCourseName.setText(course_name);
 
         return v;
+        */
+        return view;
     }
 }

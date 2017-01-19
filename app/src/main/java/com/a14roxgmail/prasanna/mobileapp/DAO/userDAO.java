@@ -35,6 +35,12 @@ public class userDAO extends DAO{
         }
     }
 
+    public void deleteUser(String userIndex){
+        command = "DELETE FROM " + tableName + " WHERE user_index = \"" + userIndex + "\";";
+        Log.i(Constants.LOG_TAG, "Delete user '" + userIndex + "' query :- " + command);
+        sqldb.execSQL(command);
+    }
+
     public User getUser(String userIndex){
         command = "SELECT * FROM "+tableName+" WHERE user_index = \"" + userIndex + "\";";
         Log.i(Constants.LOG_TAG,"User select for index query :- " + command);
@@ -44,12 +50,12 @@ public class userDAO extends DAO{
         if(c.moveToFirst()) {
             do {
                 user = new User(
-                        c.getString(c.getColumnIndex("ID")),
                         c.getString(c.getColumnIndex("first_name")),
                         c.getString(c.getColumnIndex("last_name")),
                         c.getString(c.getColumnIndex("full_name")),
                         c.getString(c.getColumnIndex("user_index")),
-                        c.getString(c.getColumnIndex("token")));
+                        c.getString(c.getColumnIndex("token")),
+                        c.getString(c.getColumnIndex("login_status")));
             } while (c.moveToNext());
         }
         return user;
@@ -63,10 +69,30 @@ public class userDAO extends DAO{
         cv.put("full_name",user.getFullName());
         cv.put("user_index",user.getUserIndex());
         cv.put("token",user.getToken());
+        cv.put("login_status", "1");
 
         Log.i(Constants.LOG_TAG,"UserDAO insert method triggered");
         sqldb.insert(tableName,null,cv);
     }
 
+    public String getLoginStatus(String userIndex){
+        command = "SELECT login_status FROM "+tableName+" WHERE user_index = \"" + userIndex + "\";";
+        Log.i(Constants.LOG_TAG,"Check login_status for index query :- " + command);
+        Cursor c = sqldb.rawQuery(command,null);
+        Log.i(Constants.LOG_TAG, "Table name :- " + tableName + "   Search cursor count :- " + String.valueOf(c.getCount()));
+        String login_status_value = "";
+        if(c.moveToFirst()) {
+            do {
+                login_status_value = c.getString(c.getColumnIndex("login_status"));
+            } while (c.moveToNext());
+        }
+        return login_status_value;
+    }
+
+    public void updateLoginStatus(String new_login_status_value, String userIndex){
+        command = "UPDATE " + tableName + " SET login_status = \"" + new_login_status_value + "\" WHERE user_index = \""+ userIndex + "\";";
+        Log.i(Constants.LOG_TAG,"Update login_status value query :- " + command);
+        sqldb.execSQL(command);
+    }
 
 }

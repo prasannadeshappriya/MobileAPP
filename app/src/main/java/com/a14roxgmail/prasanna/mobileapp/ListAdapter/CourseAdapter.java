@@ -44,6 +44,7 @@ public class CourseAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+
         View v = View.inflate(context, R.layout.adapter_course_list,null);
 
         ListView lstSubCourse = (ListView)v.findViewById(R.id.lstSubCourse);
@@ -53,7 +54,10 @@ public class CourseAdapter extends BaseAdapter {
         List<String> name_list = new ArrayList<>();
 
         for(int j=0; j<course_list.size();j++){
-            name_list.add(course_list.get(j).getFullname().toString());
+            name_list.add(
+                    course_list.get(j).getCourseCode().toString() + " - " +
+                            course_list.get(j).getCourseName().toString()
+            );
         }
 
         ArrayAdapter adapter = new ArrayAdapter(context,android.R.layout.simple_list_item_1,name_list);

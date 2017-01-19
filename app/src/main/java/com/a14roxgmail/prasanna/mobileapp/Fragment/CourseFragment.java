@@ -26,9 +26,8 @@ public class CourseFragment extends Fragment {
     private List<Semester> lstCourse;
     private CourseAdapter adapter;
     private ListView lstCourstView;
-    private ArrayList<JSONObject> serverCourseList;
-
-    private ArrayList<Course> sem1, sem2, sem3, sem4, sem5, sem6, sem7, sem8;
+    private ArrayList<Course> serverCourseList;
+    private ArrayList<Course> sem1,sem2,sem3,sem4,sem5,sem6,sem7,sem8;
 
     @Nullable
     @Override
@@ -54,48 +53,37 @@ public class CourseFragment extends Fragment {
     }
 
     private void syncCourseList(){
-        for (int i=0; i<serverCourseList.size(); i++){
-            try {
-                String cName = serverCourseList.get(i).getString("shortname");
-                if(cName.substring(7,8).equals("-")){
-                    String sem = cName.substring(5,7);
-                    if (sem.toLowerCase().equals("s1")){
-                        addElements(sem1,i);
-                    }else if (sem.toLowerCase().equals("s2")){
-                        addElements(sem2,i);
-                    }else if (sem.toLowerCase().equals("s3")){
-                        addElements(sem3,i);
-                    }else if (sem.toLowerCase().equals("s4")){
-                        addElements(sem4,i);
-                    }else if (sem.toLowerCase().equals("s5")){
-                        addElements(sem5,i);
-                    }else if (sem.toLowerCase().equals("s6")){
-                        addElements(sem6,i);
-                    }else if (sem.toLowerCase().equals("s7")){
-                        addElements(sem7,i);
-                    }else if (sem.toLowerCase().equals("s8")){
-                        addElements(sem8,i);
-                    }
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+        for(int i=0;i<serverCourseList.size();i++){
+            if(serverCourseList.get(i).getSemester().equals("1")){
+                addElements(sem1,i);
+            }else if(serverCourseList.get(i).getSemester().equals("2")){
+                addElements(sem2,i);
+            }else if(serverCourseList.get(i).getSemester().equals("3")){
+                addElements(sem3,i);
+            }else if(serverCourseList.get(i).getSemester().equals("4")){
+                addElements(sem4,i);
+            }else if(serverCourseList.get(i).getSemester().equals("5")){
+                addElements(sem5,i);
+            }else if(serverCourseList.get(i).getSemester().equals("6")){
+                addElements(sem6,i);
+            }else if(serverCourseList.get(i).getSemester().equals("7")){
+                addElements(sem7,i);
+            }else if(serverCourseList.get(i).getSemester().equals("8")){
+                addElements(sem8,i);
             }
         }
     }
 
     private void addElements(ArrayList<Course> ret, int index){
-        try {
             ret.add(
                     new Course(
-                            serverCourseList.get(index).getString("id"),
-                            serverCourseList.get(index).getString("shortname"),
-                            serverCourseList.get(index).getString("fullname")
+                            serverCourseList.get(index).getUserIndex(),
+                            serverCourseList.get(index).getCourseName(),
+                            serverCourseList.get(index).getCourseCode(),
+                            serverCourseList.get(index).getCredits(),
+                            serverCourseList.get(index).getSemester()
                     )
             );
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     private void init(View view) {
@@ -111,7 +99,7 @@ public class CourseFragment extends Fragment {
         sem8 = new ArrayList<>();
     }
 
-    public void setServerCourseList(ArrayList<JSONObject> arr){
+    public void setServerCourseList(ArrayList<Course> arr){
         this.serverCourseList = arr;
     }
 }

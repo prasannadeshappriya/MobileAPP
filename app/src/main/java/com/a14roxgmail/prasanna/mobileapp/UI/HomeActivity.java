@@ -15,9 +15,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
+import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.CourseFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaSemFragment;
+import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.R;
 
 import org.json.JSONArray;
@@ -36,7 +38,8 @@ public class HomeActivity extends AppCompatActivity
     Toolbar toolbar;
     TextView tvIndexNo;
     TextView tvFullName;
-    ArrayList<JSONObject> course_list;
+    CourseDAO course_dao;
+    ArrayList<Course> course_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,28 +57,18 @@ public class HomeActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+/*
         GpaFragment gpaFragment = new GpaFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frmMain,gpaFragment);
         toolbar.setTitle("GPA SEM");
         transaction.commit();
-
-
-/*
-        course_list = new ArrayList<>();
-
+*/
+        course_dao = new CourseDAO(this);
         Bundle b = getIntent().getExtras();
         HashMap<String,String> map = (HashMap<String,String>) b.getSerializable("Values");
-        String response = b.getString("CourseResponse");
-        try {
-            JSONArray jsonArray = new JSONArray(response);
-            for (int i=0; i<jsonArray.length(); i++) {
-                course_list.add(jsonArray.getJSONObject(i));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        course_list = course_dao.getAllCoursesByUserId(map.get("username").toUpperCase());
+        int i = course_list.size();
 
         View header = navigationView.getHeaderView(0);
         tvIndexNo = (TextView) header.findViewById(R.id.tvIndexNo);
@@ -89,7 +82,7 @@ public class HomeActivity extends AppCompatActivity
         courseFragment.setServerCourseList(course_list);
         toolbar.setTitle("My Courses");
         transaction.commit();
-*/
+
     }
 
     @Override

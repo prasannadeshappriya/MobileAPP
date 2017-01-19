@@ -1,7 +1,9 @@
 package com.a14roxgmail.prasanna.mobileapp.UI;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,16 +14,24 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Token;
+import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
-import com.a14roxgmail.prasanna.mobileapp.Database.Database;
+import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.Model.User;
 import com.a14roxgmail.prasanna.mobileapp.R;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.ServerRequest;
+import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LogInActivity extends AppCompatActivity implements Serializable {
@@ -56,14 +66,44 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
     public void SignIn(){
         if(Validate()){
             if(user_DAO.isUserExist(etUserName.getText().toString())){
-                //Log.i(Constants.LOG_TAG,"User " + etUserName.getText().toString() + " is exist on the database");
-                Log.i(Constants.LOG_TAG,"asdasadadsa");
+                Log.i(Constants.LOG_TAG,"User " + etUserName.getText().toString() + " is exist on the database");
+
+                if(CheckInternetAccess()){
+                    Log.i(Constants.LOG_TAG,"Start sync process for user :- " + etUserName.getText().toString());
+
+                }else {
+                    Log.i(Constants.LOG_TAG,"No internet connection available, loading local data");
+
+                    User user = user_DAO.getUser(etUserName.getText().toString());
+                    details = new HashMap<>();
+
+                    //Hashmap_keys
+                    //          sitename
+                    //          username
+                    //          firstname
+                    //          lastname
+                    //          fullname
+                    details.put("username", user.getUserIndex());
+                    details.put("firstname", user.getFirstName());
+                    details.put("lastname", user.getLastName());
+                    details.put("fullname", user.getFullName());
+
+                    Intent i = new Intent(getApplicationContext(),HomeActivity.class);
+                    i.putExtra("Values",details);
+                    this.finish();
+                    startActivity(i);
+                    Log.i(Constants.LOG_TAG,"Completed SignIn Process");
+
+                }
             }else {
-                //Log.i(Constants.LOG_TAG,"User " + etUserName.getText().toString() + " is not exist on the database");
-                Log.i(Constants.LOG_TAG,"asdasadadsa");
+                Log.i(Constants.LOG_TAG,"User " + etUserName.getText().toString() + " is not exist on the database");
                 getToken();
             }
         }
+    }
+
+    public boolean CheckInternetAccess(){
+        return false;
     }
 
     public boolean Validate(){
@@ -93,6 +133,7 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
 
         //final ProgressDialog pd = new ProgressDialog(this, R.style.AppTheme_Dark_Dialog);
         pd.setIndeterminate(true);
+        pd.setCanceledOnTouchOutside(false);
         pd.setMessage("Authenticating..");
         pd.show();
 
@@ -138,7 +179,7 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         } else {
             Log.i(Constants.LOG_TAG, "Server Response :- " + response.toString());
 
-            details = XMLPaser(response.toString());
+            details = Utility.XMLPaser(response.toString());
             //Hashmap_keys
             //          sitename
             //          username
@@ -152,11 +193,13 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
                             details.get("lastname"),
                             details.get("fullname"),
                             etUserName.getText().toString(),
-                            Token.getToken()
+                            Token.getToken(),
+                            Constants.USER_LOGIN_FLAG
                     )
             );
 
-            //getCourseInfo();
+            getCourseInfo getCourseInfoTask = new getCourseInfo(pd);
+            getCourseInfoTask.execute();
         }
     }
 
@@ -173,6 +216,7 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
 
         //final ProgressDialog pd = new ProgressDialog(this, R.style.AppTheme);
         pd.setIndeterminate(true);
+        pd.setCanceledOnTouchOutside(false);
         pd.setMessage("Getting details..");
         //pd.show();
 
@@ -190,90 +234,98 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         timer.start();
     }
 
-    private HashMap<String,String> XMLPaser(String response){
-        HashMap<String,String> map = new HashMap();
-        int count = 0;
-        boolean con = false;
-        for(int i=0; i<response.length(); i++){
-            String tmp1 = response.substring(i,i+8).replace(" ","").toLowerCase();
-            if (tmp1.equals("keyname")){
-                String key="";
-                String value="";
-                boolean key_or_value = true; //true for key
-                for(int j=0; j<response.length(); j++){
-                    String ret2 = response.substring(i+j+8,i+j+9);
-                    if(ret2.equals(">")){
-                        if(key_or_value) {
-                            key = response.substring(i + 10, i + 7 + j);
-                            Log.i(Constants.LOG_TAG, "Key :- " + key);
-                            key_or_value = false;
-                        }else{
-                            String tmp3 = response.substring(i+j+8);
-                            for(int k=0; k<response.length(); k++){
-                                ret2 = tmp3.substring(k,k+1);
-                                if(ret2.equals("<")){
-                                    value = response.substring(i+j+9, i+j+k+8);
-                                    Log.i(Constants.LOG_TAG, "Value :- " + value);
-                                    break;
-                                }
-                            }
-                            map.put(key,value);
-                            break;
-                        }
+    public class getCourseInfo extends AsyncTask<Void,Void,Void>{
+        private String username;
+        private String password;
+        private Elements elements;
+        private ProgressDialog pd;
+        private CourseDAO course_dao;
+        private ArrayList<Course> arrCouseList;
+
+        public getCourseInfo(ProgressDialog pd){
+            this.pd = pd;
+            course_dao = new CourseDAO(getApplicationContext());
+            arrCouseList = new ArrayList<>();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            username = etUserName.getText().toString();
+            password = etPassword.getText().toString();
+            pd.setIndeterminate(true);
+            pd.setCanceledOnTouchOutside(false);
+            pd.setMessage("Getting Course Info..");
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Connection.Response response;
+                response = Jsoup.connect("https://lms.mrt.ac.lk/login.php")
+                        .method(Connection.Method.GET)
+                        .execute();
+
+                String session = response.cookie("PHPSESSID");
+
+                response = Jsoup.connect("https://lms.mrt.ac.lk/login.php")
+                        .cookie("PHPSESSID",session)
+                        .data("LearnOrgUsername",username)
+                        .data("LearnOrgPassword",password)
+                        .data("LearnOrgLogin","Login")
+                        .cookies(response.cookies())
+                        .method(Connection.Method.POST)
+                        .execute();
+
+                Document document = Jsoup.connect("https://lms.mrt.ac.lk/enrolments.php")
+                        .cookie("PHPSESSID",session)
+                        .cookies(response.cookies()).get();
+
+                elements = document.getElementsByClass("noramlTableCell");
+            } catch (Exception e) {
+                Log.i(Constants.LOG_TAG, "Error cought while getting course data :- " + e.toString());
+            }
+
+            int i=0;
+            Course course = null;
+            for (Element element : elements) {
+                if (!element.ownText().replace(" ","").equals("")) {
+                    if(i==0) {
+                        course = new Course(username);
+                        String semester = element.ownText().substring(element.ownText().length()-1);
+                        Log.i(Constants.LOG_TAG, "Semester :- '" + semester + "'");
+                        course.setSemester(semester);
+                        i++;
+                    }else if(i==1) {
+                        Log.i(Constants.LOG_TAG, "Module Code :- " + element.ownText());
+                        course.setCourseCode(element.ownText());
+                        i++;
+                    }else if(i==2) {
+                        Log.i(Constants.LOG_TAG, "Module :- " + element.ownText());
+                        course.setCourseName(element.ownText());
+                        i++;
+                    }else if(i==3) {
+                        Log.i(Constants.LOG_TAG, "Credits :- " + element.ownText());
+                        course.setCredits(element.ownText());
+                        arrCouseList.add(course);
+                        i=0;
                     }
                 }
-                count++;
-                if(count>=7){con = true;}
-            }
-            if(con){break;}
-        }
-        return map;
-    }
-
-    public void getCourseInfo(){
-        final ServerRequest request = new ServerRequest(4, this);
-        request.set_server_url(Constants.SERVER_REST_URL);
-        request.setParams(Token.getToken(), "wstoken");
-        request.setParams("moodle_enrol_get_users_courses", "wsfunction");
-        request.setParams(details.get("userid"),"userid");
-        request.setParams("json","moodlewsrestformat");
-        try {
-            String req = request.sendPostRequest();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        //final ProgressDialog pd = new ProgressDialog(this, R.style.AppTheme_Dark_Dialog);
-        pd.setIndeterminate(true);
-        pd.setMessage("Getting Course Info..");
-        pd.show();
-
-        CountDownTimer timer = new CountDownTimer(2000, 1000) {
-            @Override
-            public void onFinish() {
-                process_Course_info_response(request);
-                Log.i(Constants.LOG_TAG, "LogInActivity Class - process_Course_info_response OnFinish method triggered");
-                pd.dismiss();
             }
 
-            @Override
-            public void onTick(long millisLeft) {}
-        };
-        timer.start();
-    }
+            course_dao.addCourseList(arrCouseList);
+            return null;
+        }
 
-
-    private void process_Course_info_response(ServerRequest request) {
-        String response = request.getResponse();
-        if (response.equals("")) {
-            Toast.makeText(this, "Server timeout", Toast.LENGTH_LONG).show();
-        } else {
-            Log.i(Constants.LOG_TAG, "Server Response :- " + response);
-            Intent i = new Intent(this,HomeActivity.class);
+        @Override
+        protected void onPostExecute(Void result) {
+            pd.dismiss();
+            Intent i = new Intent(getApplicationContext(),HomeActivity.class);
             i.putExtra("Values",details);
-            i.putExtra("CourseResponse",response);
-            this.finish();
             startActivity(i);
+            Log.i(Constants.LOG_TAG,"Completed SignIn Process");
         }
+
     }
+
 }

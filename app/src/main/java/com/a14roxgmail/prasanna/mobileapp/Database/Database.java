@@ -27,12 +27,23 @@ public class Database extends SQLiteOpenHelper {
         command = "CREATE TABLE IF NOT EXISTS user (" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "user_index VARCHAR(10), " +
-                "user_id VARCHAR(25), " +
                 "first_name VARCHAR(50), " +
                 "last_name VARCHAR(50), " +
                 "full_name VARCHAR(100), " +
+                "login_status VARCHAR(10), " +
                 "token VARCHAR(255));";
         Log.i(Constants.LOG_TAG, "Create user table query :- " + command);
+        sqLiteDatabase.execSQL(command);
+
+        command = "CREATE TABLE IF NOT EXISTS course (" +
+                "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "user_index VARCHAR(10), " +
+                "course_name VARCHAR(255), " +
+                "course_code VARCHAR(50), " +
+                "credits VARCHAR(10), " +
+                "semester VARCHAR(10), " +
+                "FOREIGN KEY(user_index) REFERENCES user(user_index));";
+        Log.i(Constants.LOG_TAG, "Create course table query :- " + command);
         sqLiteDatabase.execSQL(command);
     }
 

@@ -10,6 +10,7 @@ public class User {
     private String fullName;
     private String userIndex;
     private String token;
+    private String loginStatus;
 
     public User(String ID, String firstName, String lastName, String fullName) {
         this.ID = ID;
@@ -18,19 +19,21 @@ public class User {
         this.fullName = fullName;
     }
 
-    public User(String firstName, String lastName, String fullName, String userIndex, String token) {
+    public User(String firstName, String lastName, String fullName, String userIndex, String token, String loginStatus) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.loginStatus = loginStatus;
         this.fullName = fullName;
         this.token = token;
         this.userIndex = userIndex;
     }
 
-    public User(String ID, String firstName, String lastName, String fullName, String userIndex, String token) {
+    public User(String ID, String firstName, String lastName, String fullName, String userIndex, String token,String loginStatus) {
         this.ID = ID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.fullName = fullName;
+        this.loginStatus = loginStatus;
         this.token = token;
         this.userIndex = userIndex;
     }

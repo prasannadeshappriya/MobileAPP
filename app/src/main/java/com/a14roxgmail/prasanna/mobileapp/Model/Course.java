@@ -5,21 +5,55 @@ package com.a14roxgmail.prasanna.mobileapp.Model;
  */
 public class Course {
     private String id;
-    private String shortname;
-    private String fullname;
+    private String userIndex;
+    private String courseName;
+    private String courseCode;
+    private String credits;
+    private String semester;
 
-    public Course(String id, String shortname, String fullname) {
+    public Course(String userIndex){
+        this.userIndex = userIndex;
+    }
+
+    public Course(String userIndex, String courseName, String courseCode, String credits, String semester) {
+        this.userIndex = userIndex;
+        this.courseName = courseName;
+        this.courseCode = courseCode;
+        this.credits = credits;
+        this.semester = semester;
+    }
+
+    public Course(String id, String userIndex, String courseName, String courseCode, String credits, String semester) {
         this.id = id;
-        this.shortname = shortname;
-        this.fullname = fullname;
+        this.userIndex = userIndex;
+        this.courseName = courseName;
+        this.courseCode = courseCode;
+        this.credits = credits;
+        this.semester = semester;
     }
 
-    public String getFullname() {
-        return fullname;
+    public String getCourseCode() {
+        return courseCode;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getCredits() {
+        return credits;
+    }
+
+    public void setCredits(String credits) {
+        this.credits = credits;
     }
 
     public String getId() {
@@ -30,11 +64,19 @@ public class Course {
         this.id = id;
     }
 
-    public String getShortname() {
-        return shortname;
+    public String getSemester() {
+        return semester;
     }
 
-    public void setShortname(String shortname) {
-        this.shortname = shortname;
+    public void setSemester(String semester) {
+        this.semester = semester;
+    }
+
+    public String getUserIndex() {
+        return userIndex;
+    }
+
+    public void setUserIndex(String userIndex) {
+        this.userIndex = userIndex;
     }
 }

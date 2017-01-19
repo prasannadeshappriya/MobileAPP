@@ -18,4 +18,7 @@ public class Constants {
     //Database Name
     public static final String DATABASE_NAME = "MobileAPP";
     public static final int DATABASE_VERSION = 1;
+
+    //Constant Values
+    public static final String USER_LOGIN_FLAG = "1";
 }

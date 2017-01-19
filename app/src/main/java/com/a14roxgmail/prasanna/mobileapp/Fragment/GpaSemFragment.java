@@ -45,14 +45,14 @@ public class GpaSemFragment extends Fragment{
                     }
                 }
         );
-
+/*
         courses_name.add(new Course("1","CS2023", "In14-S5-CS3332 - Industrial Instrumentation & Control"));
         courses_name.add(new Course("1","CS4854", "In14-S5-CS3322 - Computer-integrated Control System Applications"));
         courses_name.add(new Course("1","CS6298", "In14-S5-CS3282 - Industrial Computer Engineering Project"));
         courses_name.add(new Course("1","CS6598", "In14-S1-MN1012 - Engineering in Context"));
         courses_name.add(new Course("1","CS65498", "In14-S1-EL1012 - Language Skills Enhancement I"));
         courses_name.add(new Course("1","CS65928", "In14-S1-EL1012 - Language Skills Enhancement I Language Skills Enhancement ILanguage Skills Enhancement I"));
-
+*/
         adapter = new CourseGpaCalcAdapter(getContext(),courses_name);
         lstCourse.setAdapter(adapter);
 
