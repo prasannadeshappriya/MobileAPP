@@ -1,5 +1,7 @@
 package com.a14roxgmail.prasanna.mobileapp.Fragment;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -55,6 +57,7 @@ public class GpaSemFragment extends Fragment{
         this.userIndex = userIndex;
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,16 +68,14 @@ public class GpaSemFragment extends Fragment{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.i(Constants.LOG_TAG,semester);
                         save_and_refresh(view);
-
                     }
                 }
         );
 
-
         ArrayList<Course> course = course_dao.getAllCourseBySemester(semester,userIndex);
         for(int i=0; i<course.size(); i++){
+            String grade = course.get(i).getGrade();
             courses_name.add(
                     new Course(
                             String.valueOf(i+1),
@@ -82,13 +83,17 @@ public class GpaSemFragment extends Fragment{
                             course.get(i).getCourseName(),
                             course.get(i).getCourseCode(),
                             course.get(i).getCredits(),
-                            course.get(i).getSemester()
+                            course.get(i).getSemester(),
+                            grade
                     )
             );
         }
         adapter = new CourseGpaCalcAdapter(getContext(),courses_name);
-        int i = courses_name.size();
         lstCourse.setAdapter(adapter);
+
+        View v = getViewByPosition(0,lstCourse);
+        Spinner spiGrade = (Spinner)v.findViewById(R.id.spiGrades);
+        spiGrade.setSelection(5);
 
         return view;
     }

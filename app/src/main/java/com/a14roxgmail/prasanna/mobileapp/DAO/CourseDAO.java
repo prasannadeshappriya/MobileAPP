@@ -32,11 +32,13 @@ public class CourseDAO extends DAO{
         if(c.moveToFirst()) {
             do {
                 course = new Course(
+                        String.valueOf(c.getPosition()),
                         c.getString(c.getColumnIndex("user_index")),
                         c.getString(c.getColumnIndex("course_name")),
                         c.getString(c.getColumnIndex("course_code")),
                         c.getString(c.getColumnIndex("credits")),
-                        c.getString(c.getColumnIndex("semester")));
+                        c.getString(c.getColumnIndex("semester")),
+                        c.getString(c.getColumnIndex("grade")));
             } while (c.moveToNext());
         }
         return course;
@@ -52,11 +54,13 @@ public class CourseDAO extends DAO{
         if(c.moveToFirst()) {
             do {
                 course = new Course(
+                        String.valueOf(c.getPosition()),
                         c.getString(c.getColumnIndex("user_index")),
                         c.getString(c.getColumnIndex("course_name")),
                         c.getString(c.getColumnIndex("course_code")),
                         c.getString(c.getColumnIndex("credits")),
-                        c.getString(c.getColumnIndex("semester")));
+                        c.getString(c.getColumnIndex("semester")),
+                        c.getString(c.getColumnIndex("grade")));
                 arrCourse.add(course);
             } while (c.moveToNext());
         }
@@ -86,11 +90,13 @@ public class CourseDAO extends DAO{
         if(c.moveToFirst()) {
             do {
                 course = new Course(
+                        String.valueOf(c.getPosition()),
                         c.getString(c.getColumnIndex("user_index")),
                         c.getString(c.getColumnIndex("course_name")),
                         c.getString(c.getColumnIndex("course_code")),
                         c.getString(c.getColumnIndex("credits")),
-                        c.getString(c.getColumnIndex("semester")));
+                        c.getString(c.getColumnIndex("semester")),
+                        c.getString(c.getColumnIndex("grade")));
                 arrCourse.add(course);
             } while (c.moveToNext());
         }
@@ -104,6 +110,7 @@ public class CourseDAO extends DAO{
         cv.put("course_name",course.getCourseName());
         cv.put("course_code",course.getCourseCode());
         cv.put("credits",course.getCredits());
+        cv.put("grade","");
         cv.put("semester",course.getSemester());
 
         Log.i(Constants.LOG_TAG,"CourseDAO insert method triggered, course id :- " + course.getCourseCode());

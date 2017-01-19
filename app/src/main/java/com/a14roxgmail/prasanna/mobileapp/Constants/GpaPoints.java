@@ -30,4 +30,20 @@ public class GpaPoints {
         else if(pointChar.equals("F")){return F;}
         else{return "0.0";}
     }
+
+    public static int getIndex(String pointChar){
+        if(pointChar.equals("A+")){return 1;}
+        else if(pointChar.equals("A")){return 2;}
+        else if(pointChar.equals("A-")){return 3;}
+        else if(pointChar.equals("B+")){return 4;}
+        else if(pointChar.equals("B")){return 5;}
+        else if(pointChar.equals("B-")){return 6;}
+        else if(pointChar.equals("C+")){return 7;}
+        else if(pointChar.equals("C")){return 8;}
+        else if(pointChar.equals("C-")){return 9;}
+        else if(pointChar.equals("D")){return 10;}
+        else if(pointChar.equals("F")){return 11;}
+        else if(pointChar.equals("Non - GPA")){return 0;}
+        else{return 0;}
+    }
 }

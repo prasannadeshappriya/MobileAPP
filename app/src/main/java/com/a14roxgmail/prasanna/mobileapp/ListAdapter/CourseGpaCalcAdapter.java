@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.a14roxgmail.prasanna.mobileapp.Constants.GpaPoints;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.R;
 import java.util.ArrayList;
@@ -21,7 +23,8 @@ public class CourseGpaCalcAdapter extends BaseAdapter {
     private List<Course> lstCourse;
     private ArrayList<String> arrGrades;
     private Context context;
-    HashMap<Integer, Integer> viewHandler = new HashMap<>();
+    private HashMap<Integer, Integer> viewHandler = new HashMap<>();
+    boolean init = true;
 
     public CourseGpaCalcAdapter(Context context, List<Course> lstCourse) {
         this.context = context;
@@ -86,9 +89,13 @@ public class CourseGpaCalcAdapter extends BaseAdapter {
         arrGrades.add("F");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, arrGrades);
         spiGrades.setAdapter(adapter);
-        if(viewHandler.containsKey(position)){
+        spiGrades.setSelection(GpaPoints.getIndex(lstCourse.get(i).getGrade()));
+
+
+        if (viewHandler.containsKey(position)) {
             spiGrades.setSelection(viewHandler.get(position));
         }
+
         return v;
     }
 }
