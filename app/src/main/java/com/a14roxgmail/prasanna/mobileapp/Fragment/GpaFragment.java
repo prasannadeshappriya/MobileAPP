@@ -68,15 +68,15 @@ public class GpaFragment extends Fragment {
 
     public void refreshListView(){
         if(!grade_dao.isGPAExist(user_index)){
-            lstGpa.add(new GPA("sgpa","1","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA("sgpa","2","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA("sgpa","3","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA("sgpa","4","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA("sgpa","5","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA("sgpa","6","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA("sgpa","7","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA("sgpa","8","Not Calculated Yet",user_index));
-            lstGpa.add(new GPA("gpa","-","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA(1, "sgpa","1","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA(2, "sgpa","2","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA(3, "sgpa","3","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA(4, "sgpa","4","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA(5, "sgpa","5","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA(6, "sgpa","6","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA(7, "sgpa","7","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA(8, "sgpa","8","Not Calculated Yet",user_index));
+            lstGpa.add(new GPA(9, "gpa","-","Not Calculated Yet",user_index));
         }
 
 
