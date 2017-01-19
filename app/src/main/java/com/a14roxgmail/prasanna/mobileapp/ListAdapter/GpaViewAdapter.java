@@ -54,6 +54,7 @@ public class GpaViewAdapter extends BaseAdapter {
         tvGpaType.setText(lstGpa.get(i).getType());
         tvGPAValue.setText(lstGpa.get(i).getGpa());
 
+        v.setTag(lstGpa.get(i).getId());
         return v;
     }
 }

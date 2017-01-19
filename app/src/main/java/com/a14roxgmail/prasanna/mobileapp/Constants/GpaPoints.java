@@ -14,6 +14,6 @@ public class GpaPoints {
         else if(pointChar.equals("B")){return B;}
         else if(pointChar.equals("C")){return C;}
         else if(pointChar.equals("D")){return D;}
-        else{return "";}
+        else{return "0";}
     }
 }

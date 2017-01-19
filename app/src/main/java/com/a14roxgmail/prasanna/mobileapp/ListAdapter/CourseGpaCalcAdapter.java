@@ -1,18 +1,28 @@
 package com.a14roxgmail.prasanna.mobileapp.ListAdapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.preference.PreferenceManager;
+import android.support.annotation.IntegerRes;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Prasanna Deshappriya on 1/18/2017.
@@ -21,6 +31,7 @@ public class CourseGpaCalcAdapter extends BaseAdapter {
     private List<Course> lstCourse;
     private ArrayList<String> arrGrades;
     private Context context;
+    HashMap<Integer, Integer> viewHandler = new HashMap<>();
 
     public CourseGpaCalcAdapter(Context context, List<Course> lstCourse) {
         this.context = context;
@@ -48,22 +59,48 @@ public class CourseGpaCalcAdapter extends BaseAdapter {
 
         TextView tvCourseName = (TextView)v.findViewById(R.id.adapterCourseName) ;
         TextView tvCourseCredit = (TextView)v.findViewById(R.id.adapterCourseCredits) ;
-        Spinner spiGrades = (Spinner)v.findViewById(R.id.spiGrades);
-
-        arrGrades = new ArrayList<>();
-        arrGrades.add("Non - GPA");
-        arrGrades.add("A");
-        arrGrades.add("B");
-        arrGrades.add("C");
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,arrGrades);
-        spiGrades.setAdapter(adapter);
 
         String course_name = lstCourse.get(i).getCourseName();
         tvCourseName.setText(course_name);
 
         String course_credit = lstCourse.get(i).getCredits();
         tvCourseCredit.setText("(Credits - " + course_credit + ")");
+
+
+        final int position = i;
+
+        final Spinner spiGrades = (Spinner)v.findViewById(R.id.spiGrades);
+        spiGrades.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                viewHandler.put(position,spiGrades.getSelectedItemPosition());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        arrGrades = new ArrayList<>();
+        arrGrades.add("Non - GPA");
+        arrGrades.add("A");
+        arrGrades.add("A+");
+        arrGrades.add("A-");
+        arrGrades.add("B+");
+        arrGrades.add("B");
+        arrGrades.add("B-");
+        arrGrades.add("C+");
+        arrGrades.add("C");
+        arrGrades.add("C-");
+        arrGrades.add("D");
+        arrGrades.add("F");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, arrGrades);
+        spiGrades.setAdapter(adapter);
+        if(viewHandler.containsKey(position)){
+            spiGrades.setSelection(viewHandler.get(position));
+        }
         return v;
     }
+
+
 }

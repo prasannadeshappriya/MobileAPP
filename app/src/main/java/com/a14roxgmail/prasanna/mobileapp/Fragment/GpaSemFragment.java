@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
@@ -63,10 +64,12 @@ public class GpaSemFragment extends Fragment{
                     @Override
                     public void onClick(View view) {
                         Log.i(Constants.LOG_TAG,semester);
-                        //save_and_refresh(view);
+                        save_and_refresh(view);
+
                     }
                 }
         );
+
 
         ArrayList<Course> course = course_dao.getAllCourseBySemester(semester,userIndex);
         for(int i=0; i<course.size(); i++){
@@ -77,11 +80,13 @@ public class GpaSemFragment extends Fragment{
                             course.get(i).getCourseName(),
                             course.get(i).getCourseCode(),
                             course.get(i).getCredits(),
-                            course.get(i).getSemester()
+                            course.get(i).getSemester(),
+                            "2"
                     )
             );
         }
         adapter = new CourseGpaCalcAdapter(getContext(),courses_name);
+        int i = courses_name.size();
         lstCourse.setAdapter(adapter);
 
         return view;
@@ -89,17 +94,31 @@ public class GpaSemFragment extends Fragment{
 
     public void save_and_refresh(View view){
         double Total;
-        int count = lstCourse.getCount();
+        int count = lstCourse.getAdapter().getCount();
 
         for(int i=0; i<count; i++){
-            View v = lstCourse.getChildAt(i);
+            //View v = lstCourse.getAdapter().getView(i,view,null);
+            View v = getViewByPosition(i,lstCourse);
             Spinner spiGrade = (Spinner)v.findViewById(R.id.spiGrades);
-
+            TextView tv = (TextView) v.findViewById(R.id.adapterCourseCredits);
             String point = GpaPoints.getPoint(spiGrade.getSelectedItem().toString());
+            Log.i(Constants.LOG_TAG,point + "  " + tv.getText().toString() + "   " + spiGrade.getSelectedItem().toString());
 
         }
 
 
+    }
+
+    public View getViewByPosition(int position, ListView listView) {
+        final int firstListItemPosition = listView.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
+
+        if (position < firstListItemPosition || position > lastListItemPosition) {
+            return listView.getAdapter().getView(position, null, listView);
+        } else {
+            final int childIndex = position - firstListItemPosition;
+            return listView.getChildAt(childIndex);
+        }
     }
 
     private void setGpa(GPA gpa){this.gpa = gpa;}

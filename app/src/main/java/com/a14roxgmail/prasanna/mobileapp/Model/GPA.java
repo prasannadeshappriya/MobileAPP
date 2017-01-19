@@ -4,14 +4,14 @@ package com.a14roxgmail.prasanna.mobileapp.Model;
  * Created by Prasanna Deshappriya on 1/18/2017.
  */
 public class GPA {
-    private Long id;
+    private int id;
     private String type;
     private String semester;
     private String gpa;
     private String userIndex;
 
     public GPA(int id, String type, String semester, String gpa, String userIndex) {
-        this.id = Long.parseLong(String.valueOf(id));
+        this.id = id;
         this.type = type;
         this.semester = semester;
         this.gpa = gpa;
@@ -30,8 +30,8 @@ public class GPA {
     }
     public String getUserIndex(){return userIndex;}
 
-    public void setId(Long id){this.id = id;}
-    public Long getId(){return id;}
+    public void setId(int id){this.id = id;}
+    public int getId(){return id;}
 
     public String getGpa() {
         return gpa;

@@ -5,12 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.GradeDAO;
 import com.a14roxgmail.prasanna.mobileapp.ListAdapter.GpaViewAdapter;
@@ -48,6 +52,7 @@ public class GpaFragment extends Fragment {
                     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                         GPA gpa = (GPA)adapterView.getItemAtPosition(i);
                         openEditWindow(view,gpa,i);
+
                         return false;
                     }
                 }
