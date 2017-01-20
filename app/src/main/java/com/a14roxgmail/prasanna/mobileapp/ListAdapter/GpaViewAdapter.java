@@ -7,6 +7,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.a14roxgmail.prasanna.mobileapp.Model.GPA;
 import com.a14roxgmail.prasanna.mobileapp.R;
+import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
+
 import java.util.List;
 
 /**
@@ -52,8 +54,14 @@ public class GpaViewAdapter extends BaseAdapter {
             tvSemName.setText("Overall Status");
         }
         tvGpaType.setText(lstGpa.get(i).getType());
-        tvGPAValue.setText(lstGpa.get(i).getGpa());
-
+        try {
+            double gpa = Double.parseDouble(lstGpa.get(i).getGpa());
+            gpa = Utility.roundTwoDecimals(gpa);
+            tvGPAValue.setText(String.valueOf(gpa));
+        }catch (NumberFormatException e){
+            //If the input stream cannot convert to double
+            tvGPAValue.setText(lstGpa.get(i).getGpa());
+        }
         v.setTag(lstGpa.get(i).getId());
         return v;
     }

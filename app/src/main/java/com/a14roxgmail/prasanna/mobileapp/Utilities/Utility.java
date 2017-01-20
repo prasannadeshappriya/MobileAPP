@@ -7,6 +7,7 @@ import android.widget.ListView;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 /**
@@ -77,6 +78,12 @@ public class Utility{
             if(con){break;}
         }
         return map;
+    }
+
+    public static double roundTwoDecimals(double d)
+    {
+        DecimalFormat twoDForm = new DecimalFormat("#.####");
+        return Double.valueOf(twoDForm.format(d));
     }
 
 }

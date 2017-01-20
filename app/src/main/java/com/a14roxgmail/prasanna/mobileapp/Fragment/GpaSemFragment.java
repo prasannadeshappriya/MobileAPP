@@ -15,8 +15,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.GpaPoints;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
@@ -27,7 +25,6 @@ import com.a14roxgmail.prasanna.mobileapp.Model.GPA;
 import com.a14roxgmail.prasanna.mobileapp.R;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 /**
  * Created by Prasanna Deshappriya on 1/18/2017.
@@ -129,16 +126,24 @@ public class GpaSemFragment extends Fragment{
         double sgpa = (total /total_cedits);
         Log.i(Constants.LOG_TAG, "semester gpa :- " + sgpa);
 
-        gradeDAO.addGpa(
-                new GPA(
-                        Constants.SGPA_FLAG,
-                        semester,
-                        String.valueOf(sgpa),
-                        userIndex,
-                        String.valueOf(total_cedits)
-                )
+        if(gradeDAO.isSGPAExist(userIndex,semester)){
+            gradeDAO.updateSGPA(
+                    userIndex,
+                    String.valueOf(sgpa),
+                    semester
+            );
+        }else {
+            gradeDAO.addGpa(
+                    new GPA(
+                            Constants.SGPA_FLAG,
+                            semester,
+                            String.valueOf(sgpa),
+                            userIndex,
+                            String.valueOf(total_cedits)
+                    )
 
-        );
+            );
+        }
 
         if(getOption()) {
             calculate_overall_gpa_option_a();
@@ -160,15 +165,22 @@ public class GpaSemFragment extends Fragment{
         double gpa = (totalSgpa/sgpa_list.size());
         Log.i(Constants.LOG_TAG,"Calculater log using method 1 :- " + gpa);
 
-        gradeDAO.addGpa(
-                new GPA(
-                        Constants.GPA_FLAG,
-                        semester,
-                        String.valueOf(gpa),
-                        userIndex,
-                        String.valueOf(totalCredit)
-                )
-        );
+        if(gradeDAO.isGPAExist(userIndex)){
+            gradeDAO.updateGPA(
+                    userIndex,
+                    String.valueOf(gpa)
+            );
+        }else {
+            gradeDAO.addGpa(
+                    new GPA(
+                            Constants.GPA_FLAG,
+                            semester,
+                            String.valueOf(gpa),
+                            userIndex,
+                            String.valueOf(totalCredit)
+                    )
+            );
+        }
 
         GpaFragment gpaFragment = new GpaFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();

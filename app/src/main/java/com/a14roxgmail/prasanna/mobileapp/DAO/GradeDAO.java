@@ -99,9 +99,9 @@ public class GradeDAO extends DAO {
         sqldb.execSQL(command);
     }
 
-    public void updateSGPA(String userIndex, String nSGPA){
-        command = "UPDATE " + tableSGpa + " SET sgpa =\"" + nSGPA + "\" WHERE user_index = \"" + userIndex + "\";";
-        Log.i(Constants.LOG_TAG,"Update sgpa of user " + userIndex + " to " + nSGPA + ", query :- " + command);
+    public void updateSGPA(String userIndex, String nSGPA, String semester){
+        command = "UPDATE " + tableSGpa + " SET sgpa =\"" + nSGPA + "\" WHERE user_index = \"" + userIndex + "\" AND semester = \"" + semester + "\";";
+        Log.i(Constants.LOG_TAG,"Update semester " + semester + " sgpa of user " + userIndex + " to " + nSGPA + ", query :- " + command);
         sqldb.execSQL(command);
     }
 
