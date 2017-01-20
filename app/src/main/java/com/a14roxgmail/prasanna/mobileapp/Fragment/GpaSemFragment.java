@@ -116,10 +116,12 @@ public class GpaSemFragment extends Fragment{
                             tv.getText().toString().length()-1)
             );
 
-            Log.i(Constants.LOG_TAG,point + "  '" + credit + "'   " + spiGrade.getSelectedItem().toString());
+            Log.i(Constants.LOG_TAG,"total :- " + total + ", credit :- " + credit + ", point :- " + point );
             total = total + (credit*point);
+            Log.i(Constants.LOG_TAG,"total :- " + total);
             if(!spiGrade.getSelectedItem().toString().equals("Non - GPA")){
                 total_cedits = total_cedits + credit;
+                Log.i(Constants.LOG_TAG,"course is not non-gpa, total credits :- " + total_cedits);
             }
             course_dao.updateGrade(userIndex,tvName.getText().toString(),spiGrade.getSelectedItem().toString());
         }

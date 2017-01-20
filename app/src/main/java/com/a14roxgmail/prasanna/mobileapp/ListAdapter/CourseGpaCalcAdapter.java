@@ -1,6 +1,7 @@
 package com.a14roxgmail.prasanna.mobileapp.ListAdapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -9,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.GpaPoints;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.R;
@@ -21,7 +23,6 @@ import java.util.List;
  */
 public class CourseGpaCalcAdapter extends BaseAdapter {
     private List<Course> lstCourse;
-    private ArrayList<String> arrGrades;
     private Context context;
     private HashMap<Integer, Integer> viewHandler = new HashMap<>();
     boolean init = true;
@@ -74,24 +75,13 @@ public class CourseGpaCalcAdapter extends BaseAdapter {
 
             }
         });
-        arrGrades = new ArrayList<>();
-        arrGrades.add("Non - GPA");
-        arrGrades.add("A");
-        arrGrades.add("A+");
-        arrGrades.add("A-");
-        arrGrades.add("B+");
-        arrGrades.add("B");
-        arrGrades.add("B-");
-        arrGrades.add("C+");
-        arrGrades.add("C");
-        arrGrades.add("C-");
-        arrGrades.add("D");
-        arrGrades.add("F");
+        ArrayList<String> arrGrades = GpaPoints.getGradeList();
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, arrGrades);
         spiGrades.setAdapter(adapter);
         spiGrades.setSelection(GpaPoints.getIndex(lstCourse.get(i).getGrade()));
-
-
+        int dd = GpaPoints.getIndex(lstCourse.get(i).getGrade());
+        Log.i(Constants.LOG_TAG,String.valueOf(dd));
         if (viewHandler.containsKey(position)) {
             spiGrades.setSelection(viewHandler.get(position));
         }

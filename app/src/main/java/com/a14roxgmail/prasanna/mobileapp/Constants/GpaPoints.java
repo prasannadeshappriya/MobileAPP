@@ -1,5 +1,7 @@
 package com.a14roxgmail.prasanna.mobileapp.Constants;
 
+import java.util.ArrayList;
+
 /**
  * Created by Prasanna Deshappriya on 1/18/2017.
  */
@@ -15,6 +17,25 @@ public class GpaPoints {
     private static final String C_MINUS = "1.5";
     private static final String D = "1.0";
     private static final String F = "0.0";
+
+
+
+    public static ArrayList<String> getGradeList(){
+        ArrayList<String> arrGrades = new ArrayList<>();
+        arrGrades.add("Non - GPA");
+        arrGrades.add("A+");
+        arrGrades.add("A");
+        arrGrades.add("A-");
+        arrGrades.add("B+");
+        arrGrades.add("B");
+        arrGrades.add("B-");
+        arrGrades.add("C+");
+        arrGrades.add("C");
+        arrGrades.add("C-");
+        arrGrades.add("D");
+        arrGrades.add("F");
+        return arrGrades;
+    }
 
     public static String getPoint(String pointChar){
         if(pointChar.equals("A+")){return A_PLUS;}
