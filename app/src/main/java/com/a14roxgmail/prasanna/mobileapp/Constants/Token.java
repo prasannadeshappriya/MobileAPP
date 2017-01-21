@@ -3,7 +3,7 @@ package com.a14roxgmail.prasanna.mobileapp.Constants;
 /**
  * Created by Prasanna Deshappriya on 1/16/2017.
  */
-public class Token {
+public abstract class Token {
     //Store the token
     private static String token;
 

@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.util.Log;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Model.GPA;
-
 import java.util.ArrayList;
 
 /**
@@ -52,7 +51,7 @@ public class GradeDAO extends DAO {
         }
     }
 
-    public ArrayList<GPA> getSGPA(String userIndex){
+    public ArrayList<GPA> getSGPAArray(String userIndex){
         command = "SELECT * FROM " + tableSGpa + " WHERE user_index = \"" + userIndex + "\";";
         Log.i(Constants.LOG_TAG,"get sgpa for user " + userIndex + " query " + command);
         Cursor c = sqldb.rawQuery(command,null);
@@ -71,6 +70,25 @@ public class GradeDAO extends DAO {
             } while (c.moveToNext());
         }
         return arrGPA;
+    }
+
+    public GPA getSGPA(String userIndex, String semester){
+        command = "SELECT * FROM " + tableSGpa + " WHERE user_index = \"" + userIndex + "\" AND semester = \"" + semester + "\";";
+        Log.i(Constants.LOG_TAG,"get sgpa for user " + userIndex + " query " + command);
+        Cursor c = sqldb.rawQuery(command,null);
+        GPA gpa = null;
+        if(c.moveToFirst()) {
+            do {
+                gpa = new GPA(
+                        Constants.SGPA_FLAG,
+                        c.getString(c.getColumnIndex("semester")),
+                        c.getString(c.getColumnIndex("sgpa")),
+                        c.getString(c.getColumnIndex("user_index")),
+                        c.getString(c.getColumnIndex("total_credit"))
+                );
+            } while (c.moveToNext());
+        }
+        return gpa;
     }
 
     public GPA getGPA(String userIndex){
@@ -98,6 +116,12 @@ public class GradeDAO extends DAO {
         Log.i(Constants.LOG_TAG,"Update gpa of user " + userIndex + " to " + nGPA + ", query :- " + command);
         sqldb.execSQL(command);
     }
+
+    public void deleteSGPA(String userIndex, String semester){
+        command = "DELETE FROM " + tableSGpa + " WHERE user_index = \"" + userIndex + "\" AND semester = \"" + semester + "\";";
+        Log.i(Constants.LOG_TAG,"Delete semester " + semester + " sgpa of user " +userIndex + ", query :- " + command);
+        sqldb.execSQL(command);
+     }
 
     public void updateSGPA(String userIndex, String nSGPA, String semester){
         command = "UPDATE " + tableSGpa + " SET sgpa =\"" + nSGPA + "\" WHERE user_index = \"" + userIndex + "\" AND semester = \"" + semester + "\";";

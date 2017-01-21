@@ -1,7 +1,6 @@
 package com.a14roxgmail.prasanna.mobileapp.UI;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
@@ -60,8 +59,6 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         );
 
     }
-
-
 
     public void SignIn(){
         if(Validate()){
@@ -262,26 +259,26 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         protected Void doInBackground(Void... params) {
             try {
                 Connection.Response response;
-                response = Jsoup.connect("https://lms.mrt.ac.lk/login.php")
+                response = Jsoup.connect(Constants.LMS_LOGIN_URL)
                         .method(Connection.Method.GET)
                         .execute();
 
-                String session = response.cookie("PHPSESSID");
+                String session = response.cookie(Constants.LMS_COOKIE_ID);
 
-                response = Jsoup.connect("https://lms.mrt.ac.lk/login.php")
-                        .cookie("PHPSESSID",session)
-                        .data("LearnOrgUsername",username)
-                        .data("LearnOrgPassword",password)
-                        .data("LearnOrgLogin","Login")
+                response = Jsoup.connect(Constants.LMS_LOGIN_URL)
+                        .cookie(Constants.LMS_COOKIE_ID,session)
+                        .data(Constants.LMS_USERNAME_ID,username)
+                        .data(Constants.LMS_PASSWORD_ID,password)
+                        .data(Constants.LMS_LOGIN_ID,Constants.LMS_LOGIN_ID_VALUE)
                         .cookies(response.cookies())
                         .method(Connection.Method.POST)
                         .execute();
 
-                Document document = Jsoup.connect("https://lms.mrt.ac.lk/enrolments.php")
-                        .cookie("PHPSESSID",session)
+                Document document = Jsoup.connect(Constants.LMS_ENROLMENTS_URL)
+                        .cookie(Constants.LMS_COOKIE_ID,session)
                         .cookies(response.cookies()).get();
 
-                elements = document.getElementsByClass("noramlTableCell");
+                elements = document.getElementsByClass(Constants.LMS_SOURCE_TAG);
             } catch (Exception e) {
                 Log.i(Constants.LOG_TAG, "Error cought while getting course data :- " + e.toString());
             }

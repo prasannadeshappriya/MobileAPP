@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by Prasanna Deshappriya on 1/18/2017.
  */
-public class GpaPoints {
+public abstract class GpaPoints {
     private static final String A_PLUS = "4.2";
     private static final String A = "4.0";
     private static final String A_MINUS = "3.7";

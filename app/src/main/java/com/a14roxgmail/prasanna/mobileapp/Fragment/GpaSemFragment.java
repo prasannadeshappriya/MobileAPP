@@ -102,7 +102,7 @@ public class GpaSemFragment extends Fragment{
 
         for(int i=0; i<count; i++){
             View v = getViewByPosition(i,lstCourse);
-            Spinner spiGrade = (Spinner)v.findViewById(R.id.spiGrades);
+            Spinner spiGrade = (Spinner) v.findViewById(R.id.spiGrades);
             TextView tv = (TextView) v.findViewById(R.id.adapterCourseCredits);
             TextView tvName = (TextView) v.findViewById(R.id.adapterCourseName);
             double point = Double.parseDouble(GpaPoints.getPoint(spiGrade.getSelectedItem().toString()));
@@ -126,13 +126,17 @@ public class GpaSemFragment extends Fragment{
         double sgpa = (total /total_cedits);
         Log.i(Constants.LOG_TAG, "semester gpa :- " + sgpa);
 
-        if(gradeDAO.isSGPAExist(userIndex,semester)){
-            gradeDAO.updateSGPA(
-                    userIndex,
-                    String.valueOf(sgpa),
-                    semester
-            );
-        }else {
+        if (gradeDAO.isSGPAExist(userIndex, semester)) {
+            if(Double.isNaN(sgpa)){
+                gradeDAO.deleteSGPA(userIndex,semester);
+            }else {
+                gradeDAO.updateSGPA(
+                        userIndex,
+                        String.valueOf(sgpa),
+                        semester
+                );
+            }
+        } else {
             gradeDAO.addGpa(
                     new GPA(
                             Constants.SGPA_FLAG,
@@ -145,6 +149,7 @@ public class GpaSemFragment extends Fragment{
             );
         }
 
+
         if(getOption()) {
             calculate_overall_gpa_option_a();
         }else{
@@ -153,14 +158,18 @@ public class GpaSemFragment extends Fragment{
     }
 
     private void calculate_overall_gpa_option_a() {
-        ArrayList<GPA> sgpa_list = gradeDAO.getSGPA(userIndex);
+        ArrayList<GPA> sgpa_list = gradeDAO.getSGPAArray(userIndex);
         double totalSgpa = 0.0;
         double totalCredit = 0.0;
         for(int i=0; i<sgpa_list.size(); i++){
             GPA gpa = sgpa_list.get(i);
-            totalSgpa+= Double.parseDouble(gpa.getGpa());
-            Log.i(Constants.LOG_TAG, gpa.getTotal_credits().toString());
-            totalCredit+= Double.parseDouble(gpa.getTotal_credits().toString());
+            try {
+                totalSgpa += Double.parseDouble(gpa.getGpa());
+                Log.i(Constants.LOG_TAG, gpa.getTotal_credits().toString());
+                totalCredit += Double.parseDouble(gpa.getTotal_credits().toString());
+            }catch (NumberFormatException e){
+                Log.i(Constants.LOG_TAG, "Error :- " + e.toString());
+            }
         }
         double gpa = (totalSgpa/sgpa_list.size());
         Log.i(Constants.LOG_TAG,"Calculater log using method 1 :- " + gpa);

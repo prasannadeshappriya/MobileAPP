@@ -4,16 +4,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
-
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
 /**
  * Created by Prasanna Deshappriya on 1/17/2017.
  */
-public class Utility{
+public abstract class Utility{
     public static boolean setListViewHeightBasedOnItems(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter != null) {

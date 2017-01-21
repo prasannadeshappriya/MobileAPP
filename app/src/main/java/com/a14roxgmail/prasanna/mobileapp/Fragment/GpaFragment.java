@@ -1,20 +1,14 @@
 package com.a14roxgmail.prasanna.mobileapp.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.GradeDAO;
 import com.a14roxgmail.prasanna.mobileapp.ListAdapter.GpaViewAdapter;
@@ -75,13 +69,13 @@ public class GpaFragment extends Fragment {
             int max = Integer.parseInt(course_dao.getMaxSemester(user_index));
             for(int i=0; i<max; i++) {
                 if (grade_dao.isSGPAExist(user_index, String.valueOf(i+1))) {
-                    ArrayList<GPA> arrGpa = grade_dao.getSGPA(user_index);
+                    GPA gpa = grade_dao.getSGPA(user_index,String.valueOf(i+1));
                     lstGpa.add(new GPA(
                             (i+1),
-                            arrGpa.get(i).getType(),
-                            arrGpa.get(i).getSemester(),
-                            arrGpa.get(i).getGpa(),
-                            arrGpa.get(i).getUserIndex()
+                            gpa.getType(),
+                            gpa.getSemester(),
+                            gpa.getGpa(),
+                            gpa.getUserIndex()
                     ));
                 }else{
                     lstGpa.add(new GPA(
