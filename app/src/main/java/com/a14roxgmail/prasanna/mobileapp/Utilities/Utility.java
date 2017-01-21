@@ -1,4 +1,5 @@
 package com.a14roxgmail.prasanna.mobileapp.Utilities;
+
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,5 +84,24 @@ public abstract class Utility{
         DecimalFormat twoDForm = new DecimalFormat("#.####");
         return Double.valueOf(twoDForm.format(d));
     }
+
+    public static boolean CheckInternetAccess() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+            }
+        catch (Exception e) {
+            Log.i(Constants.LOG_TAG,"Error :- " + e.toString());
+            return false;
+        }
+
+    }
+
+
+
+
+
 
 }

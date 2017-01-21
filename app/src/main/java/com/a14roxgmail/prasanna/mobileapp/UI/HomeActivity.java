@@ -1,5 +1,6 @@
 package com.a14roxgmail.prasanna.mobileapp.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
+import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.CourseFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaSemFragment;
@@ -138,11 +140,19 @@ public class HomeActivity extends AppCompatActivity
             toolbar.setTitle("GPA");
             transaction.commit();
         } else if (id == R.id.nav_signout) {
-            //Signout Process
+            SignOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void SignOut() {
+        userDAO user_DAO = new userDAO(getApplicationContext());
+        user_DAO.updateLoginStatus(Constants.USER_LOGOUT_FLAG,userIndex);
+        Intent i = new Intent(this,LogInActivity.class);
+        this.finish();
+        startActivity(i);
     }
 }

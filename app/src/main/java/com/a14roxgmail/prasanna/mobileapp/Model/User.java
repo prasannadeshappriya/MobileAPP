@@ -11,6 +11,7 @@ public class User {
     private String userIndex;
     private String token;
     private String loginStatus;
+    private String password;
 
     public User(String ID, String firstName, String lastName, String fullName) {
         this.ID = ID;
@@ -19,16 +20,17 @@ public class User {
         this.fullName = fullName;
     }
 
-    public User(String firstName, String lastName, String fullName, String userIndex, String token, String loginStatus) {
+    public User(String firstName, String lastName, String fullName, String userIndex, String token, String loginStatus, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.loginStatus = loginStatus;
         this.fullName = fullName;
         this.token = token;
         this.userIndex = userIndex;
+        this.password = password;
     }
 
-    public User(String ID, String firstName, String lastName, String fullName, String userIndex, String token,String loginStatus) {
+    public User(String ID, String firstName, String lastName, String fullName, String userIndex, String token,String loginStatus,String password) {
         this.ID = ID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -36,7 +38,20 @@ public class User {
         this.loginStatus = loginStatus;
         this.token = token;
         this.userIndex = userIndex;
+        this.password = password;
     }
+
+    public String getPassword(){return password;}
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public void setLoginStatus(String loginStatus){
+        this.loginStatus = loginStatus;
+    }
+
+    public String getLoginStatus(){return loginStatus;}
 
     public void setUserIndex(String userIndex){
         this.userIndex = userIndex;

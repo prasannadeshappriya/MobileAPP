@@ -3,6 +3,7 @@ package com.a14roxgmail.prasanna.mobileapp.UI;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Token;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
@@ -18,6 +20,7 @@ import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.Model.User;
 import com.a14roxgmail.prasanna.mobileapp.R;
+import com.a14roxgmail.prasanna.mobileapp.Utilities.EncryptSHA1;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.ServerRequest;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
 
@@ -49,6 +52,12 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         //Initialize
         init();
 
+        //Check user already login before
+        User user = user_DAO.getSignInUserDetails();
+        if(user!=null){
+            autoLoginUser(user);
+        }
+
         btnSignIn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -65,42 +74,74 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
             if(user_DAO.isUserExist(etUserName.getText().toString())){
                 Log.i(Constants.LOG_TAG,"User " + etUserName.getText().toString() + " is exist on the database");
 
-                if(CheckInternetAccess()){
-                    Log.i(Constants.LOG_TAG,"Start sync process for user :- " + etUserName.getText().toString());
+                User user = user_DAO.getUser(etUserName.getText().toString());
+                details = new HashMap<>();
 
-                }else {
-                    Log.i(Constants.LOG_TAG,"No internet connection available, loading local data");
-
-                    User user = user_DAO.getUser(etUserName.getText().toString());
-                    details = new HashMap<>();
-
-                    //Hashmap_keys
-                    //          sitename
-                    //          username
-                    //          firstname
-                    //          lastname
-                    //          fullname
-                    details.put("username", user.getUserIndex());
-                    details.put("firstname", user.getFirstName());
-                    details.put("lastname", user.getLastName());
-                    details.put("fullname", user.getFullName());
-
-                    Intent i = new Intent(getApplicationContext(),HomeActivity.class);
-                    i.putExtra("Values",details);
-                    this.finish();
-                    startActivity(i);
-                    Log.i(Constants.LOG_TAG,"Completed SignIn Process");
-
-                }
+                //Hashmap_keys
+                //          sitename
+                //          username
+                //          firstname
+                //          lastname
+                //          fullname
+                details.put("username", user.getUserIndex());
+                details.put("firstname", user.getFirstName());
+                details.put("lastname", user.getLastName());
+                details.put("fullname", user.getFullName());
+                details.put("password", user.getPassword());
+                 if (EncryptSHA1.SHA1(etPassword.getText().toString()).equals(details.get("password"))) {
+                     user_DAO.updateLoginStatus(Constants.USER_LOGIN_FLAG,etUserName.getText().toString());
+                     Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+                     i.putExtra("Values", details);
+                     this.finish();
+                     startActivity(i);
+                     Log.i(Constants.LOG_TAG, "Completed SignIn Process");
+                 } else {
+                     Toast.makeText(this, "Invalid login details !", Toast.LENGTH_LONG).show();
+                     Log.i(Constants.LOG_TAG, "SignIn process terminated due to invalid details");
+                 }
             }else {
-                Log.i(Constants.LOG_TAG,"User " + etUserName.getText().toString() + " is not exist on the database");
-                getToken();
+                Log.i(Constants.LOG_TAG, "User " + etUserName.getText().toString() + " is not exist on the database");
+                if(CheckInternetAccess()) {
+                    Log.i(Constants.LOG_TAG, "Internet connection available");
+                    getToken();
+                }else{
+                    Log.i(Constants.LOG_TAG, "No internet connection available");
+                    Toast.makeText(this,"No internet connection !", Toast.LENGTH_LONG).show();
+                }
             }
         }
     }
 
+    public void autoLoginUser(User user){
+        details = new HashMap<>();
+
+        //Hashmap_keys
+        //          sitename
+        //          username
+        //          firstname
+        //          lastname
+        //          fullname
+        details.put("username", user.getUserIndex());
+        details.put("firstname", user.getFirstName());
+        details.put("lastname", user.getLastName());
+        details.put("fullname", user.getFullName());
+        details.put("password", user.getPassword());
+
+        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+        i.putExtra("Values", details);
+        this.finish();
+        startActivity(i);
+        Log.i(Constants.LOG_TAG, "Completed SignIn Process");
+    }
+
     public boolean CheckInternetAccess(){
-        return false;
+        //Ping is not working for emulator
+        //Check weather the app is running on emulator or not
+        if(Build.PRODUCT.matches(".*_?sdk_?.*")){
+            return true;
+        }else {
+            return Utility.CheckInternetAccess();
+        }
     }
 
     public boolean Validate(){
@@ -169,7 +210,7 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         }
     }
 
-    private void process_user_info_response(ServerRequest request) {
+    private void process_user_info_response(ServerRequest request){
         String response = request.getResponse();
         if (response.equals("")) {
             Toast.makeText(this, "Server timeout", Toast.LENGTH_LONG).show();
@@ -191,7 +232,8 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
                             details.get("fullname"),
                             etUserName.getText().toString(),
                             Token.getToken(),
-                            Constants.USER_LOGIN_FLAG
+                            Constants.USER_LOGIN_FLAG,
+                            EncryptSHA1.SHA1(etPassword.getText().toString())
                     )
             );
 

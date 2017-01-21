@@ -30,7 +30,8 @@ public class Database extends SQLiteOpenHelper {
                 "last_name VARCHAR(50), " +
                 "full_name VARCHAR(100), " +
                 "login_status VARCHAR(10), " +
-                "token VARCHAR(255));";
+                "token VARCHAR(255), " +
+                "password VARCHAR(255));";
         Log.i(Constants.LOG_TAG, "Create user table query :- " + command);
         sqLiteDatabase.execSQL(command);
 

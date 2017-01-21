@@ -21,6 +21,7 @@ public abstract class Constants {
 
     //Constant Values
     public static final String USER_LOGIN_FLAG = "1";
+    public static final String USER_LOGOUT_FLAG = "0";
     public static final String SGPA_FLAG = "sgpa";
     public static final String GPA_FLAG = "gpa";
 
@@ -36,4 +37,7 @@ public abstract class Constants {
 
     public static final String LMS_LOGIN_ID = "LearnOrgLogin";
     public static final String LMS_LOGIN_ID_VALUE = "Login";
+
+    //Internet connection check
+    public static final String GOOGLE_DNS_SERVER = "8.8.8.8";
 }

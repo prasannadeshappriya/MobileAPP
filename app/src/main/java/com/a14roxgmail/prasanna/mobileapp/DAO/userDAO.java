@@ -55,7 +55,8 @@ public class userDAO extends DAO{
                         c.getString(c.getColumnIndex("full_name")),
                         c.getString(c.getColumnIndex("user_index")),
                         c.getString(c.getColumnIndex("token")),
-                        c.getString(c.getColumnIndex("login_status")));
+                        c.getString(c.getColumnIndex("login_status")),
+                        c.getString(c.getColumnIndex("password")));
             } while (c.moveToNext());
         }
         return user;
@@ -70,9 +71,29 @@ public class userDAO extends DAO{
         cv.put("user_index",user.getUserIndex());
         cv.put("token",user.getToken());
         cv.put("login_status", "1");
+        cv.put("password",user.getPassword());
 
         Log.i(Constants.LOG_TAG,"UserDAO insert method triggered");
         sqldb.insert(tableName,null,cv);
+    }
+
+    public User getSignInUserDetails(){
+        command = "SELECT * FROM "+tableName+" WHERE login_status = \"" + Constants.USER_LOGIN_FLAG + "\";";
+        Log.i(Constants.LOG_TAG,"Check sign in user query :- " + command);
+        Cursor c = sqldb.rawQuery(command,null);
+        Log.i(Constants.LOG_TAG, "Table name :- " + tableName + "   Search cursor count :- " + String.valueOf(c.getCount()));
+        User user = null;
+        if(c.moveToFirst()) {
+            user = new User(
+                    c.getString(c.getColumnIndex("first_name")),
+                    c.getString(c.getColumnIndex("last_name")),
+                    c.getString(c.getColumnIndex("full_name")),
+                    c.getString(c.getColumnIndex("user_index")),
+                    c.getString(c.getColumnIndex("token")),
+                    c.getString(c.getColumnIndex("login_status")),
+                    c.getString(c.getColumnIndex("password")));
+        }
+        return user;
     }
 
     public String getLoginStatus(String userIndex){
