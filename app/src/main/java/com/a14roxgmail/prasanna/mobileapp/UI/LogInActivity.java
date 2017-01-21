@@ -62,6 +62,7 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        etUserName.setText(etUserName.getText().toString().toUpperCase());
                         SignIn();
                     }
                 }
