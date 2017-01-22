@@ -170,5 +170,6 @@ public class HomeActivity extends AppCompatActivity
         Intent i = new Intent(this,LogInActivity.class);
         this.finish();
         startActivity(i);
+        overridePendingTransition(R.anim.left_in,R.anim.left_out);
     }
 }

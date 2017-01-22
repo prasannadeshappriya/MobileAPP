@@ -97,6 +97,7 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
                     i.putExtra("Values", details);
                     this.finish();
                     startActivity(i);
+                    overridePendingTransition(R.anim.left_in,R.anim.left_out);
                     Log.i(Constants.LOG_TAG, "Completed SignIn Process");
                 } else {
                     Toast.makeText(this, "Invalid login details !", Toast.LENGTH_LONG).show();
@@ -135,6 +136,7 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         i.putExtra("Values", details);
         this.finish();
         startActivity(i);
+        overridePendingTransition(R.anim.left_in,R.anim.left_out);
         Log.i(Constants.LOG_TAG, "Completed SignIn Process");
     }
 
@@ -382,6 +384,7 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
             i.putExtra("Values",details);
             startActivity(i);
             Log.i(Constants.LOG_TAG,"Completed SignIn Process");
+            overridePendingTransition(R.anim.left_in,R.anim.left_out);
         }
 
     }

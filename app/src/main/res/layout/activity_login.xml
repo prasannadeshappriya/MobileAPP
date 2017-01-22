@@ -12,8 +12,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="120dip"
+            android:layout_marginTop="50dip"
+            android:layout_gravity="center"
+            android:layout_height="120dip"
+            android:layout_marginBottom="20dip"
+            android:src="@drawable/moodle"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_height="wrap_content"
