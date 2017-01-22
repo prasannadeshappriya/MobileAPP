@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.a14roxgmail.prasanna.mobileapp.Constants.Months;
 import com.a14roxgmail.prasanna.mobileapp.Model.Entry;
 import com.a14roxgmail.prasanna.mobileapp.R;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
@@ -49,13 +50,21 @@ public class CalendarAdapter extends BaseAdapter {
         TextView tvDetails = (TextView)v.findViewById(R.id.adapterCalendarDetails);
 
         String day = arrEntry.get(i).getDay();
-        String Month = arrEntry.get(i).getMonth();
+        String month = arrEntry.get(i).getMonth();
         ArrayList<String> arrDetails = arrEntry.get(i).getEvents();
 
-        tvDetails.setText("day:- " + day + ", month :- " +  Month);
-        ArrayAdapter adapter  = new ArrayAdapter(context,android.R.layout.simple_list_item_1,arrDetails);
-        lstListView.setAdapter(adapter);
-        Utility.setListViewHeightBasedOnItems(lstListView);
+        if(day.equals("0")){
+            tvDetails.setText(Months.getMonth(month));
+            ArrayList<String> arrTmp = new ArrayList<>();
+            arrTmp.add("No events available");
+            ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, arrTmp);
+            lstListView.setAdapter(adapter);
+        }else {
+            tvDetails.setText(day + " - " + Months.getMonth(month));
+            ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, arrDetails);
+            lstListView.setAdapter(adapter);
+            Utility.setListViewHeightBasedOnItems(lstListView);
+        }
 
         return v;
     }

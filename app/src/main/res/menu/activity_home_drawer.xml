@@ -10,6 +10,10 @@
             android:id="@+id/nav_GPA"
             android:icon="@drawable/ic_action_gpa"
             android:title="GPA" />
+        <item
+            android:id="@+id/nav_Calendar"
+            android:icon="@drawable/ic_action_calendar"
+            android:title="Calendar" />
     </group>
 
     <item android:title="Communicate">

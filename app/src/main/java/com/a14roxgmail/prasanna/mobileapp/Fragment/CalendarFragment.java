@@ -1,7 +1,6 @@
 package com.a14roxgmail.prasanna.mobileapp.Fragment;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,19 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
-import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
 import com.a14roxgmail.prasanna.mobileapp.ListAdapter.CalendarAdapter;
-import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.Model.Entry;
 import com.a14roxgmail.prasanna.mobileapp.R;
-import com.a14roxgmail.prasanna.mobileapp.UI.HomeActivity;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
 
 import org.jsoup.Connection;
@@ -33,8 +29,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,6 +42,7 @@ public class CalendarFragment extends Fragment {
     private Spinner spiMonth;
     private userDAO user_dao;
     private ListView lstCalendar;
+    private TextView tvRefresh;
 
     @Nullable
     @Override
@@ -54,17 +51,22 @@ public class CalendarFragment extends Fragment {
         init(view);
         refresh_list();
 
-        Button b = (Button) view.findViewById(R.id.btnTest);
-        b.setOnClickListener(
+        getCalendarInfo calendarTask = new getCalendarInfo(
+                userIndex,
+                Integer.parseInt(spiYear.getSelectedItem().toString()),
+                spiMonth.getSelectedItemPosition() + 1,
+                lstCalendar
+        );
+        calendarTask.execute();
+
+        tvRefresh.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(getContext(),user_dao.getUserPassword(userIndex),Toast.LENGTH_LONG).show();
                         getCalendarInfo calendarTask = new getCalendarInfo(
-                                user_dao,
                                 userIndex,
-                                2016,
-                                11,
+                                Integer.parseInt(spiYear.getSelectedItem().toString()),
+                                spiMonth.getSelectedItemPosition() + 1,
                                 lstCalendar
                         );
                         calendarTask.execute();
@@ -90,14 +92,26 @@ public class CalendarFragment extends Fragment {
         arrMonth.add("December");
 
         ArrayList<String> arrYear = new ArrayList<>();
-        arrYear.add("2016");
-        arrYear.add("2017");
+        for(int i=2016; i<2030; i++) {
+            arrYear.add(String.valueOf(i));
+        }
 
-        ArrayAdapter<String> adapterMonth = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,arrMonth);
-        ArrayAdapter<String> adapterYear = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,arrYear);
+        ArrayAdapter<String> adapterMonth = new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item,arrMonth);
+        ArrayAdapter<String> adapterYear = new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item,arrYear);
         spiMonth.setAdapter(adapterMonth);
-        spiMonth.setSelection(10);
         spiYear.setAdapter(adapterYear);
+
+
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        spiMonth.setSelection(c.get(Calendar.MONTH));
+        for(int i=0; i<spiYear.getAdapter().getCount(); i++){
+            String a = spiYear.getAdapter().getItem(i).toString();
+            if(spiYear.getAdapter().getItem(i).toString().equals(String.valueOf(year))){
+                spiYear.setSelection(i);
+                break;
+            }
+        }
     }
 
     private void init(View view) {
@@ -105,6 +119,7 @@ public class CalendarFragment extends Fragment {
         spiMonth = (Spinner) view.findViewById(R.id.spiMonth);
         spiYear = (Spinner) view.findViewById(R.id.spiYear);
         lstCalendar = (ListView) view.findViewById(R.id.lstCalender);
+        tvRefresh = (TextView) view.findViewById(R.id.tvRefresh);
     }
 
     public void setUserIndex(String userIndex){
@@ -114,15 +129,13 @@ public class CalendarFragment extends Fragment {
     public class getCalendarInfo extends AsyncTask<Void,Void,Void> {
         private String username;
         private String password;
-        private userDAO user_dao;
         CalendarAdapter adapter;
         private int month;
         private int year;
         private ProgressDialog pd;
         private ArrayList<Entry> arrAdapterArray;
 
-        public getCalendarInfo(userDAO user_dao, String userIndex, int year, int month, ListView list){
-            this.user_dao = user_dao;
+        public getCalendarInfo(String userIndex, int year, int month, ListView list){
             this.username = userIndex;
             this.month = month; this.year = year;
             this.password = user_dao.getUserPassword(userIndex);
@@ -134,7 +147,7 @@ public class CalendarFragment extends Fragment {
         protected void onPreExecute() {
             pd.setIndeterminate(true);
             pd.setCanceledOnTouchOutside(false);
-            pd.setMessage("Authenticating..");
+            pd.setMessage("Getting Information..");
             pd.show();
             super.onPreExecute();
         }
@@ -220,10 +233,11 @@ public class CalendarFragment extends Fragment {
                         }
                     }
                 }
-
-                adapter = new CalendarAdapter(getContext(),arrAdapterArray);
+                adapter = new CalendarAdapter(getContext(), arrAdapterArray);
 
             } catch (Exception e) {
+                Toast.makeText(getContext(),"Something went wrong",Toast.LENGTH_LONG).show();
+                pd.dismiss();
                 Log.i(Constants.LOG_TAG, "Error caught :- " + e.toString());
             }
             return null;

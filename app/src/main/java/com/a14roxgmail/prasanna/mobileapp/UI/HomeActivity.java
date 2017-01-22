@@ -75,20 +75,14 @@ public class HomeActivity extends AppCompatActivity
         tvIndexNo.setText(userIndex);
         tvFullName.setText(map.get("fullname").toString());
 
-        /*
+
         CourseFragment courseFragment = new CourseFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frmMain,courseFragment);
         courseFragment.setServerCourseList(course_list);
         toolbar.setTitle("My Courses");
         transaction.commit();
-        */
 
-        CalendarFragment calendarFragment = new CalendarFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frmMain,calendarFragment);
-        calendarFragment.setUserIndex(userIndex);
-        transaction.commit();
     }
 
     @Override
@@ -136,7 +130,6 @@ public class HomeActivity extends AppCompatActivity
             courseFragment.setServerCourseList(course_list);
             toolbar.setTitle("My Courses");
             transaction.commit();
-
         } else if (id == R.id.nav_feedback) {
             toolbar.setTitle("Feedback");
         } else if (id == R.id.nav_GPA) {
@@ -145,6 +138,12 @@ public class HomeActivity extends AppCompatActivity
             transaction.replace(R.id.frmMain,gpaFragment);
             gpaFragment.setUser_index(userIndex);
             toolbar.setTitle("GPA");
+            transaction.commit();
+        } else if (id == R.id.nav_Calendar) {
+            CalendarFragment calendarFragment = new CalendarFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frmMain,calendarFragment);
+            calendarFragment.setUserIndex(userIndex);
             transaction.commit();
         } else if (id == R.id.nav_signout) {
             SignOut();
