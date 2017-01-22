@@ -2,6 +2,7 @@ package com.a14roxgmail.prasanna.mobileapp.Fragment;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -51,25 +52,33 @@ public class CalendarFragment extends Fragment {
         init(view);
         refresh_list();
 
-        getCalendarInfo calendarTask = new getCalendarInfo(
-                userIndex,
-                Integer.parseInt(spiYear.getSelectedItem().toString()),
-                spiMonth.getSelectedItemPosition() + 1,
-                lstCalendar
-        );
-        calendarTask.execute();
+        if(CheckInternetAccess()) {
+            getCalendarInfo calendarTask = new getCalendarInfo(
+                    userIndex,
+                    Integer.parseInt(spiYear.getSelectedItem().toString()),
+                    spiMonth.getSelectedItemPosition() + 1,
+                    lstCalendar
+            );
+            calendarTask.execute();
+        }else{
+            Toast.makeText(getContext(),"No internet connection",Toast.LENGTH_LONG).show();
+        }
 
         tvRefresh.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        getCalendarInfo calendarTask = new getCalendarInfo(
-                                userIndex,
-                                Integer.parseInt(spiYear.getSelectedItem().toString()),
-                                spiMonth.getSelectedItemPosition() + 1,
-                                lstCalendar
-                        );
-                        calendarTask.execute();
+                        if(CheckInternetAccess()) {
+                            getCalendarInfo calendarTask = new getCalendarInfo(
+                                    userIndex,
+                                    Integer.parseInt(spiYear.getSelectedItem().toString()),
+                                    spiMonth.getSelectedItemPosition() + 1,
+                                    lstCalendar
+                            );
+                            calendarTask.execute();
+                        }else{
+                            Toast.makeText(getContext(),"No internet connection",Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
         );
@@ -78,18 +87,10 @@ public class CalendarFragment extends Fragment {
 
     private void refresh_list() {
         ArrayList<String> arrMonth = new ArrayList<>();
-        arrMonth.add("January");
-        arrMonth.add("February");
-        arrMonth.add("March");
-        arrMonth.add("April");
-        arrMonth.add("May");
-        arrMonth.add("June");
-        arrMonth.add("July");
-        arrMonth.add("August");
-        arrMonth.add("September");
-        arrMonth.add("October");
-        arrMonth.add("November");
-        arrMonth.add("December");
+        arrMonth.add("January");arrMonth.add("February");arrMonth.add("March");
+        arrMonth.add("April");arrMonth.add("May");arrMonth.add("June");
+        arrMonth.add("July");arrMonth.add("August");arrMonth.add("September");
+        arrMonth.add("October");arrMonth.add("November");arrMonth.add("December");
 
         ArrayList<String> arrYear = new ArrayList<>();
         for(int i=2016; i<2030; i++) {
@@ -111,6 +112,16 @@ public class CalendarFragment extends Fragment {
                 spiYear.setSelection(i);
                 break;
             }
+        }
+    }
+
+    public boolean CheckInternetAccess(){
+        //Ping is not working for emulator
+        //Check weather the app is running on emulator or not
+        if(Build.PRODUCT.matches(".*_?sdk_?.*")){
+            return true;
+        }else {
+            return Utility.CheckInternetAccess();
         }
     }
 
@@ -236,7 +247,6 @@ public class CalendarFragment extends Fragment {
                 adapter = new CalendarAdapter(getContext(), arrAdapterArray);
 
             } catch (Exception e) {
-                Toast.makeText(getContext(),"Something went wrong",Toast.LENGTH_LONG).show();
                 pd.dismiss();
                 Log.i(Constants.LOG_TAG, "Error caught :- " + e.toString());
             }

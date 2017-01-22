@@ -1,7 +1,7 @@
 package com.a14roxgmail.prasanna.mobileapp.Utilities;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
-public class EncryptPass {
+public abstract class EncryptPass {
     private static final String key = "UNBREAKABLE";
 
     public static String decrypt(String value){

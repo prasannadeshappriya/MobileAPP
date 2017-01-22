@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.GradeDAO;
@@ -52,8 +51,6 @@ public class GpaFragment extends Fragment {
                     }
                 }
         );
-
-        Toast.makeText(getContext(),"Tuch and hold semester to edit", Toast.LENGTH_SHORT).show();
 
         return view;
     }

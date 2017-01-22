@@ -3,7 +3,7 @@ package com.a14roxgmail.prasanna.mobileapp.Constants;
 /**
  * Created by Prasanna Deshappriya on 1/22/2017.
  */
-public class Months {
+public abstract class Months {
     public static String getMonth(String value){
         int index = Integer.parseInt(value);
         if(index==1){return "January";}
