@@ -1,9 +1,11 @@
 package com.a14roxgmail.prasanna.mobileapp.UI;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,17 +23,11 @@ import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.CalendarFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.CourseFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaFragment;
-import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaSemFragment;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -110,9 +106,9 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        //if (id == R.id.action_settings) {
+        //    return true;
+        //}
 
         return super.onOptionsItemSelected(item);
     }
@@ -131,7 +127,20 @@ public class HomeActivity extends AppCompatActivity
             toolbar.setTitle("My Courses");
             transaction.commit();
         } else if (id == R.id.nav_feedback) {
-            toolbar.setTitle("Feedback");
+            AlertDialog alertDialog = new AlertDialog.Builder(
+                    new ContextThemeWrapper(
+                            this,
+                            R.style.AppTheme_Dark_Dialog
+                    )).create();
+            alertDialog.setTitle("About");
+            alertDialog.setMessage("Please send any bugs details to 'prasannadeshappriya@gmail.com'");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
         } else if (id == R.id.nav_GPA) {
             GpaFragment gpaFragment = new GpaFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

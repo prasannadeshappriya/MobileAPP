@@ -16,12 +16,12 @@
             android:title="Calendar" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="">
         <menu>
             <item
                 android:id="@+id/nav_feedback"
                 android:icon="@drawable/ic_action_feedback"
-                android:title="Feedback" />
+                android:title="About" />
             <item
                 android:id="@+id/nav_signout"
                 android:icon="@drawable/ic_action_signout"

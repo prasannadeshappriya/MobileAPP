@@ -10,8 +10,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".UI.LogInActivity">
+        android:theme="@style/AppTheme1">
+        <activity android:name=".UI.LogInActivity"
+            android:theme="@style/AppTheme.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +22,7 @@
         <activity
             android:name=".UI.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme.Dark"></activity>
     </application>
 
 </manifest>
