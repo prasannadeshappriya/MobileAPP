@@ -1,6 +1,11 @@
 package com.a14roxgmail.prasanna.mobileapp.Utilities;
 
+import android.util.Base64;
+
+import java.security.Key;
 import java.security.MessageDigest;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Created by Prasanna Deshappriya on 1/21/2017.
@@ -29,7 +34,8 @@ public abstract class EncryptSHA1 {
             byte[] sha1hash = new byte[40];
             md.update(text.getBytes("iso-8859-1"), 0, text.length());
             sha1hash = md.digest();
-            return convertToHex(sha1hash);
+            //return convertToHex(sha1hash);
+            return text;
         }catch (Exception e){
             return text;
         }

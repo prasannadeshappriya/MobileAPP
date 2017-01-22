@@ -116,4 +116,17 @@ public class userDAO extends DAO{
         sqldb.execSQL(command);
     }
 
+    public String getUserPassword(String userIndex){
+        command = "SELECT password FROM "+tableName+" WHERE user_index = \"" + userIndex + "\";";
+        Cursor c = sqldb.rawQuery(command,null);
+        Log.i(Constants.LOG_TAG, "Table name :- " + tableName + "   Search cursor count :- " + String.valueOf(c.getCount()));
+        String password = "";
+        if(c.moveToFirst()) {
+            do {
+                password = c.getString(c.getColumnIndex("password"));
+            } while (c.moveToNext());
+        }
+        return password;
+    }
+
 }

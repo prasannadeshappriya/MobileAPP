@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
+import com.a14roxgmail.prasanna.mobileapp.Fragment.CalendarFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.CourseFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaSemFragment;
@@ -74,14 +75,20 @@ public class HomeActivity extends AppCompatActivity
         tvIndexNo.setText(userIndex);
         tvFullName.setText(map.get("fullname").toString());
 
+        /*
         CourseFragment courseFragment = new CourseFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frmMain,courseFragment);
         courseFragment.setServerCourseList(course_list);
         toolbar.setTitle("My Courses");
         transaction.commit();
+        */
 
-
+        CalendarFragment calendarFragment = new CalendarFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frmMain,calendarFragment);
+        calendarFragment.setUserIndex(userIndex);
+        transaction.commit();
     }
 
     @Override

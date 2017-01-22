@@ -32,12 +32,16 @@ public abstract class Constants {
     //Web scripting data
     public static final String LMS_SOURCE_TAG = "noramlTableCell";
     public static final String LMS_COOKIE_ID = "PHPSESSID";
+    public static final String MOODLE_COOKIE_ID = "MoodleSession";
     public static final String LMS_USERNAME_ID = "LearnOrgUsername";
     public static final String LMS_PASSWORD_ID = "LearnOrgPassword";
+    public static final String MOODLE_USERNAME_ID = "username";
+    public static final String MOODLE_PASSWORD_ID = "password";
 
     public static final String LMS_LOGIN_ID = "LearnOrgLogin";
     public static final String LMS_LOGIN_ID_VALUE = "Login";
 
-    //Internet connection check
-    public static final String GOOGLE_DNS_SERVER = "8.8.8.8";
+    //Moodle links
+    public static final String MOODLE_LOGIN_URL = "https://online.mrt.ac.lk/login/index.php";
+    public static final String MOODLE_CALENDAR_URL = "http://online.mrt.ac.lk/calendar/view.php";
 }

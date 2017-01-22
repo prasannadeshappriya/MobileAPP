@@ -39,6 +39,17 @@ public abstract class Utility{
 
     }
 
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return false;
+        } catch(NullPointerException e) {
+            return false;
+        }
+        return true;
+    }
+
     public static HashMap<String,String> XMLPaser(String response){
         HashMap<String,String> map = new HashMap();
         int count = 0;

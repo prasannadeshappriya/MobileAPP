@@ -147,6 +147,10 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
 
     public boolean Validate(){
         //Validate email address and password
+        if(etUserName.getText().toString().replace(" ","").equals("")){
+            Toast.makeText(this,"Invalid user ID",Toast.LENGTH_LONG).show();
+            return false;
+        }
         return true;
     }
 
@@ -201,9 +205,20 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
             JSONObject objResponse = null;
             try {
                 objResponse = new JSONObject(response);
-                Token.setToken(objResponse.getString("token"));
-                Log.i(Constants.LOG_TAG, "Newest Token is :- " + Token.getToken());
-                getUserInfo();
+                if (objResponse.has("error")){
+                    Log.i(Constants.LOG_TAG, "Error :- " + objResponse.getString("error"));
+                    Toast.makeText(getApplicationContext(),"Invalid login details",Toast.LENGTH_LONG).show();
+                    pd.dismiss();
+                }else {
+                    if(objResponse.has("token")){
+                        Token.setToken(objResponse.getString("token"));
+                        Log.i(Constants.LOG_TAG, "Newest Token is :- " + Token.getToken());
+                        getUserInfo();
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Something went wrong",Toast.LENGTH_LONG).show();
+                        pd.dismiss();
+                    }
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
