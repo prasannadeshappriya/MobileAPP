@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.GpaPoints;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
@@ -137,16 +138,18 @@ public class GpaSemFragment extends Fragment{
                 );
             }
         } else {
-            gradeDAO.addGpa(
-                    new GPA(
-                            Constants.SGPA_FLAG,
-                            semester,
-                            String.valueOf(sgpa),
-                            userIndex,
-                            String.valueOf(total_cedits)
-                    )
+            if(!Double.isNaN(sgpa)) {
+                gradeDAO.addGpa(
+                        new GPA(
+                                Constants.SGPA_FLAG,
+                                semester,
+                                String.valueOf(sgpa),
+                                userIndex,
+                                String.valueOf(total_cedits)
+                        )
 
-            );
+                );
+            }
         }
 
 
@@ -180,15 +183,17 @@ public class GpaSemFragment extends Fragment{
                     String.valueOf(gpa)
             );
         }else {
-            gradeDAO.addGpa(
-                    new GPA(
-                            Constants.GPA_FLAG,
-                            semester,
-                            String.valueOf(gpa),
-                            userIndex,
-                            String.valueOf(totalCredit)
-                    )
-            );
+            if(!Double.isNaN(gpa)) {
+                gradeDAO.addGpa(
+                        new GPA(
+                                Constants.GPA_FLAG,
+                                semester,
+                                String.valueOf(gpa),
+                                userIndex,
+                                String.valueOf(totalCredit)
+                        )
+                );
+            }
         }
 
         GpaFragment gpaFragment = new GpaFragment();

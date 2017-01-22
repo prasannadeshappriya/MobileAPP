@@ -21,13 +21,13 @@
     </ListView>
 
     <Button
-        android:text="Save"
-        android:id="@+id/btnSave"
-        android:layout_gravity="right"
-        android:layout_marginBottom="5dip"
-        android:layout_marginRight="5dip"
-        android:layout_marginTop="5dip"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dip"
+        android:layout_marginRight="10dip"
+        android:id="@+id/btnSave"
+        android:layout_marginTop="5dip"
+        android:text="Save"
+        android:layout_gravity="right"/>
 
 </LinearLayout>

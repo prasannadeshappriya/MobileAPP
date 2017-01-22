@@ -8,28 +8,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Year :- "
-        android:id="@+id/tvYear"/>
     <Spinner
         android:id="@+id/spiYear"
-        android:layout_centerHorizontal="true"
         android:layout_width="120dip"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvYear"
-        android:text="Month :- "
-        android:id="@+id/tvMonth"/>
     <Spinner
         android:id="@+id/spiMonth"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dip"
-        android:layout_below="@+id/tvYear"
+        android:layout_marginLeft="10dip"
+        android:layout_toRightOf="@+id/spiYear"
         android:layout_width="120dip"
         android:layout_height="wrap_content" />
 
@@ -39,7 +27,7 @@
         android:layout_marginBottom="15px"
         android:layout_marginRight="30px"
         android:textAlignment="center"
-        android:layout_below="@+id/tvMonth"
+        android:layout_below="@+id/spiYear"
         android:layout_alignParentRight="true"
         android:id="@+id/tvRefresh"
         android:text="Refresh"
