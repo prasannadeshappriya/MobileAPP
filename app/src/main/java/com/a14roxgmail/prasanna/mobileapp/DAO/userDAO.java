@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Model.User;
+import com.a14roxgmail.prasanna.mobileapp.Utilities.EncryptPass;
 
 /**
  * Created by Prasanna Deshappriya on 1/18/2017.
@@ -56,7 +57,7 @@ public class userDAO extends DAO{
                         c.getString(c.getColumnIndex("user_index")),
                         c.getString(c.getColumnIndex("token")),
                         c.getString(c.getColumnIndex("login_status")),
-                        c.getString(c.getColumnIndex("password")));
+                        EncryptPass.decrypt(c.getString(c.getColumnIndex("password"))));
             } while (c.moveToNext());
         }
         return user;
@@ -126,7 +127,7 @@ public class userDAO extends DAO{
                 password = c.getString(c.getColumnIndex("password"));
             } while (c.moveToNext());
         }
-        return password;
+        return EncryptPass.decrypt(password);
     }
 
 }

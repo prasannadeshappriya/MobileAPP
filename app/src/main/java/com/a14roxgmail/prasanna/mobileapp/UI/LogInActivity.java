@@ -20,7 +20,7 @@ import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.Model.User;
 import com.a14roxgmail.prasanna.mobileapp.R;
-import com.a14roxgmail.prasanna.mobileapp.Utilities.EncryptSHA1;
+import com.a14roxgmail.prasanna.mobileapp.Utilities.EncryptPass;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.ServerRequest;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
 
@@ -79,27 +79,30 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
                 details = new HashMap<>();
 
                 //Hashmap_keys
-                //          sitename
                 //          username
                 //          firstname
                 //          lastname
                 //          fullname
+                //          password
                 details.put("username", user.getUserIndex());
                 details.put("firstname", user.getFirstName());
                 details.put("lastname", user.getLastName());
                 details.put("fullname", user.getFullName());
                 details.put("password", user.getPassword());
-                 if (EncryptSHA1.SHA1(etPassword.getText().toString()).equals(details.get("password"))) {
-                     user_DAO.updateLoginStatus(Constants.USER_LOGIN_FLAG,etUserName.getText().toString());
-                     Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                     i.putExtra("Values", details);
-                     this.finish();
-                     startActivity(i);
-                     Log.i(Constants.LOG_TAG, "Completed SignIn Process");
-                 } else {
-                     Toast.makeText(this, "Invalid login details !", Toast.LENGTH_LONG).show();
-                     Log.i(Constants.LOG_TAG, "SignIn process terminated due to invalid details");
-                 }
+
+
+                if (etPassword.getText().toString().equals(details.get("password"))) {
+                    user_DAO.updateLoginStatus(Constants.USER_LOGIN_FLAG,etUserName.getText().toString());
+                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+                    i.putExtra("Values", details);
+                    this.finish();
+                    startActivity(i);
+                    Log.i(Constants.LOG_TAG, "Completed SignIn Process");
+                } else {
+                    Toast.makeText(this, "Invalid login details !", Toast.LENGTH_LONG).show();
+                    Log.i(Constants.LOG_TAG, "SignIn process terminated due to invalid details");
+                }
+
             }else {
                 Log.i(Constants.LOG_TAG, "User " + etUserName.getText().toString() + " is not exist on the database");
                 if(CheckInternetAccess()) {
@@ -249,7 +252,7 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
                             etUserName.getText().toString(),
                             Token.getToken(),
                             Constants.USER_LOGIN_FLAG,
-                            EncryptSHA1.SHA1(etPassword.getText().toString())
+                            EncryptPass.encrypt(etPassword.getText().toString())
                     )
             );
 

@@ -144,6 +144,7 @@ public class HomeActivity extends AppCompatActivity
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.frmMain,calendarFragment);
             calendarFragment.setUserIndex(userIndex);
+            toolbar.setTitle("Calendar");
             transaction.commit();
         } else if (id == R.id.nav_signout) {
             SignOut();
