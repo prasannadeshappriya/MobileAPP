@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
+import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
 
 import java.util.ArrayList;
 
@@ -112,6 +113,7 @@ public class CourseDAO extends DAO{
         cv.put("credits",course.getCredits());
         cv.put("grade","");
         cv.put("semester",course.getSemester());
+        cv.put("last_sync_date",Utility.getCurrentDate());
 
         Log.i(Constants.LOG_TAG,"CourseDAO insert method triggered, course id :- " + course.getCourseCode());
         sqldb.insert(tableName,null,cv);
@@ -127,6 +129,25 @@ public class CourseDAO extends DAO{
         Log.i(Constants.LOG_TAG,"CourseDAO addCourseList method triggered");
         for(int i=0;i<arrCourse.size(); i++){
             addCourse(arrCourse.get(i));
+        }
+    }
+
+    public void updateLastSyncDate(String userIndex){
+        command = "UPDATE " + tableName + " SET last_sync_date = \"" + Utility.getCurrentDate() + "\" WHERE user_index = \"" + userIndex + "\";";
+        Log.i(Constants.LOG_TAG, "Update last sync date for user :- " + userIndex + ", value :- " + Utility.getCurrentDate() + ", query :- " + command);
+        sqldb.execSQL(command);
+    }
+
+    public String getLastSyncDate(String userIndex){
+        command = "SELECT last_sync_date FROM " + tableName + " WHERE user_index = \"" + userIndex + "\";";
+        Log.i(Constants.LOG_TAG,"Get last sync date for " + userIndex + ", query :- " + command);
+        Cursor c = sqldb.rawQuery(command,null);
+        if(c.getCount()>0) {
+            Log.i(Constants.LOG_TAG, "Table name :- " + tableName + "   Search cursor count :- " + String.valueOf(c.getCount()));
+            c.moveToFirst();
+            return c.getString(c.getColumnIndex("last_sync_date"));
+        }else {
+            return "";
         }
     }
 }

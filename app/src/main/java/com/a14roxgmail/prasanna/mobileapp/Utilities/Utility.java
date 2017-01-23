@@ -6,8 +6,12 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
+import com.a14roxgmail.prasanna.mobileapp.Constants.Months;
+
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 /**
  * Created by Prasanna Deshappriya on 1/17/2017.
@@ -110,9 +114,12 @@ public abstract class Utility{
 
     }
 
-
-
-
-
-
+    public static String getCurrentDate(){
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        String year = String.valueOf(calendar.get(Calendar.YEAR));
+        String month = String.valueOf(calendar.get(Calendar.MONTH)+1);
+        String date = String.valueOf(calendar.get(Calendar.DATE));
+        String ret = year + "-" + Months.getMonth(month) + "-" + date;
+        return ret;
+    }
 }

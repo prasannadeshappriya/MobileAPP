@@ -6,11 +6,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.R;
+import com.a14roxgmail.prasanna.mobileapp.Utilities.Sync;
 
 import java.util.ArrayList;
 
@@ -22,6 +26,10 @@ public class SettingsFragment extends Fragment {
     private String user_index;
     private CheckBox chkOption1;
     private CheckBox chkOption2;
+    private TextView tvSync;
+    private Button btnSyncNow;
+    private Sync sync;
+    private CourseDAO course_dao;
 
     @Nullable
     @Override
@@ -51,6 +59,18 @@ public class SettingsFragment extends Fragment {
                     }
                 }
         );
+        btnSyncNow.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(sync.isSyncNeed()){
+                            sync.startSyncProcess();
+                        }else{
+                            Toast.makeText(getContext(),"Database is up to date",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+        );
         return view;
     }
 
@@ -66,7 +86,10 @@ public class SettingsFragment extends Fragment {
         arrCourseList = new ArrayList<>();
         chkOption1 = (CheckBox)view.findViewById(R.id.chkOptionOne);
         chkOption2 = (CheckBox)view.findViewById(R.id.chkOptionTwo);
-
+        tvSync = (TextView) view.findViewById(R.id.tvSync);
+        btnSyncNow = (Button) view.findViewById(R.id.btnSyncNow);
+        course_dao = new CourseDAO(getContext());
+        sync = new Sync(user_index,arrCourseList,course_dao);
     }
 
     public void setParams(ArrayList<Course> arrList, String user_index){

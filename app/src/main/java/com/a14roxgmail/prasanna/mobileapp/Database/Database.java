@@ -43,6 +43,7 @@ public class Database extends SQLiteOpenHelper {
                 "credits VARCHAR(10), " +
                 "grade VARCHAR(10), " +
                 "semester VARCHAR(10), " +
+                "last_sync_date VARCHAR(50), " +
                 "FOREIGN KEY(user_index) REFERENCES user(user_index));";
         Log.i(Constants.LOG_TAG, "Create course table query :- " + command);
         sqLiteDatabase.execSQL(command);

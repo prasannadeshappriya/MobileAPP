@@ -56,8 +56,12 @@ public class GpaViewAdapter extends BaseAdapter {
         tvGpaType.setText(lstGpa.get(i).getType());
         try {
             double gpa = Double.parseDouble(lstGpa.get(i).getGpa());
-            gpa = Utility.roundTwoDecimals(gpa);
-            tvGPAValue.setText(String.valueOf(gpa));
+            if(Double.isNaN(gpa)){
+                tvGPAValue.setText("Not Calculated Yet");
+            }else {
+                gpa = Utility.roundTwoDecimals(gpa);
+                tvGPAValue.setText(String.valueOf(gpa));
+            }
         }catch (NumberFormatException e){
             //If the input stream cannot convert to double
             tvGPAValue.setText(lstGpa.get(i).getGpa());
