@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="5dip"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,28 +15,23 @@
 
     <Spinner
         android:id="@+id/spiMonth"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="10dip"
-        android:layout_toRightOf="@+id/spiYear"
+        android:layout_below="@+id/spiYear"
+        android:layout_marginTop="10dip"
+        android:layout_marginBottom="5dip"
         android:layout_width="120dip"
         android:layout_height="wrap_content" />
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
-        android:layout_marginTop="15px"
-        android:layout_marginBottom="15px"
-        android:layout_marginRight="30px"
-        android:textAlignment="center"
-        android:layout_below="@+id/spiYear"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:id="@+id/tvRefresh"
-        android:text="Refresh"
-        android:layout_height="wrap_content" />
+        android:id="@+id/btnRefresh"
+        android:text="Refresh"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/tvRefresh"
+        android:layout_below="@+id/spiMonth"
         android:layout_marginTop="5dp"
         android:id="@+id/vwBar2"
         android:background="@android:color/darker_gray"/>

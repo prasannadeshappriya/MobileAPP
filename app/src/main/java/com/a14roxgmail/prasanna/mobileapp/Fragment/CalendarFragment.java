@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -43,7 +44,7 @@ public class CalendarFragment extends Fragment {
     private Spinner spiMonth;
     private userDAO user_dao;
     private ListView lstCalendar;
-    private TextView tvRefresh;
+    private Button btnRefresh;
 
     @Nullable
     @Override
@@ -64,7 +65,7 @@ public class CalendarFragment extends Fragment {
             Toast.makeText(getContext(),"No internet connection",Toast.LENGTH_LONG).show();
         }
 
-        tvRefresh.setOnClickListener(
+        btnRefresh.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -130,7 +131,7 @@ public class CalendarFragment extends Fragment {
         spiMonth = (Spinner) view.findViewById(R.id.spiMonth);
         spiYear = (Spinner) view.findViewById(R.id.spiYear);
         lstCalendar = (ListView) view.findViewById(R.id.lstCalender);
-        tvRefresh = (TextView) view.findViewById(R.id.tvRefresh);
+        btnRefresh = (Button) view.findViewById(R.id.btnRefresh);
     }
 
     public void setUserIndex(String userIndex){
