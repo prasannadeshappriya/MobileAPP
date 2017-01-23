@@ -23,6 +23,7 @@ import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.CalendarFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.CourseFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaFragment;
+import com.a14roxgmail.prasanna.mobileapp.Fragment.SettingsFragment;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.R;
 
@@ -154,6 +155,13 @@ public class HomeActivity extends AppCompatActivity
             transaction.replace(R.id.frmMain,calendarFragment);
             calendarFragment.setUserIndex(userIndex);
             toolbar.setTitle("Calendar");
+            transaction.commit();
+        } else if (id == R.id.nav_Settings) {
+            SettingsFragment settingsFragment = new SettingsFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frmMain,settingsFragment);
+            settingsFragment.setParams(course_list,userIndex);
+            toolbar.setTitle("Settings");
             transaction.commit();
         } else if (id == R.id.nav_signout) {
             SignOut();

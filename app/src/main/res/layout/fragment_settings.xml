@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="10dip"
+    android:paddingRight="10dip"
+    android:paddingLeft="10dip"
+    android:paddingBottom="10dip">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:orientation="vertical"
+        android:layout_height="fill_parent" >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dip"
+            android:paddingRight="10dip"
+            android:paddingLeft="10dip"
+            android:paddingBottom="10dip"
+            android:background="@drawable/frame_border">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/setTitle"
+                android:text="Select GPA Calculation Option"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:id="@+id/vwBar3"
+                android:layout_below="@+id/setTitle"
+                android:layout_marginBottom="10dp"
+                android:background="@android:color/darker_gray"/>
+
+            <CheckBox android:id="@+id/chkOptionOne"
+                android:layout_below="@id/vwBar3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Option 1"/>
+
+            <ImageView
+                android:layout_width="180dip"
+                android:layout_height="80dip"
+                android:layout_below="@id/chkOptionOne"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/ivSgpaOptionA"
+                android:src="@drawable/sgpa"/>
+
+            <CheckBox android:id="@+id/chkOptionTwo"
+                android:layout_width="wrap_content"
+                android:layout_below="@+id/ivSgpaOptionA"
+                android:layout_height="wrap_content"
+                android:text="Option 2"/>
+
+            <ImageView
+                android:layout_width="180dip"
+                android:layout_height="80dip"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/chkOptionTwo"
+                android:id="@+id/ivSgpaOptionB"
+                android:src="@drawable/sgpab"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:paddingTop="10dip"
+            android:paddingRight="10dip"
+            android:paddingLeft="10dip"
+            android:paddingBottom="10dip"
+            android:background="@drawable/frame_border">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dip"
+                android:id="@+id/tvSyncTitle"
+                android:text="Last sync :- "/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tvSyncTitle"
+                android:layout_marginLeft="50dip"
+                android:id="@+id/tvSync"
+                android:text="2016-08-09"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvSyncTitle"
+                android:layout_alignParentRight="true"
+                android:text="Sync now"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="10dip"/>
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

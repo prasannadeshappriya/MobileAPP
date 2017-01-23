@@ -14,6 +14,10 @@
             android:id="@+id/nav_Calendar"
             android:icon="@drawable/ic_action_calendar"
             android:title="Calendar" />
+        <item
+            android:id="@+id/nav_Settings"
+            android:icon="@drawable/ic_action_settings"
+            android:title="Settings" />
     </group>
 
     <item android:title="">
