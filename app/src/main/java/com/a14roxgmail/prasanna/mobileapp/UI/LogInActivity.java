@@ -16,8 +16,10 @@ import android.widget.Toast;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Token;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
+import com.a14roxgmail.prasanna.mobileapp.DAO.SettingsDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
+import com.a14roxgmail.prasanna.mobileapp.Model.Setting;
 import com.a14roxgmail.prasanna.mobileapp.Model.User;
 import com.a14roxgmail.prasanna.mobileapp.R;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.EncryptPass;
@@ -300,11 +302,13 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         private Elements elements;
         private ProgressDialog pd;
         private CourseDAO course_dao;
+        private SettingsDAO settings_dao;
         private ArrayList<Course> arrCouseList;
 
         public getCourseInfo(ProgressDialog pd){
             this.pd = pd;
             course_dao = new CourseDAO(getApplicationContext());
+            settings_dao = new SettingsDAO(getApplicationContext());
             arrCouseList = new ArrayList<>();
         }
 
@@ -374,6 +378,11 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
             }
 
             course_dao.addCourseList(arrCouseList);
+            settings_dao.addSettings(new Setting(
+                    username,
+                    "0",
+                    Utility.getCurrentDate()
+            ));
             return null;
         }
 

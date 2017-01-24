@@ -11,7 +11,11 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a14roxgmail.prasanna.mobileapp.Algorithm.GPA1;
+import com.a14roxgmail.prasanna.mobileapp.Algorithm.GPA2;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
+import com.a14roxgmail.prasanna.mobileapp.DAO.GradeDAO;
+import com.a14roxgmail.prasanna.mobileapp.DAO.SettingsDAO;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.R;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.Sync;
@@ -30,6 +34,7 @@ public class SettingsFragment extends Fragment {
     private Button btnSyncNow;
     private Sync sync;
     private CourseDAO course_dao;
+    private SettingsDAO settings_dao;
 
     @Nullable
     @Override
@@ -45,6 +50,13 @@ public class SettingsFragment extends Fragment {
                             chkOption2.setChecked(false);
                         }
                         change_gpa_calculation_method(1);
+                        settings_dao.updateGpaCalcOperation(user_index,"0");
+                        GPA1 gpa1 = new GPA1(
+                                getContext(),
+                                new GradeDAO(getContext()),
+                                user_index
+                        );
+                        gpa1.calculate();
                     }
                 }
         );
@@ -56,6 +68,13 @@ public class SettingsFragment extends Fragment {
                             chkOption1.setChecked(false);
                         }
                         change_gpa_calculation_method(2);
+                        settings_dao.updateGpaCalcOperation(user_index,"1");
+                        GPA2 gpa2 = new GPA2(
+                                getContext(),
+                                new GradeDAO(getContext()),
+                                user_index
+                        );
+                        gpa2.calculate();
                     }
                 }
         );
@@ -83,13 +102,26 @@ public class SettingsFragment extends Fragment {
     }
 
     private void init(View view) {
-        arrCourseList = new ArrayList<>();
         chkOption1 = (CheckBox)view.findViewById(R.id.chkOptionOne);
         chkOption2 = (CheckBox)view.findViewById(R.id.chkOptionTwo);
         tvSync = (TextView) view.findViewById(R.id.tvSync);
         btnSyncNow = (Button) view.findViewById(R.id.btnSyncNow);
         course_dao = new CourseDAO(getContext());
-        sync = new Sync(user_index,arrCourseList,course_dao);
+        settings_dao = new SettingsDAO(getContext());
+        sync = new Sync(getContext(),user_index,arrCourseList,course_dao);
+
+        String lastSyncDate = settings_dao.getLastSyncDate(user_index);
+        String option = settings_dao.getGpaOperation(user_index);
+
+        if(option.equals("0")){
+            chkOption1.setChecked(true);
+            chkOption2.setChecked(false);
+        }else{
+            chkOption1.setChecked(false);
+            chkOption2.setChecked(true);
+        }
+
+        tvSync.setText(lastSyncDate);
     }
 
     public void setParams(ArrayList<Course> arrList, String user_index){

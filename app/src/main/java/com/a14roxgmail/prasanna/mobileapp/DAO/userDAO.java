@@ -3,7 +3,6 @@ package com.a14roxgmail.prasanna.mobileapp.DAO;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;

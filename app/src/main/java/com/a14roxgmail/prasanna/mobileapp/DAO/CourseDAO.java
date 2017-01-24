@@ -113,7 +113,6 @@ public class CourseDAO extends DAO{
         cv.put("credits",course.getCredits());
         cv.put("grade","");
         cv.put("semester",course.getSemester());
-        cv.put("last_sync_date",Utility.getCurrentDate());
 
         Log.i(Constants.LOG_TAG,"CourseDAO insert method triggered, course id :- " + course.getCourseCode());
         sqldb.insert(tableName,null,cv);
@@ -132,22 +131,28 @@ public class CourseDAO extends DAO{
         }
     }
 
-    public void updateLastSyncDate(String userIndex){
-        command = "UPDATE " + tableName + " SET last_sync_date = \"" + Utility.getCurrentDate() + "\" WHERE user_index = \"" + userIndex + "\";";
-        Log.i(Constants.LOG_TAG, "Update last sync date for user :- " + userIndex + ", value :- " + Utility.getCurrentDate() + ", query :- " + command);
+    public void deleteCourse(String userIndex, String courseID) {
+        command = "DELETE FROM " + tableName + " WHERE user_index = \"" + userIndex + "\" AND course_code = \"" + courseID + "\";";
+        Log.i(Constants.LOG_TAG,"Delete course " + courseID + ", query :- " + command);
         sqldb.execSQL(command);
     }
 
-    public String getLastSyncDate(String userIndex){
-        command = "SELECT last_sync_date FROM " + tableName + " WHERE user_index = \"" + userIndex + "\";";
-        Log.i(Constants.LOG_TAG,"Get last sync date for " + userIndex + ", query :- " + command);
+    public boolean isGradeExist(String user_index, String course_code){
+        command = "SELECT grade FROM " + tableName + " WHERE user_index = \"" + user_index + "\" AND course_code = \"" + course_code + "\";";
+        Log.i(Constants.LOG_TAG,"Check existence of a grade , query :- " + command);
         Cursor c = sqldb.rawQuery(command,null);
         if(c.getCount()>0) {
             Log.i(Constants.LOG_TAG, "Table name :- " + tableName + "   Search cursor count :- " + String.valueOf(c.getCount()));
             c.moveToFirst();
-            return c.getString(c.getColumnIndex("last_sync_date"));
+            if(c.getString(c.getColumnIndex("grade")).equals("")) {
+                return false;
+            }else if(c.getString(c.getColumnIndex("grade")).equals("Non - GPA")){
+                return false;
+            }else{
+                return true;
+            }
         }else {
-            return "";
+            return false;
         }
     }
 }

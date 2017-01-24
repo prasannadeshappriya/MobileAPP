@@ -75,11 +75,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dip"
+                android:layout_marginTop="10dip"
                 android:id="@+id/tvSyncTitle"
                 android:text="Last sync :- "/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
                 android:layout_toRightOf="@+id/tvSyncTitle"
                 android:layout_marginLeft="50dip"
                 android:id="@+id/tvSync"
@@ -92,8 +94,8 @@
                 android:id="@+id/btnSyncNow"
                 android:text="Sync now"
                 android:layout_marginRight="10dip"
-                android:layout_marginTop="5dip"
-                android:layout_marginBottom="10dip"/>
+                android:layout_marginTop="10dip"
+                android:layout_marginBottom="5dip"/>
         </RelativeLayout>
     </LinearLayout>
 </ScrollView>

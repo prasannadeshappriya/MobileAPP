@@ -16,10 +16,13 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.a14roxgmail.prasanna.mobileapp.Algorithm.GPA1;
+import com.a14roxgmail.prasanna.mobileapp.Algorithm.GPA2;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.GpaPoints;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.GradeDAO;
+import com.a14roxgmail.prasanna.mobileapp.DAO.SettingsDAO;
 import com.a14roxgmail.prasanna.mobileapp.ListAdapter.CourseGpaCalcAdapter;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.Model.GPA;
@@ -31,15 +34,16 @@ import java.util.List;
  * Created by Prasanna Deshappriya on 1/18/2017.
  */
 public class GpaSemFragment extends Fragment{
-    Button btnSave;
-    CourseGpaCalcAdapter adapter;
-    List<Course> courses_name;
-    ListView lstCourse;
-    String semester;
-    CourseDAO course_dao;
-    GPA gpa;
-    GradeDAO gradeDAO;
-    String userIndex;
+    private Button btnSave;
+    private CourseGpaCalcAdapter adapter;
+    private List<Course> courses_name;
+    private ListView lstCourse;
+    private String semester;
+    private CourseDAO course_dao;
+    private GPA gpa;
+    private GradeDAO gradeDAO;
+    private String userIndex;
+    private SettingsDAO settings_dao;
 
     public void setArgs(String semester, String userIndex, GPA gpa){
         setSemester(semester);
@@ -134,7 +138,8 @@ public class GpaSemFragment extends Fragment{
                 gradeDAO.updateSGPA(
                         userIndex,
                         String.valueOf(sgpa),
-                        semester
+                        semester,
+                        String.valueOf(total_cedits)
                 );
             }
         } else {
@@ -161,40 +166,8 @@ public class GpaSemFragment extends Fragment{
     }
 
     private void calculate_overall_gpa_option_a() {
-        ArrayList<GPA> sgpa_list = gradeDAO.getSGPAArray(userIndex);
-        double totalSgpa = 0.0;
-        double totalCredit = 0.0;
-        for(int i=0; i<sgpa_list.size(); i++){
-            GPA gpa = sgpa_list.get(i);
-            try {
-                totalSgpa += Double.parseDouble(gpa.getGpa());
-                Log.i(Constants.LOG_TAG, gpa.getTotal_credits().toString());
-                totalCredit += Double.parseDouble(gpa.getTotal_credits().toString());
-            }catch (NumberFormatException e){
-                Log.i(Constants.LOG_TAG, "Error :- " + e.toString());
-            }
-        }
-        double gpa = (totalSgpa/sgpa_list.size());
-        Log.i(Constants.LOG_TAG,"Calculater log using method 1 :- " + gpa);
-
-        if(gradeDAO.isGPAExist(userIndex)){
-            gradeDAO.updateGPA(
-                    userIndex,
-                    String.valueOf(gpa)
-            );
-        }else {
-            if(!Double.isNaN(gpa)) {
-                gradeDAO.addGpa(
-                        new GPA(
-                                Constants.GPA_FLAG,
-                                semester,
-                                String.valueOf(gpa),
-                                userIndex,
-                                String.valueOf(totalCredit)
-                        )
-                );
-            }
-        }
+        GPA1 gpaAlgo1 = new GPA1(getContext(),gradeDAO,userIndex);
+        gpaAlgo1.calculate();
 
         GpaFragment gpaFragment = new GpaFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -205,11 +178,23 @@ public class GpaSemFragment extends Fragment{
     }
 
     private void calculate_overall_gpa_option_b() {
-        //
+        GPA2 gpaAlgo2 = new GPA2(getContext(),gradeDAO,userIndex);
+        gpaAlgo2.calculate();
+
+        GpaFragment gpaFragment = new GpaFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.frmMain,gpaFragment);
+        gpaFragment.setUser_index(userIndex);
+        transaction.commit();
     }
 
     private boolean getOption(){
-        return true;
+        String option = settings_dao.getGpaOperation(userIndex);
+        if(option.equals("0")) {
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public View getViewByPosition(int position, ListView listView) {
@@ -232,6 +217,7 @@ public class GpaSemFragment extends Fragment{
         btnSave = (Button) view.findViewById(R.id.btnSave);
         course_dao = new CourseDAO(getContext());
         gradeDAO = new GradeDAO(getContext());
+        settings_dao = new SettingsDAO(getContext());
     }
 
     @Override

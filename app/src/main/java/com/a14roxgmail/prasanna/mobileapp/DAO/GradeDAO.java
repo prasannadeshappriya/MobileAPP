@@ -123,9 +123,12 @@ public class GradeDAO extends DAO {
         sqldb.execSQL(command);
      }
 
-    public void updateSGPA(String userIndex, String nSGPA, String semester){
+    public void updateSGPA(String userIndex, String nSGPA, String semester, String total_credit){
         command = "UPDATE " + tableSGpa + " SET sgpa =\"" + nSGPA + "\" WHERE user_index = \"" + userIndex + "\" AND semester = \"" + semester + "\";";
         Log.i(Constants.LOG_TAG,"Update semester " + semester + " sgpa of user " + userIndex + " to " + nSGPA + ", query :- " + command);
+        sqldb.execSQL(command);
+        command = "UPDATE " + tableSGpa + " SET total_credit =\"" + total_credit + "\" WHERE user_index = \"" + userIndex + "\" AND semester = \"" + semester + "\";";
+        Log.i(Constants.LOG_TAG,"Update semester " + semester + " total_credit of user " + userIndex + " to " + total_credit + ", query :- " + command);
         sqldb.execSQL(command);
     }
 
