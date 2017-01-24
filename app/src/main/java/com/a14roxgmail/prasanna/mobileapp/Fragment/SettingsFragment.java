@@ -49,7 +49,6 @@ public class SettingsFragment extends Fragment {
                         if(chkOption2.isChecked()){
                             chkOption2.setChecked(false);
                         }
-                        change_gpa_calculation_method(1);
                         settings_dao.updateGpaCalcOperation(user_index,"0");
                         GPA1 gpa1 = new GPA1(
                                 getContext(),
@@ -67,7 +66,6 @@ public class SettingsFragment extends Fragment {
                         if(chkOption1.isChecked()){
                             chkOption1.setChecked(false);
                         }
-                        change_gpa_calculation_method(2);
                         settings_dao.updateGpaCalcOperation(user_index,"1");
                         GPA2 gpa2 = new GPA2(
                                 getContext(),
@@ -91,14 +89,6 @@ public class SettingsFragment extends Fragment {
                 }
         );
         return view;
-    }
-
-    private void change_gpa_calculation_method(int method){
-        if(method==1){
-            Toast.makeText(getContext(),"Changed to Method 1",Toast.LENGTH_SHORT).show();
-        }else if(method==2){
-            Toast.makeText(getContext(),"Changed to Method 2",Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void init(View view) {
