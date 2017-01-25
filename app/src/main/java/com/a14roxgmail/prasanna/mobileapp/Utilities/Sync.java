@@ -1,20 +1,25 @@
 package com.a14roxgmail.prasanna.mobileapp.Utilities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
+import com.a14roxgmail.prasanna.mobileapp.Constants.Token;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.SettingsDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,9 +39,18 @@ public class Sync {
     private userDAO user_dao;
     private SettingsDAO settings_dao;
     private Context context;
+    private String new_password;
+    private Activity activity;
     private ProgressDialog pd;
 
-    public Sync(Context context, String user_index, ArrayList<Course> arrCourseList, CourseDAO course_dao) {
+    public Sync(Context context,
+                String user_index,
+                ArrayList<Course> arrCourseList,
+                CourseDAO course_dao,
+                Activity activity,
+                String new_password) {
+        this.new_password = new_password;
+        this.activity = activity;
         this.user_index = user_index;
         this.arrCourseList = arrCourseList;
         this.course_dao = course_dao;
@@ -48,8 +62,7 @@ public class Sync {
 
     public void startSyncProcess() {
         if (checkInternetAccess()) {
-            getCourseInfo courseInfo = new getCourseInfo(pd);
-            courseInfo.execute();
+            getToken();
         } else {
             Toast.makeText(context, "No internet connection", Toast.LENGTH_LONG).show();
         }
@@ -88,8 +101,7 @@ public class Sync {
         protected void onPreExecute() {
             pd.setIndeterminate(true);
             pd.setCanceledOnTouchOutside(false);
-            pd.setMessage("Getting Course Info..");
-            pd.show();
+            pd.setMessage("Sync Course Info..");
             super.onPreExecute();
         }
 
@@ -155,6 +167,8 @@ public class Sync {
             if(arrSyncCourseList.size()==arrCourseList.size()){
                 pd.dismiss();
                 Toast.makeText(context,"Data up to date", Toast.LENGTH_SHORT).show();
+                String a = Utility.getCurrentDate();
+                settings_dao.updateLastSyncDate(user_index,Utility.getCurrentDate());
             }else{
                 syncDatabase();
             }
@@ -216,6 +230,159 @@ public class Sync {
                 }
             }
             return false;
+        }
+    }
+
+    public void getToken(){
+        final ServerRequest request = new ServerRequest(3, activity);
+        request.set_server_url(Constants.SERVER_GET_TOKEN);
+        request.setParams(user_index, "username");
+        request.setParams(user_dao.getUserPassword(user_index), "password");
+        request.setParams("moodle_mobile_app","service");
+        try {
+            String req = request.sendPostRequest();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        pd.setIndeterminate(true);
+        pd.setCanceledOnTouchOutside(false);
+        pd.setMessage("Sync user details..");
+        pd.show();
+
+        CountDownTimer timer = new CountDownTimer(2000, 1000) {
+            @Override
+            public void onFinish() {
+                process_token_response(request);
+                Log.i(Constants.LOG_TAG, "Sync Class - OnFinish method triggered");
+                //pd.dismiss();
+            }
+
+            @Override
+            public void onTick(long millisLeft) {}
+        };
+        timer.start();
+    }
+
+
+    private void process_token_response(ServerRequest request) {
+        String response = request.getResponse();
+        if (response.equals("")) {
+            Toast.makeText(context, "Server timeout", Toast.LENGTH_LONG).show();
+        } else {
+            Log.i(Constants.LOG_TAG, "Server Response :- " + response);
+            JSONObject objResponse = null;
+            try {
+                objResponse = new JSONObject(response);
+                if (objResponse.has("error")){
+                    Log.i(Constants.LOG_TAG, "Error :- " + objResponse.getString("error"));
+                    Toast.makeText(context,"Password update required",Toast.LENGTH_LONG).show();
+                    pd.dismiss();
+                }else {
+                    if(objResponse.has("token")){
+                        Token.setToken(objResponse.getString("token"));
+                        Log.i(Constants.LOG_TAG, "Newest Token is :- " + Token.getToken());
+                        if(!user_dao.getToken(user_index).equals(Token.getToken())){
+                            user_dao.updateToken(Token.getToken(),user_index);
+                            Log.i(Constants.LOG_TAG, "New token value received and updated");
+                        }
+                        getCourseInfo syncCourseInfo = new getCourseInfo(pd);
+                        syncCourseInfo.execute();
+                    }else{
+                        Toast.makeText(context,"Something went wrong",Toast.LENGTH_LONG).show();
+                        pd.dismiss();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void setNew_password(String new_password){
+        this.new_password = new_password;
+    }
+
+    public void updatePassword(){
+        if(new_password.equals(user_dao.getUserPassword(user_index))){
+            Toast.makeText(context,"Up to date", Toast.LENGTH_SHORT).show();
+            Log.i(Constants.LOG_TAG,"Password update does not required");
+        }else {
+            if(checkInternetAccess()) {
+                final ServerRequest request = new ServerRequest(3, activity);
+                request.set_server_url(Constants.SERVER_GET_TOKEN);
+                request.setParams(user_index, "username");
+                request.setParams(new_password, "password");
+                request.setParams("moodle_mobile_app", "service");
+                try {
+                    String req = request.sendPostRequest();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                pd.setIndeterminate(true);
+                pd.setCanceledOnTouchOutside(false);
+                pd.setMessage("Authenticating..");
+                pd.show();
+
+                CountDownTimer timer = new CountDownTimer(2000, 1000) {
+                    @Override
+                    public void onFinish() {
+                        process_updatePassword_response(request);
+                        Log.i(Constants.LOG_TAG, "Sync Class - OnFinish method triggered");
+                        //pd.dismiss();
+                    }
+
+                    @Override
+                    public void onTick(long millisLeft) {
+                    }
+                };
+                timer.start();
+            }else{
+                Toast.makeText(context,"No internet connection", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    private void process_updatePassword_response(ServerRequest request) {
+        String response = request.getResponse();
+        if (response.equals("")) {
+            Toast.makeText(context, "Server timeout", Toast.LENGTH_LONG).show();
+        } else {
+            Log.i(Constants.LOG_TAG, "Server Response :- " + response);
+            JSONObject objResponse = null;
+            try {
+                objResponse = new JSONObject(response);
+                if (objResponse.has("error")){
+                    Log.i(Constants.LOG_TAG, "Error :- " + objResponse.getString("error"));
+                    Toast.makeText(context,"Invalid password",Toast.LENGTH_LONG).show();
+                    pd.dismiss();
+                }else {
+                    if(objResponse.has("token")){
+                        Token.setToken(objResponse.getString("token"));
+                        Log.i(Constants.LOG_TAG, "Newest Token is :- " + Token.getToken());
+
+                        user_dao.updateToken(Token.getToken(),user_index);
+                        Log.i(Constants.LOG_TAG, "New token value received and updated");
+
+                        user_dao.updatePassword(new_password,user_index);
+                        Log.i(Constants.LOG_TAG, "New password value received and updated");
+
+                        Toast.makeText(context,"Password updated",Toast.LENGTH_LONG).show();
+                        pd.dismiss();
+                    }else{
+                        Toast.makeText(context,"Something went wrong",Toast.LENGTH_LONG).show();
+                        pd.dismiss();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(context,"Something went wrong",Toast.LENGTH_LONG).show();
+                pd.dismiss();
+            }
+
         }
     }
 

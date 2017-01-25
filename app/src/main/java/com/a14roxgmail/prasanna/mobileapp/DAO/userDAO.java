@@ -129,4 +129,30 @@ public class userDAO extends DAO{
         return EncryptPass.decrypt(password);
     }
 
+    public String getToken(String userIndex){
+        command = "SELECT token FROM "+tableName+" WHERE user_index = \"" + userIndex + "\";";
+        Cursor c = sqldb.rawQuery(command,null);
+        Log.i(Constants.LOG_TAG, "Table name :- " + tableName + "   Search cursor count :- " + String.valueOf(c.getCount()));
+        String token = "";
+        if(c.moveToFirst()) {
+            do {
+                token = c.getString(c.getColumnIndex("token"));
+            } while (c.moveToNext());
+        }
+        return token;
+    }
+
+    public void updateToken(String new_token, String userIndex){
+        command = "UPDATE " + tableName + " SET token = \"" + new_token + "\" WHERE user_index = \""+ userIndex + "\";";
+        Log.i(Constants.LOG_TAG,"Update token value query :- " + command);
+        sqldb.execSQL(command);
+    }
+
+    public void updatePassword(String password, String userIndex){
+        String encryptPass = EncryptPass.encrypt(password);
+        command = "UPDATE " + tableName + " SET password = \"" + encryptPass + "\" WHERE user_index = \""+ userIndex + "\";";
+        Log.i(Constants.LOG_TAG,"Update password value query :- " + command);
+        sqldb.execSQL(command);
+    }
+
 }

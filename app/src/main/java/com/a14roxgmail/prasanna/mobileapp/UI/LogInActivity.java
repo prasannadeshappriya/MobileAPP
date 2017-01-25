@@ -155,7 +155,11 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
     public boolean Validate(){
         //Validate email address and password
         if(etUserName.getText().toString().replace(" ","").equals("")){
-            Toast.makeText(this,"Invalid user ID",Toast.LENGTH_LONG).show();
+            etUserName.setError("Invalid user index");
+            return false;
+        }
+        if(etPassword.getText().toString().replace(" ","").equals("")){
+            etPassword.setError("Invalid password");
             return false;
         }
         return true;

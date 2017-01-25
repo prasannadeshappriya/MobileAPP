@@ -43,6 +43,7 @@
                 android:id="@+id/etPassword"/>
         </android.support.design.widget.TextInputLayout>
 
+
         <Button
             android:layout_width="250px"
             android:layout_height="match_parent"
@@ -51,7 +52,6 @@
             android:width="150dip"
             android:layout_gravity="center_horizontal"
             android:id="@+id/btnSignIn"/>
-
     </LinearLayout>
 
 </RelativeLayout>

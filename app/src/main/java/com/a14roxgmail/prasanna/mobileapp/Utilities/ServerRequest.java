@@ -89,37 +89,4 @@ public class ServerRequest {
     public void distroy(){
         requestQueue.cancelAll(Constants.LOG_TAG);
     }
-
-    public String sendGetRequest(HashMap<String,String> args, String server_url){
-        String param = "?";
-        for(String key:args.keySet()){
-            if (param.equals("?")) {
-                param += key + "=" + args.get(key);
-            }else{
-                param += "&" + key + "=" + args.get(key);
-            }
-        }
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(activity);
-        String url = server_url + param;
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        setResponse_msg(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                setResponse_msg("Network is unreachable");
-                Log.i(Constants.LOG_TAG,error.toString());
-            }
-        });
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-        stringRequest.setTag(Constants.LOG_TAG);
-        return getResponse();
-    }
 }
