@@ -122,4 +122,11 @@ public abstract class Utility{
         String ret = year + "-" + Months.getMonth(month) + "-" + date;
         return ret;
     }
+
+    public static String getMonthDate(){
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        String date = String.valueOf(calendar.get(Calendar.DATE));
+        String ret = date;
+        return ret;
+    }
 }

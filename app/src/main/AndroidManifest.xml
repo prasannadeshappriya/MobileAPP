@@ -22,7 +22,12 @@
         <activity
             android:name=".UI.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.Dark"></activity>
+            android:theme="@style/AppTheme.Dark">
+        </activity>
+        <service
+            android:name=".Service.SyncService">
+        </service>
+
     </application>
 
 </manifest>

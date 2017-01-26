@@ -1,5 +1,8 @@
 package com.a14roxgmail.prasanna.mobileapp.UI;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,8 +29,10 @@ import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.SettingsFragment;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.R;
+import com.a14roxgmail.prasanna.mobileapp.Service.SyncService;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class HomeActivity extends AppCompatActivity
@@ -80,6 +85,33 @@ public class HomeActivity extends AppCompatActivity
         toolbar.setTitle("My Courses");
         transaction.commit();
 
+        //Stop Services for restart
+        stopService(new Intent(getApplicationContext(),SyncService.class));
+        //Launch App Services
+        launchService();
+    }
+
+    private void launchService() {
+        Context ctx = getApplicationContext();
+
+        Calendar cal = Calendar.getInstance();
+        AlarmManager am = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+
+        long interval = 1000 * 10;
+        Intent serviceIntent = new Intent(ctx, SyncService.class);
+
+        PendingIntent servicePendingIntent =
+                PendingIntent.getService(ctx,
+                        SyncService.SERVICE_ID,
+                        serviceIntent,
+                        PendingIntent.FLAG_CANCEL_CURRENT);
+
+        am.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                cal.getTimeInMillis(),
+                interval,
+                servicePendingIntent
+        );
     }
 
     @Override
@@ -164,6 +196,7 @@ public class HomeActivity extends AppCompatActivity
             toolbar.setTitle("Settings");
             transaction.commit();
         } else if (id == R.id.nav_signout) {
+            stopService(new Intent(getApplicationContext(),SyncService.class));
             SignOut();
         }
 
