@@ -1,6 +1,7 @@
 package com.a14roxgmail.prasanna.mobileapp.Service;
 
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.Service;
@@ -10,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -30,6 +32,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -215,8 +218,6 @@ public class SyncService extends Service {
                     }
                 }
 
-                
-
             } catch (Exception e) {
                 pd.dismiss();
                 Log.i(Constants.LOG_TAG, "Error caught :- " + e.toString());
@@ -226,7 +227,40 @@ public class SyncService extends Service {
 
         @Override
         protected void onPostExecute(Void result) {
+            showNotification(arrAdapterArray);
             Log.i(Constants.LOG_TAG,"Completed calendar Sync Process");
+        }
+
+    }
+
+    private void showNotification(ArrayList<Entry> arrList){
+        //String day = Utility.getMonthDate();
+        String day = "8";
+        ArrayList<String> events = new ArrayList<>();
+        if(!arrList.isEmpty()){
+            for(Entry entry:arrList){
+                if(entry.getDay().equals(day)){
+                    events = entry.getEvents();
+                    break;
+                }
+            }
+            if(!events.isEmpty()){
+                NotificationCompat.Builder builder =
+                        (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
+                                .setSmallIcon(R.drawable.ic_launcher_theme);
+
+                NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+                inboxStyle.setBigContentTitle("Moodle Events");
+
+                for (int i=0; i < events.size(); i++) {
+                    inboxStyle.addLine(events.get(i));
+                }
+
+                builder.setStyle(inboxStyle);
+
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.notify(0, builder.build());
+            }
         }
 
     }
