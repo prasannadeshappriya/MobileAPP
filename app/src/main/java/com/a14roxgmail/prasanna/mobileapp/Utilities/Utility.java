@@ -123,10 +123,24 @@ public abstract class Utility{
         return ret;
     }
 
-    public static String getMonthDate(){
+    public static String getDate(){
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         String date = String.valueOf(calendar.get(Calendar.DATE));
         String ret = date;
+        return ret;
+    }
+
+    public static String getYear(){
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        String Year = String.valueOf(calendar.get(Calendar.YEAR));
+        String ret = Year;
+        return ret;
+    }
+
+    public static String getMonth(){
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        String Month = String.valueOf(calendar.get(Calendar.MONTH)+1);
+        String ret = Month;
         return ret;
     }
 }

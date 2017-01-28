@@ -73,6 +73,15 @@ public class Database extends SQLiteOpenHelper {
                 "FOREIGN KEY(user_index) REFERENCES user(user_index));";
         Log.i(Constants.LOG_TAG, "Create settings table query :- " + command);
         sqLiteDatabase.execSQL(command);
+
+        command = "CREATE TABLE IF NOT EXISTS notification (" +
+                "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "user_index VARCHAR(10), " +
+                "day VARCHAR(10), " +
+                "event VARCHAR(255), " +
+                "FOREIGN KEY(user_index) REFERENCES user(user_index));";
+        Log.i(Constants.LOG_TAG, "Create sync table query :- " + command);
+        sqLiteDatabase.execSQL(command);
     }
 
 
