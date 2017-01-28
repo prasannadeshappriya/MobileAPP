@@ -54,10 +54,14 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         //Initialize
         init();
 
-        //Check user already login before
-        User user = user_DAO.getSignInUserDetails();
-        if(user!=null){
-            autoLoginUser(user);
+        try {
+            //Check user already login before
+            User user = user_DAO.getSignInUserDetails();
+            if (user != null) {
+                autoLoginUser(user);
+            }
+        }catch (Exception e){
+            Log.i(Constants.LOG_TAG,"Error on start :- " + e.toString());
         }
 
         btnSignIn.setOnClickListener(
@@ -210,6 +214,7 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         String response = request.getResponse();
         if (response.equals("")) {
             Toast.makeText(this, "Server timeout", Toast.LENGTH_LONG).show();
+            pd.dismiss();
         } else {
 
             Log.i(Constants.LOG_TAG, "Server Response :- " + response);
@@ -241,6 +246,7 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         String response = request.getResponse();
         if (response.equals("")) {
             Toast.makeText(this, "Server timeout", Toast.LENGTH_LONG).show();
+            pd.dismiss();
         } else {
             Log.i(Constants.LOG_TAG, "Server Response :- " + response.toString());
 
@@ -395,11 +401,16 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
             pd.dismiss();
             Intent i = new Intent(getApplicationContext(),HomeActivity.class);
             i.putExtra("Values",details);
+            killLoginPage();
             startActivity(i);
             Log.i(Constants.LOG_TAG,"Completed SignIn Process");
             overridePendingTransition(R.anim.left_in,R.anim.left_out);
         }
 
+    }
+
+    private void killLoginPage(){
+        this.finish();
     }
 
 }
