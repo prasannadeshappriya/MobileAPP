@@ -68,6 +68,20 @@ public class CourseDAO extends DAO{
         return arrCourse;
     }
 
+    public ArrayList<String> getAllCourseNamesBySemester(String semester, String userIndex){
+        command = "SELECT * FROM "+tableName+" WHERE user_index = \"" + userIndex + "\" AND semester = \"" + semester + "\";";
+        Log.i(Constants.LOG_TAG,"Course select all course names for userIndex and semester query :- " + command);
+        Cursor c = sqldb.rawQuery(command,null);
+        Log.i(Constants.LOG_TAG, "Table name :- " + tableName + "   Search cursor count :- " + String.valueOf(c.getCount()));
+        ArrayList<String> arrCourse = new ArrayList<>();
+        if(c.moveToFirst()) {
+            do {
+                arrCourse.add(c.getString(c.getColumnIndex("course_name")));
+            } while (c.moveToNext());
+        }
+        return arrCourse;
+    }
+
     public String getMaxSemester(String userIndex){
         command = "SELECT semester FROM " + tableName + " WHERE user_index = \"" + userIndex + "\" ORDER BY semester desc;";
         Log.i(Constants.LOG_TAG,"Select max semester number, query :- " + command);

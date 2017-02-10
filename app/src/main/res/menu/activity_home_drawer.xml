@@ -15,6 +15,10 @@
             android:icon="@drawable/ic_action_calendar"
             android:title="Calendar" />
         <item
+            android:id="@+id/nav_attendance"
+            android:icon="@drawable/ic_stat_attendene"
+            android:title="Attendance" />
+        <item
             android:id="@+id/nav_Settings"
             android:icon="@drawable/ic_action_settings"
             android:title="Settings" />

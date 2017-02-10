@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
@@ -45,6 +44,7 @@ public class CalendarFragment extends Fragment {
     private userDAO user_dao;
     private ListView lstCalendar;
     private Button btnRefresh;
+    public ProgressDialog pd;
 
     @Nullable
     @Override
@@ -53,7 +53,12 @@ public class CalendarFragment extends Fragment {
         init(view);
         refresh_list();
 
+        pd.setIndeterminate(true);
+        pd.setCanceledOnTouchOutside(false);
+        pd.setMessage("Connecting ..");
+        pd.show();
         if(CheckInternetAccess()) {
+            pd.dismiss();
             getCalendarInfo calendarTask = new getCalendarInfo(
                     userIndex,
                     Integer.parseInt(spiYear.getSelectedItem().toString()),
@@ -62,6 +67,7 @@ public class CalendarFragment extends Fragment {
             );
             calendarTask.execute();
         }else{
+            pd.dismiss();
             Toast.makeText(getContext(),"No internet connection",Toast.LENGTH_LONG).show();
         }
 
@@ -132,6 +138,7 @@ public class CalendarFragment extends Fragment {
         spiYear = (Spinner) view.findViewById(R.id.spiYear);
         lstCalendar = (ListView) view.findViewById(R.id.lstCalender);
         btnRefresh = (Button) view.findViewById(R.id.btnRefresh);
+        pd = new ProgressDialog(getContext(), R.style.AppTheme_Dark_Dialog);
     }
 
     public void setUserIndex(String userIndex){
@@ -144,14 +151,12 @@ public class CalendarFragment extends Fragment {
         CalendarAdapter adapter;
         private int month;
         private int year;
-        private ProgressDialog pd;
         private ArrayList<Entry> arrAdapterArray;
 
         public getCalendarInfo(String userIndex, int year, int month, ListView list){
             this.username = userIndex;
             this.month = month; this.year = year;
             this.password = user_dao.getUserPassword(userIndex);
-            pd = new ProgressDialog(getContext(), R.style.AppTheme_Dark_Dialog);
             arrAdapterArray = new ArrayList<>();
         }
 

@@ -20,6 +20,7 @@ import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.NotificationDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
+import com.a14roxgmail.prasanna.mobileapp.Fragment.AttendanceFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.CalendarFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.CourseFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaFragment;
@@ -158,6 +159,13 @@ public class HomeActivity extends AppCompatActivity
             transaction.replace(R.id.frmMain,gpaFragment);
             gpaFragment.setUser_index(userIndex);
             toolbar.setTitle("GPA");
+            transaction.commit();
+        } else if (id == R.id.nav_attendance) {
+            AttendanceFragment attendanceFragment = new AttendanceFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frmMain,attendanceFragment);
+            attendanceFragment.setUserIndex(userIndex);
+            toolbar.setTitle("Attendance");
             transaction.commit();
         } else if (id == R.id.nav_Calendar) {
             CalendarFragment calendarFragment = new CalendarFragment();

@@ -112,11 +112,17 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
 
             }else {
                 Log.i(Constants.LOG_TAG, "User " + etUserName.getText().toString() + " is not exist on the database");
+                pd.setIndeterminate(true);
+                pd.setCanceledOnTouchOutside(false);
+                pd.setMessage("Connecting..");
+                pd.show();
                 if(CheckInternetAccess()) {
                     Log.i(Constants.LOG_TAG, "Internet connection available");
+                    pd.dismiss();
                     getToken();
                 }else{
                     Log.i(Constants.LOG_TAG, "No internet connection available");
+                    pd.dismiss();
                     Toast.makeText(this,"No internet connection !", Toast.LENGTH_LONG).show();
                 }
             }
@@ -189,7 +195,6 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
             e.printStackTrace();
         }
 
-        //final ProgressDialog pd = new ProgressDialog(this, R.style.AppTheme_Dark_Dialog);
         pd.setIndeterminate(true);
         pd.setCanceledOnTouchOutside(false);
         pd.setMessage("Authenticating..");

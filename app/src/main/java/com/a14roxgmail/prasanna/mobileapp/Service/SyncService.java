@@ -1,8 +1,6 @@
 package com.a14roxgmail.prasanna.mobileapp.Service;
 
-import android.app.AlarmManager;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -13,14 +11,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
-import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.NotificationDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
 import com.a14roxgmail.prasanna.mobileapp.Model.Entry;
 import com.a14roxgmail.prasanna.mobileapp.Model.Notification;
 import com.a14roxgmail.prasanna.mobileapp.Model.User;
 import com.a14roxgmail.prasanna.mobileapp.R;
-import com.a14roxgmail.prasanna.mobileapp.Utilities.Sync;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -37,9 +33,7 @@ import java.util.Map;
 public class SyncService extends Service {
     public static final int SERVICE_ID = 4097;
     private userDAO user_dao;
-    private CourseDAO course_dao;
     private NotificationDAO notification_dao;
-    private Sync sync;
     private String user_index;
     private Context context;
     private boolean isLogIn;
@@ -69,7 +63,6 @@ public class SyncService extends Service {
         super.onCreate();
         context = getApplicationContext();
         user_dao = new userDAO(context);
-        course_dao = new CourseDAO(context);
         notification_dao = new NotificationDAO(context);
 
         try {
@@ -98,24 +91,7 @@ public class SyncService extends Service {
 
     @Override
     public void onDestroy() {
-        String date = Utility.getDate();
-        if (notification_dao.isNotificationAvailable(user_index, date)) {
-            AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarm.set(
-                    alarm.RTC_WAKEUP,
-                    System.currentTimeMillis() + (1000 * 60 * 60 * 2),
-                    PendingIntent.getService(context, SERVICE_ID, new Intent(context, SyncService.class), 0)
-            );
-            printlog("Service schedule to run in  2 hrs again");
-        }else{
-            AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarm.set(
-                    alarm.RTC_WAKEUP,
-                    System.currentTimeMillis() + (1000 * 10),
-                    PendingIntent.getService(context, SERVICE_ID, new Intent(context, SyncService.class), 0)
-            );
-            printlog("Service schedule to run in 10 sec again");
-        }
+        super.onDestroy();
     }
 
     @Override
