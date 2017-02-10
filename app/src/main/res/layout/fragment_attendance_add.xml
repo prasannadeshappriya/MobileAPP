@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="10dip"
+    android:paddingRight="10dip"
+    android:paddingLeft="10dip"
+    android:paddingBottom="10dip">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:orientation="vertical"
+        android:layout_height="fill_parent" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dip"
+            android:paddingRight="10dip"
+            android:paddingLeft="10dip"
+            android:paddingBottom="10dip"
+            android:background="@drawable/frame_border">
+
+            <DatePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/dpPicker">
+            </DatePicker>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/tvComments"
+                android:layout_below="@+id/dpPicker"
+                android:hint="Comments">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
+                    android:id="@+id/etComments"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Present"
+                android:id="@+id/chkPresent"
+                android:layout_below="@id/tvComments"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Absent"
+                android:id="@+id/chkAbsent"
+                android:layout_below="@id/chkPresent"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnSaveDate"
+                android:text="Save"
+                android:layout_below="@+id/chkAbsent"/>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</ScrollView>

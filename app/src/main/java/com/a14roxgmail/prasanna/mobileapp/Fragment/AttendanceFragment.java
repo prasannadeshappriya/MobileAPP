@@ -4,6 +4,8 @@ package com.a14roxgmail.prasanna.mobileapp.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
@@ -49,6 +52,21 @@ public class AttendanceFragment extends Fragment{
 
                     @Override
                     public void onNothingSelected(AdapterView<?> adapterView) {}
+                }
+        );
+
+        lstModules.setOnItemLongClickListener(
+                new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        AttendanceViewFragment attendanceViewFragment = new AttendanceViewFragment();
+                        String module_name = lstModules.getAdapter().getItem(i).toString();
+                        attendanceViewFragment.setParams(user_index,module_name);
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frmMain,attendanceViewFragment);
+                        transaction.commit();
+                        return true;
+                    }
                 }
         );
         return v;
