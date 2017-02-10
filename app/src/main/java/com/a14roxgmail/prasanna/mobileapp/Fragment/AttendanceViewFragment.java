@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class AttendanceViewFragment extends Fragment{
                     @Override
                     public void onClick(View view) {
                         AttendanceAddFragment attendanceAddFragment = new AttendanceAddFragment();
+                        attendanceAddFragment.setParams(user_index,module_name);
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
                         transaction.replace(R.id.frmMain,attendanceAddFragment);
                         transaction.commit();
@@ -88,5 +90,26 @@ public class AttendanceViewFragment extends Fragment{
     public void setParams(String user_index, String module_name){
         this.module_name = module_name;
         this.user_index = user_index;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    AttendanceFragment attendanceFragment = new AttendanceFragment();
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.frmMain,attendanceFragment);
+                    attendanceFragment.setUserIndex(user_index);
+                    transaction.commit();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 }

@@ -22,7 +22,7 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        //Create user table
+        //Create tables
         command = "CREATE TABLE IF NOT EXISTS user (" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "user_index VARCHAR(10), " +
@@ -81,6 +81,18 @@ public class Database extends SQLiteOpenHelper {
                 "event VARCHAR(255), " +
                 "FOREIGN KEY(user_index) REFERENCES user(user_index));";
         Log.i(Constants.LOG_TAG, "Create sync table query :- " + command);
+        sqLiteDatabase.execSQL(command);
+
+        command = "CREATE TABLE IF NOT EXISTS attendance (" +
+                "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "user_index VARCHAR(10), " +
+                "year VARCHAR(10), " +
+                "month VARCHAR(10), " +
+                "day VARCHAR(10), " +
+                "comment VARCHAR(255), " +
+                "value VARCHAR(10), " +
+                "FOREIGN KEY(user_index) REFERENCES user(user_index));";
+        Log.i(Constants.LOG_TAG, "Create attendance table query :- " + command);
         sqLiteDatabase.execSQL(command);
     }
 
