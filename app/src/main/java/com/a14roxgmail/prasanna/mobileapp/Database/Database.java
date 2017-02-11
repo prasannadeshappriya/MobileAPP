@@ -86,6 +86,7 @@ public class Database extends SQLiteOpenHelper {
         command = "CREATE TABLE IF NOT EXISTS attendance (" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "user_index VARCHAR(10), " +
+                "module_name VARCHAR(100), " +
                 "year VARCHAR(10), " +
                 "month VARCHAR(10), " +
                 "day VARCHAR(10), " +

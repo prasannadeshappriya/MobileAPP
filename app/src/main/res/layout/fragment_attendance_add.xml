@@ -57,6 +57,16 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/btnDeleteDate"
+                android:layout_marginRight="10dip"
+                android:layout_marginBottom="10dip"
+                android:text="Delete"
+                android:layout_toLeftOf="@+id/btnSaveDate"
+                android:layout_below="@+id/chkAbsent"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/btnSaveDate"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dip"

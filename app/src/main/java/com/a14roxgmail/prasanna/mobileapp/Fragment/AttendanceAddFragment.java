@@ -17,8 +17,9 @@ import android.widget.Toast;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Months;
+import com.a14roxgmail.prasanna.mobileapp.DAO.AttendanceDAO;
+import com.a14roxgmail.prasanna.mobileapp.Model.AttendanceEntry;
 import com.a14roxgmail.prasanna.mobileapp.R;
-import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
 
 /**
  * Created by prasanna on 2/10/17.
@@ -31,20 +32,57 @@ public class AttendanceAddFragment extends Fragment {
     private CheckBox chkAbsent;
     private EditText etComment;
     private Button btnSave;
+    private Button btnDelete;
     private DatePicker dtPicker;
+    private AttendanceDAO attendance_dao;
+    private boolean isUpdate = false;
+    private String uYear="", uMonth="", uDate="";
 
     public void setParams(String user_index, String module_name){
         this.module_name = module_name;
         this.user_index = user_index;
     }
 
+    public void setIsUpdate(boolean update){this.isUpdate = update;}
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_attendance_add,container,false);
         init(v);
-        chkAbsent.setChecked(true);
-        chkPresent.setChecked(false);
+
+        if(isUpdate){
+            Log.i(Constants.LOG_TAG, "Year :- " + uYear + ", month :- " + uMonth + ", date :- " +uDate);
+            AttendanceEntry entry = attendance_dao.getAttendanceViewInfo(
+                    user_index,
+                    module_name,
+                    uYear,String.valueOf(Months.getMonthIndex(uMonth)-1),uDate
+            );
+
+            dtPicker.updateDate(
+                    Integer.parseInt(entry.getYear()),
+                    Integer.parseInt(entry.getMonth()),
+                    Integer.parseInt(entry.getDate())
+            );
+
+            if(entry.getValue().equals("1")){
+                chkPresent.setChecked(true);
+                chkAbsent.setChecked(false);
+            }else{
+                chkPresent.setChecked(false);
+                chkAbsent.setChecked(true);
+            }
+
+            etComment.setText(entry.getComment());
+
+            btnDelete.setVisibility(View.VISIBLE);
+            dtPicker.setEnabled(false);
+        }else{
+            chkAbsent.setChecked(true);
+            chkPresent.setChecked(false);
+            dtPicker.setEnabled(true);
+            btnDelete.setVisibility(View.INVISIBLE);
+        }
 
         chkPresent.setOnClickListener(
                 new View.OnClickListener() {
@@ -123,14 +161,101 @@ public class AttendanceAddFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.i(Constants.LOG_TAG,"Year :- " + dtPicker.getYear() + ", Month :- " + Months.getMonth(String.valueOf(dtPicker.getMonth())) + ", Date :- " + dtPicker.getDayOfMonth());
-                        dtPicker.updateDate(1994,10,9);
+                        if(!isUpdate) {
+                            if(attendance_dao.isAttendanceExist(
+                                    user_index,module_name,
+                                    String.valueOf(dtPicker.getYear()),
+                                    String.valueOf(dtPicker.getMonth()),
+                                    String.valueOf(dtPicker.getDayOfMonth())
+                            )){
+                                Toast.makeText(getContext(), "Entry already exist !", Toast.LENGTH_SHORT).show();
+                            }else {
+                                if (chkAbsent.isChecked() || chkPresent.isChecked()) {
+                                    String value = "0";
+                                    if (chkAbsent.isChecked()) {
+                                        value = "0";
+                                    } else if (chkPresent.isChecked()) {
+                                        value = "1";
+                                    }
+                                    AttendanceEntry entry = new AttendanceEntry(
+                                            user_index,
+                                            module_name,
+                                            value,
+                                            String.valueOf(dtPicker.getDayOfMonth()),
+                                            String.valueOf(dtPicker.getMonth()),
+                                            String.valueOf(dtPicker.getYear()),
+                                            etComment.getText().toString()
+                                    );
+                                    attendance_dao.addAttendanceEntry(entry);
 
+                                    AttendanceViewFragment attendanceViewFragment = new AttendanceViewFragment();
+                                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                    transaction.replace(R.id.frmMain, attendanceViewFragment);
+                                    attendanceViewFragment.setParams(user_index, module_name);
+                                    transaction.commit();
+                                } else {
+                                    Toast.makeText(getContext(), "Absent/Present ?", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }else {
+                            Log.i(Constants.LOG_TAG,"Outside");
+                            if (chkAbsent.isChecked() || chkPresent.isChecked()) {
+                                Log.i(Constants.LOG_TAG,"Inside");
+                                String value = "0";
+                                if (chkAbsent.isChecked()) {
+                                    value = "0";
+                                } else if (chkPresent.isChecked()) {
+                                    value = "1";
+                                }
+                                attendance_dao.updateAttendanceEntry(
+                                        user_index,
+                                        module_name,
+                                        String.valueOf(dtPicker.getYear()),
+                                        String.valueOf(dtPicker.getMonth()),
+                                        String.valueOf(dtPicker.getDayOfMonth()),
+                                        etComment.getText().toString(),
+                                        value
+                                );
+
+                                AttendanceViewFragment attendanceViewFragment = new AttendanceViewFragment();
+                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                transaction.replace(R.id.frmMain, attendanceViewFragment);
+                                attendanceViewFragment.setParams(user_index, module_name);
+                                transaction.commit();
+                            } else {
+                                Toast.makeText(getContext(), "Absent/Present ?", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    }
+                }
+        );
+
+        btnDelete.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        attendance_dao.deleteAttendanceEntry(
+                                user_index,module_name,
+                                String.valueOf(dtPicker.getYear()),
+                                String.valueOf(dtPicker.getMonth()),
+                                String.valueOf(dtPicker.getDayOfMonth())
+                        );
+
+                        AttendanceViewFragment attendanceViewFragment = new AttendanceViewFragment();
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frmMain, attendanceViewFragment);
+                        attendanceViewFragment.setParams(user_index, module_name);
+                        transaction.commit();
                     }
                 }
         );
 
         return v;
+    }
+
+    public void setDateForUpdate(String year, String month, String date){
+        uYear=year; uMonth=month; uDate=date;
     }
 
     private void init(View v) {
@@ -139,6 +264,8 @@ public class AttendanceAddFragment extends Fragment {
         etComment = (EditText)v.findViewById(R.id.etComments);
         btnSave = (Button)v.findViewById(R.id.btnSaveDate);
         dtPicker = (DatePicker)v.findViewById(R.id.dpPicker);
+        attendance_dao = new AttendanceDAO(getContext());
+        btnDelete = (Button)v.findViewById(R.id.btnDeleteDate);
     }
 
     @Override

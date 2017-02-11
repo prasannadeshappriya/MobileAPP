@@ -4,16 +4,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
+import com.a14roxgmail.prasanna.mobileapp.Constants.Months;
+import com.a14roxgmail.prasanna.mobileapp.DAO.AttendanceDAO;
+import com.a14roxgmail.prasanna.mobileapp.Model.AttendanceEntry;
 import com.a14roxgmail.prasanna.mobileapp.R;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
 
@@ -31,8 +36,8 @@ public class AttendanceViewFragment extends Fragment{
 
     private String user_index;
     private String module_name;
-    private String semester;
     private ArrayAdapter<String> adapter;
+    private AttendanceDAO attendance_dao;
 
     @Nullable
     @Override
@@ -40,25 +45,30 @@ public class AttendanceViewFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_attendance_view,container,false);
         init(v);
 
-        tvModuleName.setText(module_name);
         ArrayList<String> arrPresent = new ArrayList<>();
-        arrPresent.add("2017-01-08");
-        arrPresent.add("2017-01-09");
-        arrPresent.add("2017-01-10");
-        arrPresent.add("2017-01-12");
-        arrPresent.add("2017-01-15");
-        arrPresent.add("2017-01-20");
+        ArrayList<String> arrAbcent = new ArrayList<>();
+        tvModuleName.setText(module_name);
+
+        ArrayList<AttendanceEntry> arrList = attendance_dao.getAttendanceInfo(user_index,module_name);
+        if(!arrList.isEmpty()) {
+            for (AttendanceEntry entry : arrList) {
+                String msg = "";
+                if(entry.getValue().equals("1")){
+                    msg = entry.getYear() + "-" + Months.getMonth(String.valueOf(Integer.parseInt(entry.getMonth())+1)) + "-" + entry.getDate();
+                    msg += ",  " + entry.getComment();
+                    arrPresent.add(msg);
+                }else if (entry.getValue().equals("0")){
+                    msg = entry.getYear() + "-" + Months.getMonth(String.valueOf(Integer.parseInt(entry.getMonth())+1)) + "-" + entry.getDate();
+                    msg += ",  " + entry.getComment();
+                    arrAbcent.add(msg);
+                }
+            }
+        }
+
         adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1,arrPresent);
         lstPresent.setAdapter(adapter);
         Utility.setListViewHeightBasedOnItems(lstPresent);
 
-        ArrayList<String> arrAbcent = new ArrayList<>();
-        arrAbcent.add("2017-02-08");
-        arrAbcent.add("2017-05-09");
-        arrAbcent.add("2017-04-10");
-        arrAbcent.add("2017-08-12");
-        arrAbcent.add("2017-09-15");
-        arrAbcent.add("2017-06-20");
         adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1,arrAbcent);
         lstAbsent.setAdapter(adapter);
         Utility.setListViewHeightBasedOnItems(lstAbsent);
@@ -70,13 +80,97 @@ public class AttendanceViewFragment extends Fragment{
                     public void onClick(View view) {
                         AttendanceAddFragment attendanceAddFragment = new AttendanceAddFragment();
                         attendanceAddFragment.setParams(user_index,module_name);
+                        attendanceAddFragment.setIsUpdate(false);
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
                         transaction.replace(R.id.frmMain,attendanceAddFragment);
                         transaction.commit();
                     }
                 }
         );
+
+        lstAbsent.setOnItemLongClickListener(
+                new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        String msg = lstAbsent.getAdapter().getItem(i).toString();
+                        int start = 0;
+                        int count = 0;
+                        String year= "", month = "", date = "";
+                        for (int j=1;j <msg.length(); j++){
+                            if(count<3) {
+                                if (msg.substring(j - 1, j).equals("-") || msg.substring(j - 1, j).equals(",")) {
+                                    if(count==0){year = msg.substring(start, j-1);}
+                                    else if(count==1){month = msg.substring(start, j-1);}
+                                    else if(count==2){date = msg.substring(start, j-1);}
+                                    start = j++;
+                                    count++;
+                                }
+                            }else{break;}
+                        }
+                        if(!year.equals("") && !month.equals("") && !date.equals("")){
+                            AttendanceAddFragment attendanceAddFragment = new AttendanceAddFragment();
+                            attendanceAddFragment.setParams(user_index,module_name);
+                            attendanceAddFragment.setIsUpdate(true);
+                            attendanceAddFragment.setDateForUpdate(year,month,date);
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.frmMain,attendanceAddFragment);
+                            transaction.commit();
+                        }
+                        return true;
+                    }
+                }
+        );
+
+        lstPresent.setOnItemLongClickListener(
+                new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        String msg = lstPresent.getAdapter().getItem(i).toString();
+                        int start = 0;
+                        int count = 0;
+                        String year= "", month = "", date = "";
+                        for (int j=1;j <msg.length(); j++){
+                            if(count<3) {
+                                if (msg.substring(j - 1, j).equals("-") || msg.substring(j - 1, j).equals(",")) {
+                                    if(count==0){year = msg.substring(start, j-1);}
+                                    else if(count==1){month = msg.substring(start, j-1);}
+                                    else if(count==2){date = msg.substring(start, j-1);}
+                                    start = j++;
+                                    count++;
+                                }
+                            }else{break;}
+                        }
+                        if(!year.equals("") && !month.equals("") && !date.equals("")){
+                            AttendanceAddFragment attendanceAddFragment = new AttendanceAddFragment();
+                            attendanceAddFragment.setParams(user_index,module_name);
+                            attendanceAddFragment.setIsUpdate(true);
+                            attendanceAddFragment.setDateForUpdate(year,month,date);
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.frmMain,attendanceAddFragment);
+                            transaction.commit();
+                        }
+                        return true;
+                    }
+                }
+        );
+
+        calculate_80_pr();
+
         return v;
+    }
+
+    private void calculate_80_pr() {
+        double present_count = lstPresent.getAdapter().getCount();
+        double absent_count = lstAbsent.getAdapter().getCount();
+
+        double total_count = present_count +absent_count;
+        double avg = (present_count/total_count)*100;
+
+        if(!Double.isNaN(avg)) {
+            tvModuleName.setText(
+                    tvModuleName.getText().toString() + " [" + Utility.roundInToDecimals(avg) + " %]"
+            );
+        }
     }
 
     private void init(View v) {
@@ -84,7 +178,7 @@ public class AttendanceViewFragment extends Fragment{
         btnAdd = (Button)v.findViewById(R.id.btnAddDate);
         lstAbsent = (ListView)v.findViewById(R.id.lstAbcentDates);
         lstPresent = (ListView)v.findViewById(R.id.lstPresentDates);
-
+        attendance_dao = new AttendanceDAO(getContext());
     }
 
     public void setParams(String user_index, String module_name){

@@ -20,4 +20,20 @@ public abstract class Months {
         else if(index==12){return "December";}
         else{return"";}
     }
+
+    public static int getMonthIndex(String value){
+        if(value.equals("January")){return 1;}
+        else if(value.equals("February")){return 2;}
+        else if(value.equals("March")){return 3;}
+        else if(value.equals("April")){return 4;}
+        else if(value.equals("May")){return 5;}
+        else if(value.equals("June")){return 6;}
+        else if(value.equals("July")){return 7;}
+        else if(value.equals("August")){return 8;}
+        else if(value.equals("September")){return 9;}
+        else if(value.equals("October")){return 10;}
+        else if(value.equals("November")){return 11;}
+        else if(value.equals("December")){return 12;}
+        else{return 0;}
+    }
 }

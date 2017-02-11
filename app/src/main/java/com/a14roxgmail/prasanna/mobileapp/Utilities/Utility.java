@@ -100,6 +100,12 @@ public abstract class Utility{
         return Double.valueOf(twoDForm.format(d));
     }
 
+    public static double roundInToDecimals(double d)
+    {
+        DecimalFormat twoDForm = new DecimalFormat("#.#");
+        return Double.valueOf(twoDForm.format(d));
+    }
+
     public static boolean CheckInternetAccess() {
         Runtime runtime = Runtime.getRuntime();
         try {
