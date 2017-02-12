@@ -63,6 +63,8 @@ public class AttendanceFragment extends Fragment{
                         String module_name = lstModules.getAdapter().getItem(i).toString();
                         attendanceViewFragment.setParams(user_index,module_name);
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.setCustomAnimations(android.R.anim.fade_in,
+                                android.R.anim.fade_out);
                         transaction.replace(R.id.frmMain,attendanceViewFragment);
                         transaction.commit();
                         return true;
@@ -91,7 +93,7 @@ public class AttendanceFragment extends Fragment{
         int max_sem = Integer.parseInt(course_dao.getMaxSemester(user_index));
         ArrayList<String> arrSemester = new ArrayList<>();
         for(int i=0; i<max_sem; i++){
-            arrSemester.add(String.valueOf(i+1));
+            arrSemester.add("Semester " + String.valueOf(i+1));
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,arrSemester);
         spiSemester.setAdapter(adapter);

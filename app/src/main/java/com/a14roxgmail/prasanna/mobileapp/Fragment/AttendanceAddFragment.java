@@ -102,6 +102,8 @@ public class AttendanceAddFragment extends Fragment {
                         if (keyEvent.getAction() == KeyEvent.ACTION_UP && i == KeyEvent.KEYCODE_BACK) {
                             AttendanceViewFragment attendanceViewFragment = new AttendanceViewFragment();
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                                    android.R.anim.slide_out_right);
                             transaction.replace(R.id.frmMain,attendanceViewFragment);
                             attendanceViewFragment.setParams(user_index,module_name);
                             transaction.commit();
@@ -119,6 +121,8 @@ public class AttendanceAddFragment extends Fragment {
                         if (keyEvent.getAction() == KeyEvent.ACTION_UP && i == KeyEvent.KEYCODE_BACK) {
                             AttendanceViewFragment attendanceViewFragment = new AttendanceViewFragment();
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                                    android.R.anim.slide_out_right);
                             transaction.replace(R.id.frmMain,attendanceViewFragment);
                             attendanceViewFragment.setParams(user_index,module_name);
                             transaction.commit();
@@ -136,6 +140,8 @@ public class AttendanceAddFragment extends Fragment {
                         if (keyEvent.getAction() == KeyEvent.ACTION_UP && i == KeyEvent.KEYCODE_BACK) {
                             AttendanceViewFragment attendanceViewFragment = new AttendanceViewFragment();
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                                    android.R.anim.slide_out_right);
                             transaction.replace(R.id.frmMain,attendanceViewFragment);
                             attendanceViewFragment.setParams(user_index,module_name);
                             transaction.commit();
@@ -161,6 +167,12 @@ public class AttendanceAddFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        String value = "0";
+                        if (chkAbsent.isChecked()) {
+                            value = "0";
+                        } else if (chkPresent.isChecked()) {
+                            value = "1";
+                        }
                         if(!isUpdate) {
                             if(attendance_dao.isAttendanceExist(
                                     user_index,module_name,
@@ -171,12 +183,6 @@ public class AttendanceAddFragment extends Fragment {
                                 Toast.makeText(getContext(), "Entry already exist !", Toast.LENGTH_SHORT).show();
                             }else {
                                 if (chkAbsent.isChecked() || chkPresent.isChecked()) {
-                                    String value = "0";
-                                    if (chkAbsent.isChecked()) {
-                                        value = "0";
-                                    } else if (chkPresent.isChecked()) {
-                                        value = "1";
-                                    }
                                     AttendanceEntry entry = new AttendanceEntry(
                                             user_index,
                                             module_name,
@@ -190,6 +196,8 @@ public class AttendanceAddFragment extends Fragment {
 
                                     AttendanceViewFragment attendanceViewFragment = new AttendanceViewFragment();
                                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                    transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                                            android.R.anim.slide_out_right);
                                     transaction.replace(R.id.frmMain, attendanceViewFragment);
                                     attendanceViewFragment.setParams(user_index, module_name);
                                     transaction.commit();
@@ -198,15 +206,7 @@ public class AttendanceAddFragment extends Fragment {
                                 }
                             }
                         }else {
-                            Log.i(Constants.LOG_TAG,"Outside");
                             if (chkAbsent.isChecked() || chkPresent.isChecked()) {
-                                Log.i(Constants.LOG_TAG,"Inside");
-                                String value = "0";
-                                if (chkAbsent.isChecked()) {
-                                    value = "0";
-                                } else if (chkPresent.isChecked()) {
-                                    value = "1";
-                                }
                                 attendance_dao.updateAttendanceEntry(
                                         user_index,
                                         module_name,
@@ -219,6 +219,8 @@ public class AttendanceAddFragment extends Fragment {
 
                                 AttendanceViewFragment attendanceViewFragment = new AttendanceViewFragment();
                                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                                        android.R.anim.slide_out_right);
                                 transaction.replace(R.id.frmMain, attendanceViewFragment);
                                 attendanceViewFragment.setParams(user_index, module_name);
                                 transaction.commit();
@@ -244,6 +246,8 @@ public class AttendanceAddFragment extends Fragment {
 
                         AttendanceViewFragment attendanceViewFragment = new AttendanceViewFragment();
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                                android.R.anim.slide_out_right);
                         transaction.replace(R.id.frmMain, attendanceViewFragment);
                         attendanceViewFragment.setParams(user_index, module_name);
                         transaction.commit();
@@ -279,6 +283,8 @@ public class AttendanceAddFragment extends Fragment {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     AttendanceViewFragment attendanceViewFragment = new AttendanceViewFragment();
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right);
                     transaction.replace(R.id.frmMain,attendanceViewFragment);
                     attendanceViewFragment.setParams(user_index,module_name);
                     transaction.commit();

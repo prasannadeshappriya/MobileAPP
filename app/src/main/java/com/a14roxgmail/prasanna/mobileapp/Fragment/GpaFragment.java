@@ -59,6 +59,8 @@ public class GpaFragment extends Fragment {
         if(gpa.getType().equals("sgpa")){
             GpaSemFragment gpaSemFragment = new GpaSemFragment();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.fade_in,
+                    android.R.anim.fade_out);
             transaction.replace(R.id.frmMain,gpaSemFragment);
             gpaSemFragment.setArgs(String.valueOf(i+1),user_index,gpa);
             transaction.commit();

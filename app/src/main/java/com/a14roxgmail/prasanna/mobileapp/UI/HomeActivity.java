@@ -134,6 +134,8 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_MyCourses) {
             CourseFragment courseFragment = new CourseFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                    android.R.anim.slide_out_right);
             transaction.replace(R.id.frmMain,courseFragment);
             courseFragment.setServerCourseList(course_list);
             toolbar.setTitle("My Courses");
@@ -156,6 +158,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_GPA) {
             GpaFragment gpaFragment = new GpaFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                    android.R.anim.slide_out_right);
             transaction.replace(R.id.frmMain,gpaFragment);
             gpaFragment.setUser_index(userIndex);
             toolbar.setTitle("GPA");
@@ -163,6 +167,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_attendance) {
             AttendanceFragment attendanceFragment = new AttendanceFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                    android.R.anim.slide_out_right);
             transaction.replace(R.id.frmMain,attendanceFragment);
             attendanceFragment.setUserIndex(userIndex);
             toolbar.setTitle("Attendance");
@@ -170,6 +176,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_Calendar) {
             CalendarFragment calendarFragment = new CalendarFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                    android.R.anim.slide_out_right);
             transaction.replace(R.id.frmMain,calendarFragment);
             calendarFragment.setUserIndex(userIndex);
             toolbar.setTitle("Calendar");
@@ -177,6 +185,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_Settings) {
             SettingsFragment settingsFragment = new SettingsFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                    android.R.anim.slide_out_right);
             transaction.replace(R.id.frmMain,settingsFragment);
             settingsFragment.setParams(course_list,userIndex);
             toolbar.setTitle("Settings");

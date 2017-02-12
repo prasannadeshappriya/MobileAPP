@@ -171,6 +171,8 @@ public class GpaSemFragment extends Fragment{
 
         GpaFragment gpaFragment = new GpaFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right);
         transaction.replace(R.id.frmMain,gpaFragment);
         gpaFragment.setUser_index(userIndex);
         transaction.commit();
@@ -183,6 +185,8 @@ public class GpaSemFragment extends Fragment{
 
         GpaFragment gpaFragment = new GpaFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right);
         transaction.replace(R.id.frmMain,gpaFragment);
         gpaFragment.setUser_index(userIndex);
         transaction.commit();
@@ -231,6 +235,8 @@ public class GpaSemFragment extends Fragment{
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     GpaFragment gpaFragment = new GpaFragment();
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right);
                     transaction.replace(R.id.frmMain,gpaFragment);
                     gpaFragment.setUser_index(userIndex);
                     transaction.commit();

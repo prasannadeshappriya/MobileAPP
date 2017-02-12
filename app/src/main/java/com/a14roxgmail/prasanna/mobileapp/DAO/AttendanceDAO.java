@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Model.AttendanceEntry;
-import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 
 import java.util.ArrayList;
 

@@ -82,6 +82,8 @@ public class AttendanceViewFragment extends Fragment{
                         attendanceAddFragment.setParams(user_index,module_name);
                         attendanceAddFragment.setIsUpdate(false);
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                                android.R.anim.slide_out_right);
                         transaction.replace(R.id.frmMain,attendanceAddFragment);
                         transaction.commit();
                     }
@@ -113,6 +115,8 @@ public class AttendanceViewFragment extends Fragment{
                             attendanceAddFragment.setIsUpdate(true);
                             attendanceAddFragment.setDateForUpdate(year,month,date);
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.setCustomAnimations(android.R.anim.fade_in,
+                                    android.R.anim.fade_out);
                             transaction.replace(R.id.frmMain,attendanceAddFragment);
                             transaction.commit();
                         }
@@ -146,6 +150,8 @@ public class AttendanceViewFragment extends Fragment{
                             attendanceAddFragment.setIsUpdate(true);
                             attendanceAddFragment.setDateForUpdate(year,month,date);
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.setCustomAnimations(android.R.anim.fade_in,
+                                    android.R.anim.fade_out);
                             transaction.replace(R.id.frmMain,attendanceAddFragment);
                             transaction.commit();
                         }
@@ -197,7 +203,10 @@ public class AttendanceViewFragment extends Fragment{
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     AttendanceFragment attendanceFragment = new AttendanceFragment();
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right);
                     transaction.replace(R.id.frmMain,attendanceFragment);
+
                     attendanceFragment.setUserIndex(user_index);
                     transaction.commit();
                     return true;
