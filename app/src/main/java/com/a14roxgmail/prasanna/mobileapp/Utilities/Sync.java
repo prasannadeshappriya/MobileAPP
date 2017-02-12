@@ -61,19 +61,8 @@ public class Sync {
     }
 
     public void startSyncProcess() {
-        if (checkInternetAccess()) {
-            getToken();
-        } else {
-            Toast.makeText(context, "No internet connection", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private boolean checkInternetAccess(){
-        if(Build.PRODUCT.matches(".*_?sdk_?.*")) {
-            return true;
-        }else{
-            return Utility.CheckInternetAccess();
-        }
+        CheckInternetAccess checkInternetAccess = new CheckInternetAccess("startSyncProcess");
+        checkInternetAccess.execute();
     }
 
     public boolean isSyncNeed(){
@@ -248,7 +237,6 @@ public class Sync {
         pd.setIndeterminate(true);
         pd.setCanceledOnTouchOutside(false);
         pd.setMessage("Sync user details..");
-        pd.show();
 
         CountDownTimer timer = new CountDownTimer(2000, 1000) {
             @Override
@@ -309,39 +297,84 @@ public class Sync {
             Toast.makeText(context,"Up to date", Toast.LENGTH_SHORT).show();
             Log.i(Constants.LOG_TAG,"Password update does not required");
         }else {
-            if(checkInternetAccess()) {
-                final ServerRequest request = new ServerRequest(3, activity);
-                request.set_server_url(Constants.SERVER_GET_TOKEN);
-                request.setParams(user_index, "username");
-                request.setParams(new_password, "password");
-                request.setParams("moodle_mobile_app", "service");
-                try {
-                    String req = request.sendPostRequest();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            CheckInternetAccess checkInternetAccess = new CheckInternetAccess("updatePassword");
+            checkInternetAccess.execute();
+        }
+    }
+
+    private class CheckInternetAccess extends AsyncTask<Void,Void,Void>{
+        private boolean con = false;
+        private String method;
+        public CheckInternetAccess(String method){
+            this.method = method;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(con) {
+                if(method.equals("updatePassword")) {
+                    final ServerRequest request = new ServerRequest(3, activity);
+                    request.set_server_url(Constants.SERVER_GET_TOKEN);
+                    request.setParams(user_index, "username");
+                    request.setParams(new_password, "password");
+                    request.setParams("moodle_mobile_app", "service");
+                    try {
+                        String req = request.sendPostRequest();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    pd.setIndeterminate(true);
+                    pd.setCanceledOnTouchOutside(false);
+                    pd.setMessage("Authenticating..");
+
+                    CountDownTimer timer = new CountDownTimer(2000, 1000) {
+                        @Override
+                        public void onFinish() {
+                            process_updatePassword_response(request);
+                            Log.i(Constants.LOG_TAG, "Sync Class - OnFinish method triggered");
+                            //pd.dismiss();
+                        }
+
+                        @Override
+                        public void onTick(long millisLeft) {
+                        }
+                    };
+                    timer.start();
+                }else if(method.equals("startSyncProcess")){
+                    getToken();
                 }
-
-                pd.setIndeterminate(true);
-                pd.setCanceledOnTouchOutside(false);
-                pd.setMessage("Authenticating..");
-                pd.show();
-
-                CountDownTimer timer = new CountDownTimer(2000, 1000) {
-                    @Override
-                    public void onFinish() {
-                        process_updatePassword_response(request);
-                        Log.i(Constants.LOG_TAG, "Sync Class - OnFinish method triggered");
-                        //pd.dismiss();
-                    }
-
-                    @Override
-                    public void onTick(long millisLeft) {
-                    }
-                };
-                timer.start();
             }else{
                 Toast.makeText(context,"No internet connection", Toast.LENGTH_SHORT).show();
+                pd.dismiss();
             }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            pd.setIndeterminate(true);
+            pd.setCanceledOnTouchOutside(false);
+            pd.setMessage("Connecting..");
+            pd.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            //Ping is not working for emulator
+            //Check weather the app is running on emulator or not
+            if(Build.PRODUCT.matches(".*_?sdk_?.*")){
+                con = true;
+            }else {
+                Runtime runtime = Runtime.getRuntime();
+                try {
+                    Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+                    int exitValue = ipProcess.waitFor();
+                    con = (exitValue == 0);
+                } catch (Exception e) {
+                    Log.i(Constants.LOG_TAG, "Error :- " + e.toString());
+                    con = false;
+                }
+            }
+            return null;
         }
     }
 

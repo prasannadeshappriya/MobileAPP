@@ -1,5 +1,6 @@
 package com.a14roxgmail.prasanna.mobileapp.Utilities;
 
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Months;
+import com.a14roxgmail.prasanna.mobileapp.Fragment.CalendarFragment;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -104,20 +106,6 @@ public abstract class Utility{
     {
         DecimalFormat twoDForm = new DecimalFormat("#.#");
         return Double.valueOf(twoDForm.format(d));
-    }
-
-    public static boolean CheckInternetAccess() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-            }
-        catch (Exception e) {
-            Log.i(Constants.LOG_TAG,"Error :- " + e.toString());
-            return false;
-        }
-
     }
 
     public static String getCurrentDate(){

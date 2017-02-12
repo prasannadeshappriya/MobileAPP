@@ -1,6 +1,7 @@
 package com.a14roxgmail.prasanna.mobileapp.Service;
 
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +11,12 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.DAO.NotificationDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
+import com.a14roxgmail.prasanna.mobileapp.Fragment.CalendarFragment;
 import com.a14roxgmail.prasanna.mobileapp.Model.Entry;
 import com.a14roxgmail.prasanna.mobileapp.Model.Notification;
 import com.a14roxgmail.prasanna.mobileapp.Model.User;
@@ -79,16 +83,6 @@ public class SyncService extends Service {
         }
     }
 
-    public boolean CheckInternetAccess(){
-        //Ping is not working for emulator
-        //Check weather the app is running on emulator or not
-        if(Build.PRODUCT.matches(".*_?sdk_?.*")){
-            return true;
-        }else {
-            return Utility.CheckInternetAccess();
-        }
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -106,13 +100,8 @@ public class SyncService extends Service {
                     Log.i(Constants.LOG_TAG, "Service is working [Log in user_id :- " + user_index + "]");
 
                     //check for internet connection
-                    if (CheckInternetAccess()) {
-                        int year = Integer.parseInt(Utility.getYear());
-                        int month = Integer.parseInt(Utility.getMonth());
-                        printlog("Current status, month :- " + month + ", year :- " + year);
-                        getCalendarInfo calender_task = new getCalendarInfo(year, month);
-                        calender_task.execute();
-                    }
+                    CheckInternetAccess checkInternetAccess = new CheckInternetAccess();
+                    checkInternetAccess.execute();
 
                     //stop the service
                     stopSelf();
@@ -123,6 +112,45 @@ public class SyncService extends Service {
         }
 
         return Service.START_STICKY;
+    }
+
+    private class CheckInternetAccess extends AsyncTask<Void,Void,Void>{
+        boolean con;
+        @Override
+        protected void onPreExecute() {
+            con = false;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(con) {
+                int year = Integer.parseInt(Utility.getYear());
+                int month = Integer.parseInt(Utility.getMonth());
+                printlog("Current status, month :- " + month + ", year :- " + year);
+                getCalendarInfo calender_task = new getCalendarInfo(year, month);
+                calender_task.execute();
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            //Ping is not working for emulator
+            //Check weather the app is running on emulator or not
+            if(Build.PRODUCT.matches(".*_?sdk_?.*")){
+                con = true;
+            }else {
+                Runtime runtime = Runtime.getRuntime();
+                try {
+                    Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+                    int exitValue = ipProcess.waitFor();
+                    con = (exitValue == 0);
+                } catch (Exception e) {
+                    Log.i(Constants.LOG_TAG, "Error :- " + e.toString());
+                    con = false;
+                }
+            }
+            return null;
+        }
     }
 
     public void showEventNotification(String date){

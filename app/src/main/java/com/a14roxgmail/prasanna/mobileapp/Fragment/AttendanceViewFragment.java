@@ -55,11 +55,15 @@ public class AttendanceViewFragment extends Fragment{
                 String msg = "";
                 if(entry.getValue().equals("1")){
                     msg = entry.getYear() + "-" + Months.getMonth(String.valueOf(Integer.parseInt(entry.getMonth())+1)) + "-" + entry.getDate();
-                    msg += ",  " + entry.getComment();
+                    if(!entry.getComment().equals("")){
+                        msg += ",  " + entry.getComment();
+                    }
                     arrPresent.add(msg);
                 }else if (entry.getValue().equals("0")){
                     msg = entry.getYear() + "-" + Months.getMonth(String.valueOf(Integer.parseInt(entry.getMonth())+1)) + "-" + entry.getDate();
-                    msg += ",  " + entry.getComment();
+                    if(!entry.getComment().equals("")){
+                        msg += ",  " + entry.getComment();
+                    }
                     arrAbcent.add(msg);
                 }
             }

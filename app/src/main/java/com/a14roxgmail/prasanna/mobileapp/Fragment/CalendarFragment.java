@@ -53,43 +53,66 @@ public class CalendarFragment extends Fragment {
         init(view);
         refresh_list();
 
-        pd.setIndeterminate(true);
-        pd.setCanceledOnTouchOutside(false);
-        pd.setMessage("Connecting ..");
-        pd.show();
-        if(CheckInternetAccess()) {
-            pd.dismiss();
-            getCalendarInfo calendarTask = new getCalendarInfo(
-                    userIndex,
-                    Integer.parseInt(spiYear.getSelectedItem().toString()),
-                    spiMonth.getSelectedItemPosition() + 1,
-                    lstCalendar
-            );
-            calendarTask.execute();
-        }else{
-            pd.dismiss();
-            Toast.makeText(getContext(),"No internet connection",Toast.LENGTH_LONG).show();
-        }
+        CheckInternetAccess checkInternetAccess = new CheckInternetAccess();
+        checkInternetAccess.execute();
 
         btnRefresh.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(CheckInternetAccess()) {
-                            getCalendarInfo calendarTask = new getCalendarInfo(
-                                    userIndex,
-                                    Integer.parseInt(spiYear.getSelectedItem().toString()),
-                                    spiMonth.getSelectedItemPosition() + 1,
-                                    lstCalendar
-                            );
-                            calendarTask.execute();
-                        }else{
-                            Toast.makeText(getContext(),"No internet connection",Toast.LENGTH_LONG).show();
-                        }
+                        CheckInternetAccess checkInternetAccess = new CheckInternetAccess();
+                        checkInternetAccess.execute();
                     }
                 }
         );
         return view;
+    }
+
+    private class CheckInternetAccess extends AsyncTask<Void,Void,Void>{
+        private boolean con = false;
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(con) {
+                getCalendarInfo calendarTask = new getCalendarInfo(
+                        userIndex,
+                        Integer.parseInt(spiYear.getSelectedItem().toString()),
+                        spiMonth.getSelectedItemPosition() + 1,
+                        lstCalendar
+                );
+                calendarTask.execute();
+            }else{
+                Toast.makeText(getContext(),"No internet connection",Toast.LENGTH_LONG).show();
+                pd.dismiss();
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            pd.setIndeterminate(true);
+            pd.setCanceledOnTouchOutside(false);
+            pd.setMessage("Connecting..");
+            pd.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            //Ping is not working for emulator
+            //Check weather the app is running on emulator or not
+            if(Build.PRODUCT.matches(".*_?sdk_?.*")){
+                con = true;
+            }else {
+                Runtime runtime = Runtime.getRuntime();
+                try {
+                    Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+                    int exitValue = ipProcess.waitFor();
+                    con = (exitValue == 0);
+                } catch (Exception e) {
+                    Log.i(Constants.LOG_TAG, "Error :- " + e.toString());
+                    con = false;
+                }
+            }
+            return null;
+        }
     }
 
     private void refresh_list() {
@@ -119,16 +142,6 @@ public class CalendarFragment extends Fragment {
                 spiYear.setSelection(i);
                 break;
             }
-        }
-    }
-
-    public boolean CheckInternetAccess(){
-        //Ping is not working for emulator
-        //Check weather the app is running on emulator or not
-        if(Build.PRODUCT.matches(".*_?sdk_?.*")){
-            return true;
-        }else {
-            return Utility.CheckInternetAccess();
         }
     }
 
@@ -165,7 +178,6 @@ public class CalendarFragment extends Fragment {
             pd.setIndeterminate(true);
             pd.setCanceledOnTouchOutside(false);
             pd.setMessage("Getting Information..");
-            pd.show();
             super.onPreExecute();
         }
 

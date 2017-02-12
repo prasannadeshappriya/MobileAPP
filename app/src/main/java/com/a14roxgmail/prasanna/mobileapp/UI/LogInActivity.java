@@ -18,6 +18,7 @@ import com.a14roxgmail.prasanna.mobileapp.Constants.Token;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.SettingsDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
+import com.a14roxgmail.prasanna.mobileapp.Fragment.CalendarFragment;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.Model.Setting;
 import com.a14roxgmail.prasanna.mobileapp.Model.User;
@@ -112,20 +113,52 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
 
             }else {
                 Log.i(Constants.LOG_TAG, "User " + etUserName.getText().toString() + " is not exist on the database");
-                pd.setIndeterminate(true);
-                pd.setCanceledOnTouchOutside(false);
-                pd.setMessage("Connecting..");
-                pd.show();
-                if(CheckInternetAccess()) {
-                    Log.i(Constants.LOG_TAG, "Internet connection available");
-                    pd.dismiss();
-                    getToken();
-                }else{
-                    Log.i(Constants.LOG_TAG, "No internet connection available");
-                    pd.dismiss();
-                    Toast.makeText(this,"No internet connection !", Toast.LENGTH_LONG).show();
+                CheckInternetAccess checkInternetAccess = new CheckInternetAccess();
+                checkInternetAccess.execute();
+            }
+        }
+    }
+
+    private class CheckInternetAccess extends AsyncTask<Void,Void,Void>{
+        private boolean con = false;
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(con) {
+                Log.i(Constants.LOG_TAG, "Internet connection available");
+                getToken();
+            }else{
+                Log.i(Constants.LOG_TAG, "No internet connection available");
+                pd.dismiss();
+                Toast.makeText(getApplicationContext(),"No internet connection !", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            pd.setIndeterminate(true);
+            pd.setCanceledOnTouchOutside(false);
+            pd.setMessage("Connecting..");
+            pd.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            //Ping is not working for emulator
+            //Check weather the app is running on emulator or not
+            if(Build.PRODUCT.matches(".*_?sdk_?.*")){
+                con = true;
+            }else {
+                Runtime runtime = Runtime.getRuntime();
+                try {
+                    Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+                    int exitValue = ipProcess.waitFor();
+                    con = (exitValue == 0);
+                } catch (Exception e) {
+                    Log.i(Constants.LOG_TAG, "Error :- " + e.toString());
+                    con = false;
                 }
             }
+            return null;
         }
     }
 
@@ -150,16 +183,6 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         startActivity(i);
         overridePendingTransition(R.anim.left_in,R.anim.left_out);
         Log.i(Constants.LOG_TAG, "Completed SignIn Process");
-    }
-
-    public boolean CheckInternetAccess(){
-        //Ping is not working for emulator
-        //Check weather the app is running on emulator or not
-        if(Build.PRODUCT.matches(".*_?sdk_?.*")){
-            return true;
-        }else {
-            return Utility.CheckInternetAccess();
-        }
     }
 
     public boolean Validate(){
@@ -198,7 +221,6 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
         pd.setIndeterminate(true);
         pd.setCanceledOnTouchOutside(false);
         pd.setMessage("Authenticating..");
-        pd.show();
 
         CountDownTimer timer = new CountDownTimer(2000, 1000) {
             @Override
