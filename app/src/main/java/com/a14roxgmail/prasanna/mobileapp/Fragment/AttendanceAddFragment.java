@@ -52,7 +52,6 @@ public class AttendanceAddFragment extends Fragment {
         init(v);
 
         if(isUpdate){
-            Log.i(Constants.LOG_TAG, "Year :- " + uYear + ", month :- " + uMonth + ", date :- " +uDate);
             AttendanceEntry entry = attendance_dao.getAttendanceViewInfo(
                     user_index,
                     module_name,
@@ -206,13 +205,18 @@ public class AttendanceAddFragment extends Fragment {
                                 }
                             }
                         }else {
+                            AttendanceEntry entry = attendance_dao.getAttendanceViewInfo(
+                                    user_index,
+                                    module_name,
+                                    uYear,String.valueOf(Months.getMonthIndex(uMonth)-1),uDate
+                            );
                             if (chkAbsent.isChecked() || chkPresent.isChecked()) {
                                 attendance_dao.updateAttendanceEntry(
                                         user_index,
                                         module_name,
-                                        String.valueOf(dtPicker.getYear()),
-                                        String.valueOf(dtPicker.getMonth()),
-                                        String.valueOf(dtPicker.getDayOfMonth()),
+                                        entry.getYear(),
+                                        entry.getMonth(),
+                                        entry.getDate(),
                                         etComment.getText().toString(),
                                         value
                                 );

@@ -103,7 +103,7 @@ public class SyncService extends Service {
                 if (isLogIn) {
                     //service will only work when some user already sign in only
                     //print log for more information
-                    Log.i(Constants.LOG_TAG, "Server is working [Log in user_id :- " + user_index + "]");
+                    Log.i(Constants.LOG_TAG, "Service is working [Log in user_id :- " + user_index + "]");
 
                     //check for internet connection
                     if (CheckInternetAccess()) {
