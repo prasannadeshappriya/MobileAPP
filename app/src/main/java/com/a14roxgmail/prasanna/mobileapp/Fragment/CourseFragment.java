@@ -3,11 +3,13 @@ package com.a14roxgmail.prasanna.mobileapp.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.ListAdapter.CourseAdapter;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.Model.Semester;
@@ -28,6 +30,7 @@ public class CourseFragment extends Fragment {
     private ListView lstCourstView;
     private ArrayList<Course> serverCourseList;
     private ArrayList<Course> sem1,sem2,sem3,sem4,sem5,sem6,sem7,sem8;
+    private ArrayList<Course> other;
 
     @Nullable
     @Override
@@ -45,6 +48,7 @@ public class CourseFragment extends Fragment {
         if(!sem6.isEmpty()){lstCourse.add(new Semester(6,sem6));}
         if(!sem7.isEmpty()){lstCourse.add(new Semester(7,sem7));}
         if(!sem8.isEmpty()){lstCourse.add(new Semester(8,sem8));}
+        if(!other.isEmpty()){lstCourse.add(new Semester(0,other));}
 
         adapter = new CourseAdapter(getContext(),lstCourse);
         lstCourstView.setAdapter(adapter);
@@ -70,6 +74,8 @@ public class CourseFragment extends Fragment {
                 addElements(sem7,i);
             }else if(serverCourseList.get(i).getSemester().equals("8")){
                 addElements(sem8,i);
+            }else{
+                addElements(other,i);
             }
         }
     }
@@ -97,6 +103,7 @@ public class CourseFragment extends Fragment {
         sem6 = new ArrayList<>();
         sem7 = new ArrayList<>();
         sem8 = new ArrayList<>();
+        other = new ArrayList<>();
     }
 
     public void setServerCourseList(ArrayList<Course> arr){

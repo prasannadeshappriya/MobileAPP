@@ -82,6 +82,16 @@ public class CourseDAO extends DAO{
         return arrCourse;
     }
 
+    public boolean isInt(String value){
+        try{
+            int check = Integer.parseInt(value);
+            Log.i(Constants.LOG_TAG, "Value :- " +String.valueOf(check) + " is a numaric value");
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
     public String getMaxSemester(String userIndex){
         command = "SELECT semester FROM " + tableName + " WHERE user_index = \"" + userIndex + "\" ORDER BY semester desc;";
         Log.i(Constants.LOG_TAG,"Select max semester number, query :- " + command);
@@ -89,7 +99,18 @@ public class CourseDAO extends DAO{
         if(c.getCount()>0) {
             Log.i(Constants.LOG_TAG, "Table name :- " + tableName + "   Search cursor count :- " + String.valueOf(c.getCount()));
             c.moveToFirst();
-            return c.getString(c.getColumnIndex("semester"));
+            String max_sem = c.getString(c.getColumnIndex("semester"));
+            boolean con = true;
+            while(!isInt(max_sem)){
+                try {
+                    c.moveToNext();
+                }catch (Exception e){
+                    Log.i(Constants.LOG_TAG,"An error occurred while getting the max semester [course_dao]");
+                    return "0";
+                }
+                max_sem = c.getString(c.getColumnIndex("semester"));
+            }
+            return max_sem;
         }else {
             return "0";
         }

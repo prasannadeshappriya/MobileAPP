@@ -22,6 +22,7 @@ import com.a14roxgmail.prasanna.mobileapp.Model.AttendanceEntry;
 import com.a14roxgmail.prasanna.mobileapp.R;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 /**
@@ -55,7 +56,7 @@ public class AttendanceViewFragment extends Fragment{
                 String msg = "";
                 if(entry.getValue().equals("1")){
                     msg = entry.getYear() + "-" + Months.getMonth(String.valueOf(Integer.parseInt(entry.getMonth())+1)) + "-" + entry.getDate();
-                    if(!entry.getComment().equals("")){
+                    if(!entry.getComment().equals("")) {
                         msg += ",  " + entry.getComment();
                     }
                     arrPresent.add(msg);
@@ -104,7 +105,7 @@ public class AttendanceViewFragment extends Fragment{
                         String year= "", month = "", date = "";
                         for (int j=1;j <msg.length(); j++){
                             if(count<3) {
-                                if (msg.substring(j - 1, j).equals("-") || msg.substring(j - 1, j).equals(",")) {
+                                if (msg.substring(j - 1, j).equals("-") || msg.substring(j - 1, j).equals(",") || msg.substring(j - 1, j).equals("")) {
                                     if(count==0){year = msg.substring(start, j-1);}
                                     else if(count==1){month = msg.substring(start, j-1);}
                                     else if(count==2){date = msg.substring(start, j-1);}
@@ -112,6 +113,13 @@ public class AttendanceViewFragment extends Fragment{
                                     count++;
                                 }
                             }else{break;}
+                        }
+                        if(date.equals("")){
+                            if(msg.substring(msg.length()-3,msg.length()-2).equals("-")){
+                                date = msg.substring(msg.length()-2).replace(" ","");
+                            }else if(msg.substring(msg.length()-2,msg.length()-1).equals("-")){
+                                date = msg.substring(msg.length()-1).replace(" ","");
+                            }
                         }
                         if(!year.equals("") && !month.equals("") && !date.equals("")){
                             AttendanceAddFragment attendanceAddFragment = new AttendanceAddFragment();
@@ -147,6 +155,13 @@ public class AttendanceViewFragment extends Fragment{
                                     count++;
                                 }
                             }else{break;}
+                        }
+                        if(date.equals("")){
+                            if(msg.substring(msg.length()-3,msg.length()-2).equals("-")){
+                                date = msg.substring(msg.length()-2).replace(" ","");
+                            }else if(msg.substring(msg.length()-2,msg.length()-1).equals("-")){
+                                date = msg.substring(msg.length()-1).replace(" ","");
+                            }
                         }
                         if(!year.equals("") && !month.equals("") && !date.equals("")){
                             AttendanceAddFragment attendanceAddFragment = new AttendanceAddFragment();

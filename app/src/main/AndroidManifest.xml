@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme1">
         <activity android:name=".UI.LogInActivity"
-            android:theme="@style/AppTheme.Dark">
+            android:theme="@style/AppTheme.Dark"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,6 +22,7 @@
         </activity>
         <activity
             android:name=".UI.HomeActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.Dark">
         </activity>

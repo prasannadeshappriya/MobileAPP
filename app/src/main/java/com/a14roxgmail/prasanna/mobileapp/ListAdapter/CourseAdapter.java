@@ -63,8 +63,11 @@ public class CourseAdapter extends BaseAdapter {
         ArrayAdapter adapter = new ArrayAdapter(context,android.R.layout.simple_list_item_1,name_list);
         lstSubCourse.setAdapter(adapter);
         Utility.setListViewHeightBasedOnItems(lstSubCourse);
-
-        tvSemName.setText("Semester " + String.valueOf(arr.get(i).getId()));
+        if(String.valueOf(arr.get(i).getId()).equals("0")){
+            tvSemName.setText("Other academic related modules");
+        }else{
+            tvSemName.setText("Semester " + String.valueOf(arr.get(i).getId()));
+        }
         return v;
     }
 }
