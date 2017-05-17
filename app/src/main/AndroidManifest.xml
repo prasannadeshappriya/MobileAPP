@@ -29,7 +29,9 @@
         <service
             android:name=".Service.SyncService">
         </service>
-
+        <service
+            android:name=".Service.SyncServerService">
+        </service>
     </application>
 
 </manifest>

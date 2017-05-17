@@ -157,4 +157,17 @@ public class GradeDAO extends DAO {
             return false;
         }
     }
+
+    public boolean isSGPAAvailable(String userIndex){
+        command = "SELECT * FROM " + tableSGpa + " WHERE user_index=\"" + userIndex + "\";";
+        Log.i(Constants.LOG_TAG,"Check for sgpa available query :- " + command);
+        Cursor c = sqldb.rawQuery(command,null);
+        if(c.getCount()>0){
+            c.close();
+            return true;
+        }else{
+            c.close();
+            return false;
+        }
+    }
 }

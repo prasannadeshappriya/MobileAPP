@@ -1,7 +1,6 @@
 package com.a14roxgmail.prasanna.mobileapp.Service;
 
 import android.app.NotificationManager;
-import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,12 +10,10 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.DAO.NotificationDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
-import com.a14roxgmail.prasanna.mobileapp.Fragment.CalendarFragment;
 import com.a14roxgmail.prasanna.mobileapp.Model.Entry;
 import com.a14roxgmail.prasanna.mobileapp.Model.Notification;
 import com.a14roxgmail.prasanna.mobileapp.Model.User;

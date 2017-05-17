@@ -139,6 +139,19 @@ public class CourseDAO extends DAO{
         return arrCourse;
     }
 
+    public boolean isCoursesExist(String userIndex){
+        command = "SELECT * FROM "+tableName+" WHERE user_index = \"" + userIndex + "\";";
+        Log.i(Constants.LOG_TAG,"Check for courses exist query :- " + command);
+        Cursor c = sqldb.rawQuery(command,null);
+        if(c.getCount()>0){
+            c.close();
+            return true;
+        }else{
+            c.close();
+            return false;
+        }
+    }
+
     public void addCourse(Course course){
         ContentValues cv = new ContentValues();
 

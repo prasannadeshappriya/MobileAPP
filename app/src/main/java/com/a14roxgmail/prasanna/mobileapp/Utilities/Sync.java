@@ -3,7 +3,6 @@ package com.a14roxgmail.prasanna.mobileapp.Utilities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.CountDownTimer;
@@ -66,9 +65,7 @@ public class Sync {
     }
 
     public boolean isSyncNeed(){
-        //For autoSync Process
-        //Sync Details automatically after 30 days
-
+        //For autoSS
         return true;
     }
 

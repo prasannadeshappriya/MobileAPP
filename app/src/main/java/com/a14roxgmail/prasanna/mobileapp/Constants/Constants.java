@@ -44,4 +44,9 @@ public abstract class Constants {
     //Moodle links
     public static final String MOODLE_LOGIN_URL = "https://online.mrt.ac.lk/login/index.php";
     public static final String MOODLE_CALENDAR_URL = "http://online.mrt.ac.lk/calendar/view.php";
+
+    //Local server links
+    public static final String SERVER_NOTIFY_URL = "http://10.0.2.2/MyBlogHeroku/public/dashboard/sync";
+    public static final String SERVER_SYNC_DATA_URL = "http://10.0.2.2/MyBlogHeroku/public/dashboard/syncdetails";
+    public static final String SERVER_SYNC_COURSE_URL = "http://10.0.2.2/MyBlogHeroku/public/dashboard/synccourse";
 }

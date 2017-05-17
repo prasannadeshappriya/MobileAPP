@@ -23,8 +23,8 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.1.0'
-    compile 'com.android.volley:volley:1.0.0'
-    compile 'org.jsoup:jsoup:+'
     compile 'com.android.support:design:24.1.0'
     compile 'org.jasypt:jasypt:+'
+    compile project(':jsoup')
+    compile project(':volley')
 }

@@ -27,6 +27,7 @@ import com.a14roxgmail.prasanna.mobileapp.Fragment.GpaFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.SettingsFragment;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.R;
+import com.a14roxgmail.prasanna.mobileapp.Service.SyncServerService;
 import com.a14roxgmail.prasanna.mobileapp.Service.SyncService;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,6 +92,10 @@ public class HomeActivity extends AppCompatActivity
         Intent i = new Intent(this,SyncService.class);
         i.setFlags(SyncService.SERVICE_ID);
         startService(i);
+
+        Intent j = new Intent(this, SyncServerService.class);
+        j.setFlags(SyncServerService.SERVICE_ID);
+        startService(j);
     }
 
     @Override
