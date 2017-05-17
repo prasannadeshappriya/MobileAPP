@@ -291,7 +291,6 @@ public class SyncServerService extends Service {
             }
             map = new HashMap<>();
             map.put("details", String.valueOf(object));
-            printLog(String.valueOf(object));
             PostRequest request = new PostRequest(
                     getApplicationContext(),
                     map,
