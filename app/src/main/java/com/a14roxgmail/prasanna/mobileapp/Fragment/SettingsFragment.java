@@ -19,6 +19,7 @@ import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.GradeDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.SettingsDAO;
+import com.a14roxgmail.prasanna.mobileapp.DAO.SyncVerifyDAO;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.R;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.Sync;
@@ -34,6 +35,7 @@ public class SettingsFragment extends Fragment {
     private String user_index;
     private CheckBox chkOption1;
     private CheckBox chkOption2;
+    private SyncVerifyDAO syncVerifyDAO;
     private TextView tvSync;
     private Button btnSyncNow;
     private Sync sync;
@@ -87,6 +89,11 @@ public class SettingsFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         if(sync.isSyncNeed()){
+                            try{
+                                syncVerifyDAO.updateSyncStatus(user_index,"0");
+                            }catch (Exception e){
+                                Log.i(Constants.LOG_TAG,"Error : " + e.toString());
+                            }
                             sync.startSyncProcess();
                             tvSync.setText(settings_dao.getLastSyncDate(user_index));
                         }else{
@@ -120,6 +127,7 @@ public class SettingsFragment extends Fragment {
         tvSync = (TextView) view.findViewById(R.id.tvSync);
         btnSyncNow = (Button) view.findViewById(R.id.btnSyncNow);
         course_dao = new CourseDAO(getContext());
+        syncVerifyDAO = new SyncVerifyDAO(getContext());
         settings_dao = new SettingsDAO(getContext());
 
         String lastSyncDate = settings_dao.getLastSyncDate(user_index);
