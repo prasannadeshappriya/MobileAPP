@@ -12,6 +12,7 @@ import android.util.Log;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.GradeDAO;
+import com.a14roxgmail.prasanna.mobileapp.DAO.SyncVerifyDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.Model.GPA;
@@ -42,6 +43,7 @@ public class SyncServerService extends Service {
     private Context context;
 
     private userDAO user_dao;
+    private SyncVerifyDAO syncDAO;
     private CourseDAO course_dao;
     private GradeDAO grade_dao;
 
@@ -92,8 +94,12 @@ public class SyncServerService extends Service {
         printLog("Service is start working");
         if(isLogIn) {
             //This service works only when user logged into the app
-            CheckInternetAccess internetAccess = new CheckInternetAccess();
-            internetAccess.execute();
+            syncDAO = new SyncVerifyDAO(getApplicationContext());
+            if(syncDAO.isSyncDetailsExist(user_index)) {
+                printLog("Data modified, sending new data to the server");
+                CheckInternetAccess internetAccess = new CheckInternetAccess();
+                internetAccess.execute();
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -132,7 +138,6 @@ public class SyncServerService extends Service {
                 grade_dao = new GradeDAO(getApplicationContext());
                 course_dao = new CourseDAO(getApplicationContext());
                 lock = new Lock();
-
                 NotifyServer notifyServer = new NotifyServer();
                 notifyServer.execute();
             }else{
@@ -179,8 +184,13 @@ public class SyncServerService extends Service {
         @Override
         protected void onPostExecute(Void aVoid) {
             printLog("Notify Server Async task stopped");
-            SyncDetailsTask syncCoursesTask = new SyncDetailsTask();
-            syncCoursesTask.execute();
+            if(syncDAO.getSyncStatus(user_index).equals("0")) {
+                SyncDetailsTask syncCoursesTask = new SyncDetailsTask();
+                syncCoursesTask.execute();
+            }else{
+                printLog("Data is up-to-date, No sync is necessary");
+                stopSelf();
+            }
         }
     }
 
@@ -220,7 +230,6 @@ public class SyncServerService extends Service {
                     printLog("Error on SyncCoursesTask[onPreExecute - courseObject - " + e.toString() + "][" + user_index + "]");
                 }
             }
-
             try {
                 if(grade_dao.isGPAExist(user_index)) {
                     gpa = grade_dao.getGPA(user_index);
@@ -232,6 +241,7 @@ public class SyncServerService extends Service {
 
             map = new HashMap<>();
             map.put("details", String.valueOf(object));
+            printLog(String.valueOf(object));
             PostRequest request = new PostRequest(
                     getApplicationContext(),
                     map,
@@ -291,6 +301,7 @@ public class SyncServerService extends Service {
             }
             map = new HashMap<>();
             map.put("details", String.valueOf(object));
+            map.put("user_index",user_index);
             PostRequest request = new PostRequest(
                     getApplicationContext(),
                     map,
@@ -313,8 +324,10 @@ public class SyncServerService extends Service {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            syncDAO.updateSyncStatus(user_index,"1");
             printLog("SyncCourseTask Async task stopped");
             printLog("Sync Process is completed successfully");
+            stopSelf();
         }
     }
 

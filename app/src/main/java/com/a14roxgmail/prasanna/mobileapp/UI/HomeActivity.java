@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.NotificationDAO;
+import com.a14roxgmail.prasanna.mobileapp.DAO.SyncVerifyDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.userDAO;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.AttendanceFragment;
 import com.a14roxgmail.prasanna.mobileapp.Fragment.CalendarFragment;
@@ -29,6 +30,8 @@ import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.R;
 import com.a14roxgmail.prasanna.mobileapp.Service.SyncServerService;
 import com.a14roxgmail.prasanna.mobileapp.Service.SyncService;
+import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -41,6 +44,7 @@ public class HomeActivity extends AppCompatActivity
     private TextView tvIndexNo;
     private TextView tvFullName;
     private CourseDAO course_dao;
+    private SyncVerifyDAO sync_dao;
     private ArrayList<Course> course_list;
     private String userIndex;
 
@@ -74,6 +78,10 @@ public class HomeActivity extends AppCompatActivity
         tvIndexNo.setText(userIndex);
         tvFullName.setText(map.get("fullname").toString());
 
+        sync_dao = new SyncVerifyDAO(this);
+        if(!sync_dao.isSyncDetailsExist(userIndex)){
+            sync_dao.initialize(Utility.getCurrentDate(),"0",userIndex);
+        }
 
         CourseFragment courseFragment = new CourseFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

@@ -23,10 +23,13 @@ import com.a14roxgmail.prasanna.mobileapp.Constants.GpaPoints;
 import com.a14roxgmail.prasanna.mobileapp.DAO.CourseDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.GradeDAO;
 import com.a14roxgmail.prasanna.mobileapp.DAO.SettingsDAO;
+import com.a14roxgmail.prasanna.mobileapp.DAO.SyncVerifyDAO;
 import com.a14roxgmail.prasanna.mobileapp.ListAdapter.CourseGpaCalcAdapter;
 import com.a14roxgmail.prasanna.mobileapp.Model.Course;
 import com.a14roxgmail.prasanna.mobileapp.Model.GPA;
 import com.a14roxgmail.prasanna.mobileapp.R;
+import com.a14roxgmail.prasanna.mobileapp.Utilities.Sync;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +38,7 @@ import java.util.List;
  */
 public class GpaSemFragment extends Fragment{
     private Button btnSave;
+    private SyncVerifyDAO syncVerifyDAO;
     private CourseGpaCalcAdapter adapter;
     private List<Course> courses_name;
     private ListView lstCourse;
@@ -104,7 +108,11 @@ public class GpaSemFragment extends Fragment{
         double total = 0.0;
         double total_cedits = 0.0;
         int count = lstCourse.getAdapter().getCount();
-
+        try{
+            syncVerifyDAO.updateSyncStatus(userIndex,"0");
+        }catch (Exception e){
+            Log.i(Constants.LOG_TAG,"Error : " + e.toString());
+        }
         for(int i=0; i<count; i++){
             View v = getViewByPosition(i,lstCourse);
             Spinner spiGrade = (Spinner) v.findViewById(R.id.spiGrades);
@@ -222,6 +230,7 @@ public class GpaSemFragment extends Fragment{
         course_dao = new CourseDAO(getContext());
         gradeDAO = new GradeDAO(getContext());
         settings_dao = new SettingsDAO(getContext());
+        syncVerifyDAO = new SyncVerifyDAO(getContext());
     }
 
     @Override
