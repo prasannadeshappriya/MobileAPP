@@ -45,10 +45,15 @@ public abstract class Constants {
     public static final String MOODLE_LOGIN_URL = "https://online.mrt.ac.lk/login/index.php";
     public static final String MOODLE_CALENDAR_URL = "http://online.mrt.ac.lk/calendar/view.php";
 
-    //Local server links for emulator
-    public static final String SERVER_NOTIFY_URL = "http://10.0.2.2/MyBlog/public/dashboard/sync";
-    public static final String SERVER_SYNC_DATA_URL = "http://10.0.2.2/MyBlog/public/dashboard/syncdetails";
-    public static final String SERVER_SYNC_COURSE_URL = "http://10.0.2.2/MyBlog/public/dashboard/synccourse";
+//    //Local server links for emulator
+//    public static final String SERVER_NOTIFY_URL = "http://10.0.2.2/MyBlog/public/dashboard/sync";
+//    public static final String SERVER_SYNC_DATA_URL = "http://10.0.2.2/MyBlog/public/dashboard/syncdetails";
+//    public static final String SERVER_SYNC_COURSE_URL = "http://10.0.2.2/MyBlog/public/dashboard/synccourse";
+
+    //Herokuapp server links for emulator
+    public static final String SERVER_NOTIFY_URL = "https://prasannadeshappriya.herokuapp.com/dashboard/sync";
+    public static final String SERVER_SYNC_DATA_URL = "https://prasannadeshappriya.herokuapp.com/dashboard/syncdetails";
+    public static final String SERVER_SYNC_COURSE_URL = "https://prasannadeshappriya.herokuapp.com/dashboard/synccourse";
 
     //Local server links for real devices
 //    public static final String SERVER_NOTIFY_URL = "http://192.168.43.101/MyBlog/public/dashboard/sync";
