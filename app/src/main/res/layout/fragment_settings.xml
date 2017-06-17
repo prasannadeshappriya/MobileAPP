@@ -86,16 +86,19 @@
                 android:layout_marginLeft="50dip"
                 android:id="@+id/tvSync"
                 android:text="2016-08-09"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvSyncTitle"
-                android:layout_alignParentRight="true"
+
+            <ImageButton
                 android:id="@+id/btnSyncNow"
-                android:text="Sync now"
-                android:layout_marginRight="10dip"
+                android:layout_width="wrap_content"
+                android:layout_marginRight="50dip"
                 android:layout_marginTop="10dip"
-                android:layout_marginBottom="5dip"/>
+                android:layout_marginLeft="50dip"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/sync_now_button"
+                android:background="@android:color/transparent"
+                android:layout_below="@id/tvSyncTitle"
+                android:scaleType="fitCenter"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -147,16 +150,20 @@
                     android:hint="New Password"
                     android:id="@+id/tvNewPass"/>
             </android.support.design.widget.TextInputLayout>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvNewPassView"
-                android:layout_alignParentRight="true"
+
+            <ImageButton
                 android:id="@+id/btnUpdate"
-                android:text="Update"
-                android:layout_marginRight="10dip"
+                android:layout_width="wrap_content"
+                android:layout_marginRight="50dip"
                 android:layout_marginTop="10dip"
-                android:layout_marginBottom="5dip"/>
+                android:layout_marginLeft="50dip"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/update_button"
+                android:background="@android:color/transparent"
+                android:layout_below="@id/tvNewPassView"
+                android:scaleType="fitCenter"/>
+
         </RelativeLayout>
     </LinearLayout>
 </ScrollView>

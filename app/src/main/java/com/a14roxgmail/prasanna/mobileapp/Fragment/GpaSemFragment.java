@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ import java.util.List;
  * Created by Prasanna Deshappriya on 1/18/2017.
  */
 public class GpaSemFragment extends Fragment{
-    private Button btnSave;
+    private ImageButton btnSave;
     private SyncVerifyDAO syncVerifyDAO;
     private CourseGpaCalcAdapter adapter;
     private List<Course> courses_name;
@@ -226,7 +227,7 @@ public class GpaSemFragment extends Fragment{
     private void init(View view) {
         courses_name = new ArrayList<>();
         lstCourse = (ListView) view.findViewById(R.id.lstSemesterGpa);
-        btnSave = (Button) view.findViewById(R.id.btnSave);
+        btnSave = (ImageButton) view.findViewById(R.id.btnSave);
         course_dao = new CourseDAO(getContext());
         gradeDAO = new GradeDAO(getContext());
         settings_dao = new SettingsDAO(getContext());

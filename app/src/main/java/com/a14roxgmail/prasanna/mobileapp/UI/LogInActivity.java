@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
@@ -42,7 +43,7 @@ import java.util.HashMap;
 public class LogInActivity extends AppCompatActivity implements Serializable {
     private EditText etUserName;
     private EditText etPassword;
-    private Button btnSignIn;
+    private ImageButton btnSignIn;
     private HashMap<String,String> details;
     private ProgressDialog pd;
     private userDAO user_DAO;
@@ -199,7 +200,7 @@ public class LogInActivity extends AppCompatActivity implements Serializable {
     }
 
     private void init(){
-        btnSignIn = (Button) findViewById(R.id.btnSignIn);
+        btnSignIn = (ImageButton) findViewById(R.id.btnSignIn);
         etPassword = (EditText) findViewById(R.id.etPassword);
         etUserName = (EditText) findViewById(R.id.etUserName);
         pd = new ProgressDialog(this, R.style.AppTheme_Dark_Dialog);

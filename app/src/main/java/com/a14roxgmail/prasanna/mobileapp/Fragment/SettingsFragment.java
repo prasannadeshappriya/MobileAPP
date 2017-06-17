@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,11 +38,11 @@ public class SettingsFragment extends Fragment {
     private CheckBox chkOption2;
     private SyncVerifyDAO syncVerifyDAO;
     private TextView tvSync;
-    private Button btnSyncNow;
+    private ImageButton btnSyncNow;
     private Sync sync;
     private CourseDAO course_dao;
     private SettingsDAO settings_dao;
-    private Button btnUpdate;
+    private ImageButton btnUpdate;
     private EditText etNewPassword;
 
     @Nullable
@@ -125,7 +126,7 @@ public class SettingsFragment extends Fragment {
         chkOption1 = (CheckBox)view.findViewById(R.id.chkOptionOne);
         chkOption2 = (CheckBox)view.findViewById(R.id.chkOptionTwo);
         tvSync = (TextView) view.findViewById(R.id.tvSync);
-        btnSyncNow = (Button) view.findViewById(R.id.btnSyncNow);
+        btnSyncNow = (ImageButton) view.findViewById(R.id.btnSyncNow);
         course_dao = new CourseDAO(getContext());
         syncVerifyDAO = new SyncVerifyDAO(getContext());
         settings_dao = new SettingsDAO(getContext());
@@ -143,7 +144,7 @@ public class SettingsFragment extends Fragment {
 
         tvSync.setText(lastSyncDate);
 
-        btnUpdate = (Button)view.findViewById(R.id.btnUpdate);
+        btnUpdate = (ImageButton) view.findViewById(R.id.btnUpdate);
         etNewPassword = (EditText) view.findViewById(R.id.tvNewPass);
 
         sync = new Sync(

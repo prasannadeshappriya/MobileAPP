@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
@@ -31,8 +32,8 @@ public class AttendanceAddFragment extends Fragment {
     private CheckBox chkPresent;
     private CheckBox chkAbsent;
     private EditText etComment;
-    private Button btnSave;
-    private Button btnDelete;
+    private ImageButton btnSave;
+    private ImageButton btnDelete;
     private DatePicker dtPicker;
     private AttendanceDAO attendance_dao;
     private boolean isUpdate = false;
@@ -80,7 +81,7 @@ public class AttendanceAddFragment extends Fragment {
             chkAbsent.setChecked(true);
             chkPresent.setChecked(false);
             dtPicker.setEnabled(true);
-            btnDelete.setVisibility(View.INVISIBLE);
+            btnDelete.setVisibility(View.GONE);
         }
 
         chkPresent.setOnClickListener(
@@ -270,10 +271,10 @@ public class AttendanceAddFragment extends Fragment {
         chkAbsent = (CheckBox)v.findViewById(R.id.chkAbsent);
         chkPresent = (CheckBox)v.findViewById(R.id.chkPresent);
         etComment = (EditText)v.findViewById(R.id.etComments);
-        btnSave = (Button)v.findViewById(R.id.btnSaveDate);
+        btnSave = (ImageButton)v.findViewById(R.id.btnSaveDate);
         dtPicker = (DatePicker)v.findViewById(R.id.dpPicker);
         attendance_dao = new AttendanceDAO(getContext());
-        btnDelete = (Button)v.findViewById(R.id.btnDeleteDate);
+        btnDelete = (ImageButton)v.findViewById(R.id.btnDeleteDate);
     }
 
     @Override

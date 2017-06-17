@@ -79,16 +79,18 @@
                 android:layout_below="@+id/vwBar6">
             </ListView>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:layout_marginRight="10dip"
+            <ImageButton
                 android:id="@+id/btnAddDate"
-                android:layout_marginTop="5dip"
-                android:text="Add"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/lstAbcentDates"/>
+                android:layout_width="wrap_content"
+                android:layout_marginRight="50dip"
+                android:layout_marginLeft="50dip"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/add_button"
+                android:background="@android:color/transparent"
+                android:layout_marginTop="-20dip"
+                android:layout_below="@+id/lstAbcentDates"
+                android:scaleType="fitCenter"/>
         </RelativeLayout>
 
 

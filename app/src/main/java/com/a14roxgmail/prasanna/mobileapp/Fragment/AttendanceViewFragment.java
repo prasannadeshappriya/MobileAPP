@@ -4,25 +4,22 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.a14roxgmail.prasanna.mobileapp.Constants.Constants;
 import com.a14roxgmail.prasanna.mobileapp.Constants.Months;
 import com.a14roxgmail.prasanna.mobileapp.DAO.AttendanceDAO;
 import com.a14roxgmail.prasanna.mobileapp.Model.AttendanceEntry;
 import com.a14roxgmail.prasanna.mobileapp.R;
 import com.a14roxgmail.prasanna.mobileapp.Utilities.Utility;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 /**
@@ -31,7 +28,7 @@ import java.util.ArrayList;
 
 public class AttendanceViewFragment extends Fragment{
     private TextView tvModuleName;
-    private Button btnAdd;
+    private ImageButton btnAdd;
     private ListView lstAbsent;
     private ListView lstPresent;
 
@@ -200,7 +197,7 @@ public class AttendanceViewFragment extends Fragment{
 
     private void init(View v) {
         tvModuleName = (TextView)v.findViewById(R.id.tvModuleName);
-        btnAdd = (Button)v.findViewById(R.id.btnAddDate);
+        btnAdd = (ImageButton) v.findViewById(R.id.btnAddDate);
         lstAbsent = (ListView)v.findViewById(R.id.lstAbcentDates);
         lstPresent = (ListView)v.findViewById(R.id.lstPresentDates);
         attendance_dao = new AttendanceDAO(getContext());

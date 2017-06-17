@@ -43,15 +43,16 @@
                 android:id="@+id/etPassword"/>
         </android.support.design.widget.TextInputLayout>
 
-
-        <Button
-            android:layout_width="250px"
-            android:layout_height="match_parent"
-            android:text="Sign In"
-            android:layout_marginTop="20dip"
-            android:width="150dip"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/btnSignIn"/>
+        <ImageButton
+            android:id="@+id/btnSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/sign_in_button"
+            android:background="@android:color/transparent"
+            android:layout_alignParentBottom="true"
+            android:scaleType="fitCenter"
+            android:layout_margin="30dp"/>
     </LinearLayout>
 
 </RelativeLayout>

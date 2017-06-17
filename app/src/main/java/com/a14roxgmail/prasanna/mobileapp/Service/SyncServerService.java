@@ -331,9 +331,6 @@ public class SyncServerService extends Service {
         }
     }
 
-
-
-
     private class PostRequest extends AsyncTask<Void,Void,Void>{
         private String SERVER_URL;
         private String serverResponse;
