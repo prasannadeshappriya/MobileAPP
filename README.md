@@ -1,2 +1,1 @@
-# MobileAPP
-# MobileAPP
+This is a mobile application implemented using android studio. This app provide moodle services such as Submission dates, Calendar, Course Details, etc. Student also can track their attendance with this app. Furthermore, they can store their module credits for semesters so that they can keep track of their semester and overall GPA. App notification about submission deadline will helpful for students to complete them before deadline.
