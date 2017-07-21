@@ -35,7 +35,7 @@ public class GPA2 {
         String max = course_dao.getMaxSemester(userIndex);
         double total_credits = 0.0;
         double sum = 0.0;
-        for(int i=0; i<Integer.parseInt(max); i++){
+        for(int i=0; i<Integer.parseInt(max+1); i++){
             ArrayList<Course> arrCourse = course_dao.getAllCourseBySemester(String.valueOf(i), userIndex);
             for(int j=0; j<arrCourse.size(); j++){
                 Course course = arrCourse.get(j);
